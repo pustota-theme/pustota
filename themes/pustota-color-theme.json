@@ -43,6 +43,7 @@
 
     "editorLineNumber.activeForeground": "#B3B1ADCC",
     "editorLineNumber.foreground": "#B3B1AD80",
+    "editorInlayHint.foreground": "#626A73",
 
     // Stuff that I don't really care about, mostly copied from Ayu Dark:
     // TODO: rework?
