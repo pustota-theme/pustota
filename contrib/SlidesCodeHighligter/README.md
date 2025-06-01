@@ -8,3 +8,5 @@ To apply **Pustota** colorshema to your presentation just:
 * [Open the app](https://romannurik.github.io/SlidesCodeHighlighter/)
 * paste `pustota.json` config to **Theme - Custom** input
 * enjoy with your **Pustota**-styled presentations!
+
+Pairs greatly with [`FiraCode`](https://github.com/tonsky/FiraCode) font (you can select it in the platform).
