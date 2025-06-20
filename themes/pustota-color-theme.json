@@ -140,6 +140,10 @@
     "inputValidation.warningBackground": "#0A0E14",
     "inputValidation.warningBorder": "#E6B450",
 
+    // Breakpoints
+    "debugIcon.breakpointDisabledForeground": "#59C2FF",
+    "debugIcon.breakpointForeground": "#E6B450",
+
     "debugExceptionWidget.background": "#0A0E14",
     "debugExceptionWidget.border": "#0A0E14",
     "debugToolBar.background": "#0A0E14",

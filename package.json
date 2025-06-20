@@ -2,7 +2,7 @@
   "name": "pustota",
   "displayName": "pustota",
   "description": "Minimalistic VSCode theme inspired by old-fashioned hobbies",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "scripts": {
     "package": "vsce package",
     "start": "npm run package",
