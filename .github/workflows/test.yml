@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  dryrun:
     runs-on: ubuntu-latest
 
     steps:
