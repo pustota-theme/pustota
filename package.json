@@ -20,6 +20,16 @@
         "label": "pustota",
         "uiTheme": "vs-dark",
         "path": "./themes/pustota-color-theme.json"
+      },
+      {
+        "label": "pustota middle",
+        "uiTheme": "vs-dark",
+        "path": "./themes/pustota-middle-color-theme.json"
+      },
+      {
+        "label": "pustota soft",
+        "uiTheme": "vs-dark",
+        "path": "./themes/pustota-soft-color-theme.json"
       }
     ]
   },
