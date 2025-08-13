@@ -575,6 +575,14 @@
       "settings": {
         "fontStyle": "strikethrough",
       }
+    },
+    {
+      "scope": [
+        "keyword.other.special-method.ruby",
+      ],
+      "settings": {
+        "foreground": "#FFFFFF"
+      }
     }
   ]
 }
