@@ -532,6 +532,8 @@
         "meta.method-call.static keyword.operator",
         "keyword.operator.return-value.php",
         "keyword.operator.class.php",
+        // Ruby:
+        "keyword.other.special-method.ruby",  // `.new()`
         // Lisp:
         "keyword.constant.lisp",  // :value
         // Objective-C:
@@ -574,14 +576,6 @@
       ],
       "settings": {
         "fontStyle": "strikethrough",
-      }
-    },
-    {
-      "scope": [
-        "keyword.other.special-method.ruby",
-      ],
-      "settings": {
-        "foreground": "#FFFFFF"
       }
     }
   ]
