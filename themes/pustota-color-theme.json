@@ -6,7 +6,7 @@
   // Colors:
   // Black: #0A0E14
   // Grey: #B3B1AD
-  // Light grey: #B3B1ADBF // 75% alpha
+  // Dark grey: #B3B1ADBF // 75% alpha
   // Yellow: #E6B450
   // Orange: #FFB454
   // Red: #FF8F40
@@ -115,7 +115,7 @@
     // Sidebar
     "sideBar.background": "#0A0E14",
     "sideBar.border": "#0A0E14",
-    "sideBar.foreground": "#B3B1ADBF",
+    "sideBar.foreground": "#B3B1ADDF",
     "sideBarSectionHeader.background": "#0A0E14",
     "sideBarSectionHeader.border": "#0A0E14",
     "sideBarSectionHeader.foreground": "#B3B1ADBF",
@@ -239,7 +239,7 @@
     "tab.activeForeground": "#b3b1ad",
     "tab.border": "#0A0E14",
     "tab.inactiveBackground": "#0a0e14",
-    "tab.inactiveForeground": "#4d5566",
+    "tab.inactiveForeground": "#b3b1adBF",
     "tab.unfocusedActiveBorder": "#4d5566",
     "tab.unfocusedActiveForeground": "#4d5566",
     "tab.unfocusedInactiveForeground": "#4d5566",
@@ -264,6 +264,15 @@
     "terminal.ansiYellow": "#f9af4f",
     "terminal.background": "#0a0e14",
     "terminal.foreground": "#b3b1ad",
+
+    //Menu
+    "menu.background": "#0A0E14",
+    "menu.foreground": "#B3B1ADBF",
+    "menu.selectionBackground": "#0A0E14",
+    "menu.selectionForeground": "#E6B450",
+    "menu.separatorBackground": "#B3B1ADBF",
+    "menubar.selectionBackground": "#0A0E14",
+    "menubar.selectionForeground": "#B3B1ADBF",
 
     // Other
     "extensionButton.prominentBackground": "#e6b450",
