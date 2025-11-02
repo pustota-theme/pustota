@@ -1,0 +1,47 @@
+package card
+
+import (
+  "mesh/src/services"
+  "fmt"
+)
+
+type CardProps struct {
+  *services.Card
+}
+
+templ Card(props CardProps) {
+  <mesh-card
+    id={ fmt.Sprintf("card-%d", props.Card.ID) }
+  >
+    <template shadowrootmode="open">
+      <base href="/"/>
+      <link rel="stylesheet" href="/static/css/components/card.css"/>
+      <div data-view class="card">
+        <div class="card-header">
+          <h3>{ props.Card.Title }</h3>
+        </div>
+        <div class="card-content">
+          { props.Card.Content }
+        </div>
+        <div class="actions">
+          <button type="button" mesh-click="edit">Edit</button>
+        </div>
+      </div>
+      <form data-form class="card hide" hx-patch="/card">
+        <input type="hidden" name="cardID" value={ props.Card.ID } />
+        <label>
+          Title
+          <input type="text" name="title" value={ props.Data.Title } />
+        </label>
+        <label>
+          Content
+          <textarea name="content">{ props.Data.Content }</textarea>
+        </label>
+        <div class="actions">
+          <button type="button" mesh-click="cancel">Cancel</button>
+          <button type="submit">Save</button>
+        </div>
+      </form>
+    </template>
+  </mesh-card>
+}

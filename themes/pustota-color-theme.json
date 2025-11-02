@@ -506,6 +506,9 @@
         "keyword.operator.access.dot",
         "keyword.operator.namespace",
 
+        // Python:
+        "meta.function meta.function.parameters support.function.builtin.python",
+        "keyword.illegal.name.python",
         // C#:
         "source.cs keyword.type",  // primitive types like `int`
         // JS:

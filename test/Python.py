@@ -27,6 +27,8 @@ def hash_primitive[T, B](t: T, b: B) -> T:
     #print '=', hexify(t)
     return t
 
+def accept(data: bytes | bytearray | memoryview): ...
+
 # We need this class because otherwise we can't put a list in a set.
 @classdecorator
 class FrozenList(object):
