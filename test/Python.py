@@ -32,10 +32,11 @@ def accept(data: bytes | bytearray | memoryview): ...
 # We need this class because otherwise we can't put a list in a set.
 @classdecorator
 class FrozenList(object):
-    def __init__(self, l):
+    def __init__(self, l) -> None:
         self.l = tuple(l)
+        x = None
 
-    def raw_input(self):
+    def raw_input(self) -> Literal[None]:
         class B:
             print('abc')
 
