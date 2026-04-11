@@ -40,7 +40,7 @@ class FrozenList(object):
         class B:
             print('abc')
 
-    def set(self, other: str) -> str:
+    def set(self, other: str | None) -> str:
         class A: ...
 
     def __getitem__(self, key):
@@ -60,7 +60,7 @@ class FrozenList(object):
         return len(self.l)
 
     @classmethod
-    def some(cls):
+    def some(cls) -> None:
         ...
 
 def obj_hash_bool(b):
