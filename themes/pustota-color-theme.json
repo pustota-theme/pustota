@@ -509,6 +509,8 @@
         // Python:
         "meta.function meta.function.parameters support.function.builtin.python",
         "keyword.illegal.name.python",
+        // C:
+        "meta.body meta.function.definition.parameters entity.name.function.c",
         // C#:
         "source.cs keyword.type",  // primitive types like `int`
         // JS:

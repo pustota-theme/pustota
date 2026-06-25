@@ -308,3 +308,40 @@ static json_object *unicode_normalize_string(json_object *j) {
 json_object *unicode_normalize(json_object *j) {
   return apply_to_leaves(j, unicode_normalize_string);
 }
+
+static int
+handle_queue_error(int err, PyObject *mod, int64_t qid)
+{
+    if (err == 0) {
+        assert(!PyErr_Occurred());
+        return 0;
+    }
+    assert(err < 0);
+    assert((err == -1) == (PyErr_Occurred() != NULL));
+
+    module_state *state;
+    switch (err) {
+    case ERR_QUEUE_ALLOC: _Py_FALLTHROUGH;
+    case ERR_QUEUES_ALLOC:
+        PyErr_NoMemory();
+        break;
+    case -1:
+        return -1;
+    default:
+        state = get_module_state(mod);
+        assert(state->QueueError != NULL);
+        PyObject *exctype = NULL;
+        PyObject *msg = NULL;
+        if (resolve_module_errcode(state, err, qid, &exctype, &msg) < 0) {
+            return -1;
+        }
+        PyObject *exc = PyObject_CallOneArg(exctype, msg);
+        Py_DECREF(msg);
+        if (exc == NULL) {
+            return -1;
+        }
+        PyErr_SetObject(exctype, exc);
+        Py_DECREF(exc);
+    }
+    return 1;
+}
