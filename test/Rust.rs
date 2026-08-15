@@ -67,3 +67,30 @@ macro_rules! extend_module {
         )*
     }};
 }
+
+#[cfg_attr(feature = "no-panic", no_panic)]
+#[inline]
+unsafe fn copy_exact_left_by_1(src: *mut u8, count: usize) {
+    debug_assert!((1..=16).contains(&count));
+
+    macro_rules! shift {
+        ($ty:ty, $tail:expr) => {{
+            unsafe {
+                let a = src.add(1).cast::<$ty>().read_unaligned();
+                let b = src.add(count - ($tail - 1)).cast::<$ty>().read_unaligned();
+                src.cast::<$ty>().write_unaligned(a);
+                src.add(count - $tail).cast::<$ty>().write_unaligned(b);
+            }
+        }};
+    }
+
+    if count >= 8 {
+        shift!(u64, 8);
+    } else if count >= 4 {
+        shift!(u32, 4);
+    } else if count >= 2 {
+        shift!(u16, 2);
+    } else {
+        unsafe { *src = *src.add(1) };
+    }
+}
