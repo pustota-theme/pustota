@@ -350,8 +350,7 @@
         "storage.type.enum.ts",  // `enum`
         "meta.type.declaration storage.type.type",
         // Rust:
-        "punctuation.definition.attribute",  // `#[]`
-        "punctuation.brackets.attribute",
+        "punctuation.definition.attribute.rust",  // `#` before `[]`
         "storage.type.rust",
         // Ruby:
         "punctuation.separator.other.ruby",  // `:` in ternary

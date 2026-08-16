@@ -4,7 +4,14 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## 0.0.30
+## 0.31.0
+
+- Fixed `#[]` highlight in Rust, now only `#` is highlighted
+
+## 0.30.0
+
+I screwed up the versioning policy in this release.
+So, starting from `0.30.0` it would be beta releases.
 
 - Fixed a bug in Rust with `<$` operator color
 

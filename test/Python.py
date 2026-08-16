@@ -5,6 +5,7 @@ import random
 import types
 import unicodedata
 from binascii import hexlify as hexify, unhexlify as unhexify
+from whatever import *
 
 def hash_fn(x: int | str | tuple[str, ...]) -> int:
     """Docstring
