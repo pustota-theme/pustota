@@ -4,6 +4,9 @@
   "description": "Minimalistic VSCode theme inspired by old-fashioned hobbies",
   "version": "0.31.0",
   "scripts": {
+    "build": "node src/build.js",
+    "check": "node src/build.js --check",
+    "vscode:prepublish": "npm run build",
     "package": "vsce package",
     "start": "npm run package",
     "publish": "vsce publish"
@@ -20,6 +23,11 @@
         "label": "pustota",
         "uiTheme": "vs-dark",
         "path": "./themes/pustota-color-theme.json"
+      },
+      {
+        "label": "pustota light",
+        "uiTheme": "vs",
+        "path": "./themes/pustota-light-color-theme.json"
       }
     ]
   },
