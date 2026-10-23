@@ -3,6 +3,7 @@
   "displayName": "pustota",
   "description": "Minimalistic VSCode theme inspired by old-fashioned hobbies",
   "version": "0.31.0",
+  "author": "Nikita Sobolev",
   "scripts": {
     "build": "node src/build.js",
     "check": "node src/build.js --check",
