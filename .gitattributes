@@ -2,3 +2,5 @@
 
 # Theme files are built from `src/`, see `npm run build`.
 themes/*.json generated
+zed/themes/*.json generated
+zed/extension.toml generated

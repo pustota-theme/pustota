@@ -64,8 +64,8 @@ It is quite easy to do, since there are only 5 major colors :)
 
 ## Development
 
-Files in `themes/` are generated, do not edit them by hand.
-The layout and highlight rules live in `src/theme.js`,
+Files in `themes/` and `zed/` are generated, do not edit them by hand.
+The layout and highlight rules live in `src/vscode.js` and `src/zed.js`,
 colors for each variant live in `src/palettes/`.
 To regenerate themes after a change run:
 

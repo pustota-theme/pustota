@@ -3,7 +3,7 @@
 // Colors are taken from Ayu Dark (`ayu` colors v7, as shipped in
 // https://github.com/ayu-theme/vscode-ayu around mid-2020),
 // the only "logic" of `pustota` is to apply them to a minimalistic,
-// borderless layout. The layout itself lives in `../theme.js`.
+// borderless layout. The layout itself lives in `../vscode.js` and `../zed.js`.
 module.exports = {
   name: 'pustota',
   type: 'dark',

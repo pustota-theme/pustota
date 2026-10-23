@@ -6,3 +6,4 @@ assets/**
 test/
 .github/
 src/**
+zed/**
