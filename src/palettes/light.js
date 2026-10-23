@@ -11,47 +11,51 @@ module.exports = {
   filename: 'pustota-light-color-theme.json',
 
   colors: {
-    // Base
-    bg: '#fafafa', // `common.bg`
-    line: '#8a91991a', // `ui.line`: `common.ui` at 10%, Ayu Light has no opaque line color
-    fg: '#181b1f', // `common.fg`: main text color
-    ui: '#6e7682', // `common.ui`: inactive text in UI
-    uiDim: '#b2b7bb', // `common.ui` faded into `bg` (invalid / placeholder items)
-    uiMuted: '#c9cccf', // `common.ui` faded even more (ignored files, picker groups)
-    dropdownBorder: '#dddfe1',
-    panelBorder: '#f0f0f0',
+    base: {
+      bg: '#fafafa', // `common.bg`
+      line: '#8a91991a', // `ui.line`: `common.ui` at 10%, Ayu Light has no opaque line color
+      fg: '#181b1f', // `common.fg`: main text color
+      ui: '#6e7682', // `common.ui`: inactive text in UI
+      uiDim: '#b2b7bb', // `common.ui` faded into `bg` (invalid / placeholder items)
+      uiMuted: '#c9cccf', // `common.ui` faded even more (ignored files, picker groups)
+      dropdownBorder: '#dddfe1',
+      panelBorder: '#f0f0f0',
+    },
 
-    // Accent
-    accent: '#ab8600', // `common.accent`
-    accentHover: '#a27f00', // `accent` slightly darkened, used for hovered buttons
-    accentAlt: '#997900', // `accent` darkened, used for accent-colored text
+    accent: {
+      main: '#ab8600', // `common.accent`
+      hover: '#a27f00', // `accent` slightly darkened, used for hovered buttons
+      alt: '#997900', // `accent` darkened, used for accent-colored text
+    },
 
-    // Syntax
-    comment: '#737b84', // `syntax.comment`
-    string: '#478f00', // `syntax.string`
-    // Keywords, functions and types are the main markers while scrolling the code,
-    // so they are saturated `syntax.*` hues, spread apart so they do not blend:
-    keyword: '#d43811', // `syntax.keyword`
-    func: '#cc7e00', // `syntax.func`
-    entity: '#007ada', // `syntax.entity`
-    constant: '#a37acc', // `syntax.constant`, only used in UI, not in code
-    operator: '#ed9366', // `syntax.operator`, only used in UI, not in code
-    error: '#f51818', // `syntax.error`, only used in UI, not in code
-    conflict: '#ff0000', // git conflicts
+    syntax: {
+      comment: '#737b84', // `syntax.comment`
+      string: '#478f00', // `syntax.string`
+      // Keywords, functions and types are the main markers while scrolling the code,
+      // so they are saturated `syntax.*` hues, spread apart so they do not blend:
+      keyword: '#d43811', // `syntax.keyword`
+      func: '#cc7e00', // `syntax.func`
+      entity: '#007ada', // `syntax.entity`
+      constant: '#a37acc', // `syntax.constant`, only used in UI, not in code
+      operator: '#ed9366', // `syntax.operator`, only used in UI, not in code
+      error: '#f51818', // `syntax.error`, only used in UI, not in code
+    },
 
-    // Selection
-    selection: '#c8e0f4', // `entity` at 20% over `bg`
-    selectionInactive: '#e7e8e9', // `ui.selection.inactive`
-    selectionBorder: '#e1e1e2', // `ui.selection.border`
-    suggestSelection: '#bcdaf2', // selected item in the autocomplete popup, a bit stronger than `selection`
+    selection: {
+      bg: '#c8e0f4', // `entity` at 20% over `bg`
+      inactive: '#e7e8e9', // `ui.selection.inactive`
+      border: '#e1e1e2', // `ui.selection.border`
+      suggest: '#bcdaf2', // selected item in the autocomplete popup, a bit stronger than `selection`
+    },
 
-    // VCS
-    vcsAdded: '#99bf4d',
-    vcsModified: '#709ecc',
-    vcsRemoved: '#f27983',
-    gitModifiedFile: '#c2a620', // modified files in the explorer, between `string` and `accent`
+    vcs: {
+      added: '#99bf4d',
+      modified: '#709ecc',
+      removed: '#f27983',
+      modifiedFile: '#c2a620', // modified files in the explorer, between `string` and `accent`
+      conflict: '#ff0000', // git conflicts
+    },
 
-    // Terminal
     terminal: {
       black: '#000000',
       red: '#ea6c6d',

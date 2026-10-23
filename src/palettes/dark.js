@@ -11,45 +11,49 @@ module.exports = {
   filename: 'pustota-color-theme.json',
 
   colors: {
-    // Base
-    bg: '#0a0e14', // `common.bg`
-    line: '#00010a', // `ui.line`: a bit darker than `bg`, used for subtle highlights
-    fg: '#b3b1ad', // `common.fg`: main text color
-    ui: '#4d5566', // `common.ui`: inactive text in UI
-    uiDim: '#414856', // `common.ui` faded into `bg` (invalid / placeholder items)
-    uiMuted: '#373d49', // `common.ui` faded even more (ignored files, picker groups)
-    dropdownBorder: '#2b303a',
-    panelBorder: '#000000',
+    base: {
+      bg: '#0a0e14', // `common.bg`
+      line: '#00010a', // `ui.line`: a bit darker than `bg`, used for subtle highlights
+      fg: '#b3b1ad', // `common.fg`: main text color
+      ui: '#4d5566', // `common.ui`: inactive text in UI
+      uiDim: '#414856', // `common.ui` faded into `bg` (invalid / placeholder items)
+      uiMuted: '#373d49', // `common.ui` faded even more (ignored files, picker groups)
+      dropdownBorder: '#2b303a',
+      panelBorder: '#000000',
+    },
 
-    // Accent
-    accent: '#e6b450', // `common.accent`
-    accentHover: '#e1af4b', // `common.accent` slightly darkened, used for hovered buttons
-    accentAlt: '#e5b358', // a slightly different accent for highlighted text in lists
+    accent: {
+      main: '#e6b450', // `common.accent`
+      hover: '#e1af4b', // `common.accent` slightly darkened, used for hovered buttons
+      alt: '#e5b358', // a slightly different accent for highlighted text in lists
+    },
 
-    // Syntax
-    comment: '#626a73', // `syntax.comment`
-    string: '#c2d94c', // `syntax.string`
-    keyword: '#ff8f40', // `syntax.keyword`
-    func: '#ffb454', // `syntax.func`
-    entity: '#59c2ff', // `syntax.entity`
-    constant: '#ffee99', // `syntax.constant`, only used in UI, not in code
-    operator: '#f29668', // `syntax.operator`, only used in UI, not in code
-    error: '#ff3333', // `syntax.error`, only used in UI, not in code
-    conflict: '#ff0000', // git conflicts
+    syntax: {
+      comment: '#626a73', // `syntax.comment`
+      string: '#c2d94c', // `syntax.string`
+      keyword: '#ff8f40', // `syntax.keyword`
+      func: '#ffb454', // `syntax.func`
+      entity: '#59c2ff', // `syntax.entity`
+      constant: '#ffee99', // `syntax.constant`, only used in UI, not in code
+      operator: '#f29668', // `syntax.operator`, only used in UI, not in code
+      error: '#ff3333', // `syntax.error`, only used in UI, not in code
+    },
 
-    // Selection
-    selection: '#273747', // `ui.selection.bg`
-    selectionInactive: '#1b2733', // `ui.selection.inactive`
-    selectionBorder: '#304357', // `ui.selection.border`
-    suggestSelection: '#1c2a42', // selected item in the autocomplete popup
+    selection: {
+      bg: '#273747', // `ui.selection.bg`
+      inactive: '#1b2733', // `ui.selection.inactive`
+      border: '#304357', // `ui.selection.border`
+      suggest: '#1c2a42', // selected item in the autocomplete popup
+    },
 
-    // VCS
-    vcsAdded: '#91b362',
-    vcsModified: '#6994bf',
-    vcsRemoved: '#d96c75',
-    gitModifiedFile: '#d4cb68', // modified files in the explorer, between `string` and `accent`
+    vcs: {
+      added: '#91b362',
+      modified: '#6994bf',
+      removed: '#d96c75',
+      modifiedFile: '#d4cb68', // modified files in the explorer, between `string` and `accent`
+      conflict: '#ff0000', // git conflicts
+    },
 
-    // Terminal
     terminal: {
       black: '#00010a',
       red: '#ea6c73',
