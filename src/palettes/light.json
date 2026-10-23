@@ -1,0 +1,68 @@
+{
+  "name": "pustota light",
+  "type": "light",
+  "filename": "pustota-light-color-theme.json",
+  "colors": {
+    "base": {
+      "bg": "#fafafa",
+      "line": "#8a91991a",
+      "fg": "#181b1f",
+      "ui": "#6e7682",
+      "uiDim": "#b2b7bb",
+      "uiMuted": "#c9cccf",
+      "dropdownBorder": "#dddfe1",
+      "panelBorder": "#f0f0f0"
+    },
+
+    "accent": {
+      "main": "#ab8600",
+      "hover": "#a27f00",
+      "alt": "#997900"
+    },
+
+    "syntax": {
+      "comment": "#737b84",
+      "string": "#478f00",
+      "keyword": "#d43811",
+      "func": "#cc7e00",
+      "entity": "#007ada",
+      "constant": "#a37acc",
+      "operator": "#ed9366",
+      "error": "#f51818"
+    },
+
+    "selection": {
+      "bg": "#c8e0f4",
+      "inactive": "#e7e8e9",
+      "border": "#e1e1e2",
+      "suggest": "#bcdaf2"
+    },
+
+    "vcs": {
+      "added": "#99bf4d",
+      "modified": "#709ecc",
+      "removed": "#f27983",
+      "modifiedFile": "#c2a620",
+      "conflict": "#ff0000"
+    },
+
+    "terminal": {
+      "black": "#000000",
+      "red": "#ea6c6d",
+      "green": "#99bf4d",
+      "yellow": "#eca944",
+      "blue": "#3199e1",
+      "magenta": "#9e75c7",
+      "cyan": "#46ba94",
+      "white": "#c7c7c7",
+      "brightBlack": "#686868",
+      "brightRed": "#f07171",
+      "brightGreen": "#86b300",
+      "brightYellow": "#f2ae49",
+      "brightBlue": "#399ee6",
+      "brightMagenta": "#a37acc",
+      "brightCyan": "#4cbf99",
+      "brightWhite": "#d1d1d1"
+    }
+  }
+}
