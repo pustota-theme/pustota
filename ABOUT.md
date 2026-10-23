@@ -53,6 +53,8 @@ VSCodium and OpenVSX [are also supported](https://open-vsx.org/extension/sobolev
 
 And then choose `Preferences: Color Theme` to be `"pustota"` or `"pustota light"`.
 
+For [Zed](https://zed.dev), install `pustota` from the extensions page, and then choose `theme selector: toggle` to be `"pustota"`, `"pustota light"`, or `"pustota contrast"`.
+
 ## Supported languages
 
 This theme [supports a lot of languages](https://github.com/pustota-theme/pustota/tree/master/test), starting from mainstream ones
