@@ -10,9 +10,18 @@ const path = require('path');
 const buildTheme = require('./theme');
 
 const ROOT = path.join(__dirname, '..');
-const PALETTES = ['src/palettes/dark.json', 'src/palettes/light.json']
-  .map(source => ({ source, ...require(path.join(ROOT, source)) }));
 const THEMES_DIR = path.join(ROOT, 'themes');
+
+// `source` is the palette path, used in the header of the generated theme.
+function loadPalette(source) {
+  return { source, ...require(path.join(ROOT, source)) };
+}
+
+const PALETTES = [
+  loadPalette('src/palettes/dark.json'),
+  loadPalette('src/palettes/light.json'),
+  loadPalette('src/palettes/contrast.json'),
+];
 
 // VSCode reads theme files as JSONC, so a comment header is fine here.
 function header(palette) {

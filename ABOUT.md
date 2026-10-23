@@ -39,6 +39,21 @@ Everything else is just dark grey (`#181B1F`) ![#181B1F](https://placehold.co/15
 
 ![default-light](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default-light.png)
 
+### pustota contrast
+
+`pustota contrast` is the same dark theme with brighter text and comments, and more saturated accents.
+It highlights exactly the same things:
+1. Comments (`#959DA6`) ![#959DA6](https://placehold.co/15x15/959DA6/959DA6.png)
+2. Strings (`#CCE53D`) ![#CCE53D](https://placehold.co/15x15/CCE53D/CCE53D.png)
+3. Constants (`#F5BD47`) ![#F5BD47](https://placehold.co/15x15/F5BD47/F5BD47.png)
+4. Keywords and operators (`#FF8F40`) ![#FF8F40](https://placehold.co/15x15/FF8F40/FF8F40.png)
+5. Function definitions (`#FFB454`) ![#FFB454](https://placehold.co/15x15/FFB454/FFB454.png)
+6. Type definitions (`#59C2FF`) ![#59C2FF](https://placehold.co/15x15/59C2FF/59C2FF.png)
+
+Everything else is just white (`#E0DED8`) ![#E0DED8](https://placehold.co/15x15/E0DED8/E0DED8.png)
+
+![default-contrast](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default-contrast.png)
+
 ## Pairings
 
 Pairs greatly with [`FiraCode`](https://github.com/tonsky/FiraCode) font and [`sobole`](https://github.com/sobolevn/sobole-zsh-theme) theme for ZSH.
@@ -55,7 +70,7 @@ You can also check my [`.dotfiles`](https://github.com/sobolevn/dotfiles) with t
 
 VSCodium and OpenVSX [are also supported](https://open-vsx.org/extension/sobolevn/pustota).
 
-And then choose `Preferences: Color Theme` to be `"pustota"` or `"pustota light"`.
+And then choose `Preferences: Color Theme` to be `"pustota"`, `"pustota light"`, or `"pustota contrast"`.
 
 ## Supported languages
 
