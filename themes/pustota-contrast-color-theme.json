@@ -59,7 +59,7 @@
     "editorWidget.background": "#0a0e14",
     "editorWidget.resizeBorder": "#0a0e14",
     "editorWidget.border": "#0a0e14",
-    "gitDecoration.addedResourceForeground": "#cce53d",
+    "gitDecoration.addedResourceForeground": "#c2d94c",
     "gitDecoration.conflictingResourceForeground": "#ff0000",
     "gitDecoration.deletedResourceForeground": "#d96c75b3",
     "gitDecoration.ignoredResourceForeground": "#373d49",
@@ -106,7 +106,7 @@
     "debugExceptionWidget.border": "#0a0e14",
     "debugToolBar.background": "#0a0e14",
     "descriptionForeground": "#848c9c",
-    "diffEditor.insertedTextBackground": "#cce53d26",
+    "diffEditor.insertedTextBackground": "#c2d94c26",
     "diffEditor.removedTextBackground": "#f2966826",
     "dropdown.background": "#0a0e14",
     "dropdown.border": "#2b303a",
@@ -233,7 +233,7 @@
         "markup.quote meta.paragraph"
       ],
       "settings": {
-        "foreground": "#cce53d"
+        "foreground": "#c2d94c"
       }
     },
     {

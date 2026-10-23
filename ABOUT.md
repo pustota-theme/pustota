@@ -41,10 +41,10 @@ Everything else is just dark grey (`#181B1F`) ![#181B1F](https://placehold.co/15
 
 ### pustota contrast
 
-`pustota contrast` is the same dark theme with brighter text and comments, and more saturated accents.
+`pustota contrast` is the same dark theme with brighter text, comments and constants.
 It highlights exactly the same things:
 1. Comments (`#959DA6`) ![#959DA6](https://placehold.co/15x15/959DA6/959DA6.png)
-2. Strings (`#CCE53D`) ![#CCE53D](https://placehold.co/15x15/CCE53D/CCE53D.png)
+2. Strings (`#C2D94C`) ![#C2D94C](https://placehold.co/15x15/C2D94C/C2D94C.png)
 3. Constants (`#F5BD47`) ![#F5BD47](https://placehold.co/15x15/F5BD47/F5BD47.png)
 4. Keywords and operators (`#FF8F40`) ![#FF8F40](https://placehold.co/15x15/FF8F40/FF8F40.png)
 5. Function definitions (`#FFB454`) ![#FFB454](https://placehold.co/15x15/FFB454/FFB454.png)
