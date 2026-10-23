@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds all `themes/*.json` files from `src/palettes/*.js` + `src/theme.js`.
+// Builds all `themes/*.json` files from `src/palettes/*.json` + `src/theme.js`.
 //
 // Usage:
 //   node src/build.js          # (re)generate theme files
@@ -9,11 +9,10 @@ const path = require('path');
 
 const buildTheme = require('./theme');
 
-const PALETTES = [
-  require('./palettes/dark'),
-  require('./palettes/light'),
-];
-const THEMES_DIR = path.join(__dirname, '..', 'themes');
+const ROOT = path.join(__dirname, '..');
+const PALETTES = ['src/palettes/dark.json', 'src/palettes/light.json']
+  .map(source => ({ source, ...require(path.join(ROOT, source)) }));
+const THEMES_DIR = path.join(ROOT, 'themes');
 
 // VSCode reads theme files as JSONC, so a comment header is fine here.
 function header(palette) {
