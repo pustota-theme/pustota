@@ -14,36 +14,36 @@ module.exports = {
     // Base
     bg: '#fafafa', // `common.bg`
     line: '#8a91991a', // `ui.line`: `common.ui` at 10%, Ayu Light has no opaque line color
-    fg: '#575f66', // `common.fg`: main text color
-    ui: '#8a9199', // `common.ui`: inactive text in UI
+    fg: '#181b1f', // `common.fg`: main text color
+    ui: '#6e7682', // `common.ui`: inactive text in UI
     uiDim: '#b2b7bb', // `common.ui` faded into `bg` (invalid / placeholder items)
     uiMuted: '#c9cccf', // `common.ui` faded even more (ignored files, picker groups)
     dropdownBorder: '#dddfe1',
     panelBorder: '#f0f0f0',
 
     // Accent
-    accent: '#ff9940', // `common.accent`
-    accentHover: '#f9943b', // `common.accent` slightly darkened, used for hovered buttons
-    accentAlt: '#f48f36', // `common.accent` darkened, Ayu Light uses it for accent-colored text
+    accent: '#ab8600', // `common.accent`
+    accentHover: '#a27f00', // `accent` slightly darkened, used for hovered buttons
+    accentAlt: '#997900', // `accent` darkened, used for accent-colored text
 
     // Syntax
-    comment: '#abb0b6', // `syntax.comment`
-    string: '#86b300', // `syntax.string`
+    comment: '#737b84', // `syntax.comment`
+    string: '#478f00', // `syntax.string`
     // Keywords, functions and types are the main markers while scrolling the code,
-    // so they are `syntax.*` hues darkened to at least 4.5:1 contrast with `bg`:
-    keyword: '#be5305', // `syntax.keyword` (`#fa8d3e`), darkened
-    func: '#a3660c', // `syntax.func` (`#f2ae49`), darkened
-    entity: '#1878bd', // `syntax.entity` (`#399ee6`), darkened
+    // so they are saturated `syntax.*` hues, spread apart so they do not blend:
+    keyword: '#d43811', // `syntax.keyword`
+    func: '#cc7e00', // `syntax.func`
+    entity: '#007ada', // `syntax.entity`
     constant: '#a37acc', // `syntax.constant`, only used in UI, not in code
     operator: '#ed9366', // `syntax.operator`, only used in UI, not in code
     error: '#f51818', // `syntax.error`, only used in UI, not in code
     conflict: '#ff0000', // git conflicts
 
     // Selection
-    selection: '#d1e4f4', // `ui.selection.bg`
+    selection: '#c8e0f4', // `entity` at 20% over `bg`
     selectionInactive: '#e7e8e9', // `ui.selection.inactive`
     selectionBorder: '#e1e1e2', // `ui.selection.border`
-    suggestSelection: '#c4dbf0', // selected item in the autocomplete popup, a bit stronger than `selection`
+    suggestSelection: '#bcdaf2', // selected item in the autocomplete popup, a bit stronger than `selection`
 
     // VCS
     vcsAdded: '#99bf4d',
