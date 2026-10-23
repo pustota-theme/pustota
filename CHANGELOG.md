@@ -4,9 +4,12 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## Unreleased
+## 0.33.0
 
+- Added semantic highlight support
 - Added `pustota contrast` theme, a brighter variant of `pustota`
+- Fixed `type` keyword highlight in Python
+- Fixed method highlight when method name matches builtin type name in Python
 
 ## 0.32.0
 

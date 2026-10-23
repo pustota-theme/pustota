@@ -4,6 +4,7 @@
   "name": "pustota contrast",
   "$schema": "vscode://schemas/color-theme",
   "type": "dark",
+  "semanticHighlighting": true,
   "colors": {
     "editor.background": "#0a0e14",
     "editor.findMatchBackground": "#0a0e14",
@@ -273,6 +274,7 @@
         "punctuation.definition.attribute.rust",
         "storage.type.rust",
         "punctuation.separator.other.ruby",
+        "storage.type.type.python",
         "storage.type.function-type.lisp",
         "punctuation.definition.storage.type.objc",
         "punctuation.definition.keyword.objc",
@@ -427,5 +429,9 @@
         "fontStyle": "strikethrough"
       }
     }
-  ]
+  ],
+  "semanticTokenColors": {
+    "function.declaration:python": "#ffb454",
+    "method.declaration:python": "#ffb454"
+  }
 }

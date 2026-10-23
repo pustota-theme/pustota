@@ -359,6 +359,8 @@ function tokenColors(c) {
         'storage.type.rust',
         // Ruby:
         'punctuation.separator.other.ruby', // `:` in ternary
+        // Python:
+        'storage.type.type.python',  // `type` keyword
         // Lisp:
         'storage.type.function-type.lisp', // `def*`
         // Objective-C:
@@ -581,11 +583,26 @@ function tokenColors(c) {
 }
 
 // Builds a complete VSCode color theme from a palette.
+// Semantic tokens come from language servers (like Pylance) and are applied
+// on top of TextMate scopes. We only use them where TextMate grammars
+// cannot tell the cases apart.
+function semanticTokenColors(c) {
+  return {
+    // Python: builtin type names used as function/method names,
+    // like `def set(self): ...`. The grammar scopes the name as
+    // `support.type.python`, exactly like `set(items)` or `-> set`,
+    // so only the language server can tell the definition apart.
+    'function.declaration:python': c.syntax.func,
+    'method.declaration:python': c.syntax.func,
+  };
+}
+
 module.exports = function buildTheme(palette) {
   return {
     name: palette.name,
     $schema: 'vscode://schemas/color-theme',
     type: palette.type,
+    semanticHighlighting: true,
 
     // There are several default VSCode colors that we don't customize:
     // - diffs
@@ -593,5 +610,6 @@ module.exports = function buildTheme(palette) {
     // - some other internals
     colors: colors(palette.colors),
     tokenColors: tokenColors(palette.colors),
+    semanticTokenColors: semanticTokenColors(palette.colors),
   };
 };

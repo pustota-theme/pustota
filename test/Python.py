@@ -19,7 +19,7 @@ def hash_fn(x: int | str | tuple[str, ...]) -> int:
         print('Do not do that!')
     return hashlib.sha256()
 
-def hash_primitive[T, B](t: T, b: B) -> T:
+def hash_primitive[T, B: int, C=str](t: T, b: B) -> T:
     #print hexify(t), hexify(b)
     m = hash_fn()
     m.update(t)
@@ -29,6 +29,9 @@ def hash_primitive[T, B](t: T, b: B) -> T:
     return t
 
 def accept(data: bytes | bytearray | memoryview): ...
+
+type Some = Literal[True]
+OldStyle = Callable[[list[Literal[None]]], Literal[None]]
 
 # We need this class because otherwise we can't put a list in a set.
 @classdecorator
