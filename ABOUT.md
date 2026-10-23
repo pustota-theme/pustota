@@ -22,7 +22,7 @@ Unlike many other themes, this one only highlights a few things:
 
 Everything else is just white (`#B3B1AD`) ![#B3B1AD](https://placehold.it/15/B3B1AD/B3B1AD?text=+)
 
-Basically, this is it.
+![default](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default.png)
 
 ### pustota light
 
@@ -36,6 +36,10 @@ It highlights exactly the same things:
 6. Type definitions (`#1878BD`) ![#1878BD](https://placehold.it/15/1878BD/1878BD?text=+)
 
 Everything else is just dark grey (`#575F66`) ![#575F66](https://placehold.it/15/575F66/575F66?text=+)
+
+![default-light](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default-light.png)
+
+## Pairings
 
 Pairs greatly with [`FiraCode`](https://github.com/tonsky/FiraCode) font and [`sobole`](https://github.com/sobolevn/sobole-zsh-theme) theme for ZSH.
 
@@ -75,7 +79,9 @@ npm run build
 
 ## Ports
 
-- Neovim port is available at [pustota.nvim](https://github.com/igor-gorohovsky/pustota.nvim).
+- Neovim port is available at [pustota.nvim](https://github.com/pustota-theme/pustota.nvim)
+- Zed post is available at [pustota.zed](https://github.com/pustota-theme/pustota.zed)
+- Codex post is available at [pustota.zed](https://github.com/pustota-theme/pustota.codex)
 
 ## Showcase
 
@@ -84,12 +90,6 @@ Theme with [my VSCode settings](https://github.com/sobolevn/dotfiles/tree/master
 ![minimal](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/minimal.png)
 
 ![main](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/main.png)
-
-Theme with default VSCode settings:
-
-![default](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default.png)
-
-![default-terminal](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default-terminal.png)
 
 ## Recommended settings
 

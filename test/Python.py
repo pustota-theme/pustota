@@ -265,6 +265,11 @@ def unicode_normalize_entity(e):
 
 unicode_normalize = ApplyToLeaves(unicode_normalize_entity, (str, unicode))
 
+@dataclass
+class DataclassExample:
+    field1: int
+    field2: str
+
 setup(
     name = "django-stubs",
     version = "1.8.0",
