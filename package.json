@@ -28,6 +28,11 @@
         "label": "pustota light",
         "uiTheme": "vs",
         "path": "./themes/pustota-light-color-theme.json"
+      },
+      {
+        "label": "pustota contrast",
+        "uiTheme": "vs-dark",
+        "path": "./themes/pustota-contrast-color-theme.json"
       }
     ]
   },

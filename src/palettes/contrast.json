@@ -1,0 +1,23 @@
+{
+  "extends": "dark.json",
+  "name": "pustota contrast",
+  "filename": "pustota-contrast-color-theme.json",
+  "colors": {
+    "base": {
+      "fg": "#e0ded8",
+      "ui": "#848c9c"
+    },
+
+    "accent": {
+      "main": "#f5bd47"
+    },
+
+    "syntax": {
+      "comment": "#959da6"
+    },
+
+    "selection": {
+      "bg": "#203f55"
+    }
+  }
+}

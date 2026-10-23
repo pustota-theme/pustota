@@ -13,14 +13,14 @@
 - Only statically known parts are highlighed
 
 Unlike many other themes, this one only highlights a few things:
-1. Comments (`#626A73`) ![#626A73](https://placehold.it/15/626A73/626A73?text=+)
-2. Strings (`#C2D94C`) ![#C2D94C](https://placehold.it/15/C2D94C/C2D94C?text=+)
-3. Constants (`#E6B450`) ![#E6B450](https://placehold.it/15/E6B450/E6B450?text=+)
-4. Keywords and operators (`#FF8F40`) ![#FF8F40](https://placehold.it/15/FF8F40/FF8F40?text=+)
-5. Function definitions (`#FFB454`) ![#FFB454](https://placehold.it/15/FFB454/FFB454?text=+)
-6. Type definitions (`#59C2FF`) ![#59C2FF](https://placehold.it/15/59C2FF/59C2FF?text=+)
+1. Comments (`#626A73`) ![#626A73](https://placehold.co/15x15/626A73/626A73.png)
+2. Strings (`#C2D94C`) ![#C2D94C](https://placehold.co/15x15/C2D94C/C2D94C.png)
+3. Constants (`#E6B450`) ![#E6B450](https://placehold.co/15x15/E6B450/E6B450.png)
+4. Keywords and operators (`#FF8F40`) ![#FF8F40](https://placehold.co/15x15/FF8F40/FF8F40.png)
+5. Function definitions (`#FFB454`) ![#FFB454](https://placehold.co/15x15/FFB454/FFB454.png)
+6. Type definitions (`#59C2FF`) ![#59C2FF](https://placehold.co/15x15/59C2FF/59C2FF.png)
 
-Everything else is just white (`#B3B1AD`) ![#B3B1AD](https://placehold.it/15/B3B1AD/B3B1AD?text=+)
+Everything else is just white (`#B3B1AD`) ![#B3B1AD](https://placehold.co/15x15/B3B1AD/B3B1AD.png)
 
 ![default](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default.png)
 
@@ -28,16 +28,31 @@ Everything else is just white (`#B3B1AD`) ![#B3B1AD](https://placehold.it/15/B3B
 
 `pustota light` is the same theme with colors from [Ayu Light](https://github.com/ayu-theme/vscode-ayu) instead of Ayu Dark.
 It highlights exactly the same things:
-1. Comments (`#ABB0B6`) ![#ABB0B6](https://placehold.it/15/ABB0B6/ABB0B6?text=+)
-2. Strings (`#86B300`) ![#86B300](https://placehold.it/15/86B300/86B300?text=+)
-3. Constants (`#FF9940`) ![#FF9940](https://placehold.it/15/FF9940/FF9940?text=+)
-4. Keywords and operators (`#BE5305`) ![#BE5305](https://placehold.it/15/BE5305/BE5305?text=+)
-5. Function definitions (`#A3660C`) ![#A3660C](https://placehold.it/15/A3660C/A3660C?text=+)
-6. Type definitions (`#1878BD`) ![#1878BD](https://placehold.it/15/1878BD/1878BD?text=+)
+1. Comments (`#737B84`) ![#737B84](https://placehold.co/15x15/737B84/737B84.png)
+2. Strings (`#478F00`) ![#478F00](https://placehold.co/15x15/478F00/478F00.png)
+3. Constants (`#AB8600`) ![#AB8600](https://placehold.co/15x15/AB8600/AB8600.png)
+4. Keywords and operators (`#D43811`) ![#D43811](https://placehold.co/15x15/D43811/D43811.png)
+5. Function definitions (`#CC7E00`) ![#CC7E00](https://placehold.co/15x15/CC7E00/CC7E00.png)
+6. Type definitions (`#007ADA`) ![#007ADA](https://placehold.co/15x15/007ADA/007ADA.png)
 
-Everything else is just dark grey (`#575F66`) ![#575F66](https://placehold.it/15/575F66/575F66?text=+)
+Everything else is just dark grey (`#181B1F`) ![#181B1F](https://placehold.co/15x15/181B1F/181B1F.png)
 
 ![default-light](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default-light.png)
+
+### pustota contrast
+
+`pustota contrast` is the same dark theme with brighter text, comments and constants.
+It highlights exactly the same things:
+1. Comments (`#959DA6`) ![#959DA6](https://placehold.co/15x15/959DA6/959DA6.png)
+2. Strings (`#C2D94C`) ![#C2D94C](https://placehold.co/15x15/C2D94C/C2D94C.png)
+3. Constants (`#F5BD47`) ![#F5BD47](https://placehold.co/15x15/F5BD47/F5BD47.png)
+4. Keywords and operators (`#FF8F40`) ![#FF8F40](https://placehold.co/15x15/FF8F40/FF8F40.png)
+5. Function definitions (`#FFB454`) ![#FFB454](https://placehold.co/15x15/FFB454/FFB454.png)
+6. Type definitions (`#59C2FF`) ![#59C2FF](https://placehold.co/15x15/59C2FF/59C2FF.png)
+
+Everything else is just white (`#E0DED8`) ![#E0DED8](https://placehold.co/15x15/E0DED8/E0DED8.png)
+
+![default-contrast](https://raw.githubusercontent.com/pustota-theme/pustota/master/assets/default-contrast.png)
 
 ## Pairings
 
@@ -55,7 +70,7 @@ You can also check my [`.dotfiles`](https://github.com/sobolevn/dotfiles) with t
 
 VSCodium and OpenVSX [are also supported](https://open-vsx.org/extension/sobolevn/pustota).
 
-And then choose `Preferences: Color Theme` to be `"pustota"` or `"pustota light"`.
+And then choose `Preferences: Color Theme` to be `"pustota"`, `"pustota light"`, or `"pustota contrast"`.
 
 ## Supported languages
 

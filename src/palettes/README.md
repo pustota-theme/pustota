@@ -7,3 +7,5 @@ Colors come from [Ayu](https://github.com/ayu-theme/vscode-ayu) (`ayu` colors v7
 `syntax.constant`, `syntax.operator` and `syntax.error` are only used in UI, not in code.
 
 To add a palette, create a JSON file here and list it in `build.js` and `package.json`.
+
+A palette can set `extends` to another palette file and list only the colors it changes, see `contrast.json`.

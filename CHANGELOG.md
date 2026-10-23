@@ -4,6 +4,10 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## Unreleased
+
+- Added `pustota contrast` theme, a brighter variant of `pustota`
+
 ## 0.32.0
 
 - Added `pustota light` theme, based on Ayu Light colors
