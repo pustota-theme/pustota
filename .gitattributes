@@ -1,0 +1,4 @@
+[attr]generated linguist-generated=true diff=generated
+
+# Theme files are built from `src/`, see `npm run build`.
+themes/*.json generated

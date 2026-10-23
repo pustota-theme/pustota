@@ -5,3 +5,4 @@ assets/**
 !assets/icon.png
 test/
 .github/
+src/**
