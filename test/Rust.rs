@@ -1,3 +1,6 @@
+// NOTE: rust highlight has known bugs with ligatures enabled,
+// see https://github.com/microsoft/vscode/issues/43440
+
 use itertools::Itertools;
 use std::{env, io::prelude::*, path::PathBuf, process::Command};
 
