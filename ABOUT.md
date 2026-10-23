@@ -81,7 +81,7 @@ npm run build
 
 - Neovim port is available at [pustota.nvim](https://github.com/pustota-theme/pustota.nvim)
 - Zed post is available at [pustota.zed](https://github.com/pustota-theme/pustota.zed)
-- Codex post is available at [pustota.zed](https://github.com/pustota-theme/pustota.codex)
+- Codex post is available at [pustota.codex](https://github.com/pustota-theme/pustota.codex)
 
 ## Showcase
 
