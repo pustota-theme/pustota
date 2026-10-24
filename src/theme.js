@@ -594,6 +594,25 @@ function semanticTokenColors(c) {
     // so only the language server can tell the definition apart.
     'function.declaration:python': c.syntax.func,
     'method.declaration:python': c.syntax.func,
+
+    // C: names introduced by `typedef`, like `PyObject` in
+    // `typedef struct _object PyObject;` or `PySlot` in
+    // `typedef struct { ... } PySlot;`. The grammar has no scope for
+    // the new name, so only the language server can mark it as a type
+    // being declared. Type usages stay uncolored.
+    //
+    // This needs clangd. The Microsoft C/C++ extension (cpptools) emits
+    // the same `type` token for definitions and usages and only knows
+    // the `static`, `global` and `local` modifiers, so there is no
+    // selector that would match the typedef name alone. All cpptools
+    // tokens fall back to the TextMate colors above, which is what we want.
+    'type.declaration:c': c.syntax.entity,
+
+    // Go: type names being defined, like `config` in `type config struct`
+    // or `Set` in `type Set []interface{}`. The grammar uses the same
+    // `entity.name.type.go` scope for definitions and usages, so only
+    // gopls can tell them apart. Type usages stay uncolored.
+    'type.definition:go': c.syntax.entity,
   };
 }
 

@@ -432,6 +432,8 @@
   ],
   "semanticTokenColors": {
     "function.declaration:python": "#ffb454",
-    "method.declaration:python": "#ffb454"
+    "method.declaration:python": "#ffb454",
+    "type.declaration:c": "#59c2ff",
+    "type.definition:go": "#59c2ff"
   }
 }
