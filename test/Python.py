@@ -31,6 +31,7 @@ def hash_primitive[T, B: int, C=str](t: T, b: B) -> T:
 def accept(data: bytes | bytearray | memoryview): ...
 
 type Some = Literal[True]
+type(Some)
 OldStyle = Callable[[list[Literal[None]]], Literal[None]]
 
 # We need this class because otherwise we can't put a list in a set.
@@ -68,6 +69,10 @@ class FrozenList(object):
         ...
 
 def obj_hash_bool(b):
+    print((x := 1))
+    match x:
+        case 1:
+            x = 2
     return hash_primitive('b', '1' if b else '0')
 
 def obj_hash_list(l):
@@ -241,7 +246,7 @@ def redactable_rand():
         r += chr(random.SystemRandom().getrandbits(8))
     return hexify(r)
 
-redactable = ApplyToLeavesAndKeys(redactable_entity, redactable_key)
+redactable: Final = ApplyToLeavesAndKeys(redactable_entity, redactable_key)
 
 class ApplyUnredactable(ApplyToLeavesAndKeys):
     def __init__(self):

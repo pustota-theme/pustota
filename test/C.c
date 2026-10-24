@@ -23,9 +23,43 @@ struct student
     float marks;
 } s;
 
+typedef struct {
+    uint16_t sl_id;
+    uint16_t sl_flags;
+    uint32_t _reserved;  // must be 0
+    union {
+        void *sl_ptr;
+        void (*sl_func)(void);
+        Py_ssize_t sl_size;
+        int64_t sl_int64;
+        uint64_t sl_uint64;
+    };
+} PySlot;
+
+typedef struct _object PyObject;
+
+PyAPI_FUNC(void) PyObject_ClearWeakRefs(PyObject *);
+
+typedef Py_hash_t (*hashfunc)(PyObject *);
+typedef PyObject *(*richcmpfunc) (PyObject *, PyObject *, int);
+
 enum Color chosenColor = GREEN;
 struct Point pt = { 10, 20 };
 union DataValue val;
+
+int
+PyList_Append(PyObject *op, PyObject *newitem)
+{
+    if (PyList_Check(op) && (newitem != NULL)) {
+        int ret;
+        Py_BEGIN_CRITICAL_SECTION(op);
+        ret = _PyList_AppendTakeRef((PyListObject *)op, Py_NewRef(newitem));
+        Py_END_CRITICAL_SECTION();
+        return ret;
+    }
+    PyErr_BadInternalCall();
+    return -1;
+}
 
 bool object_hash(/*const*/ json_object *j, byte hash[HASH_SIZE]);
 

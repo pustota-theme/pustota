@@ -4,6 +4,11 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## Unreleased
+
+- Added `typedef` name highlight in C via semantic tokens
+- Added type definition name highlight in Go via semantic tokens
+
 ## 0.33.0
 
 - Added semantic highlight support

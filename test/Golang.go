@@ -10,7 +10,7 @@ import (
 	"sort"
 )
 
-struct config {
+type config struct {
   port int
 }
 
@@ -20,6 +20,14 @@ func hash(t string, b []byte) [hashLength]byte {
 	h := sha256.New()
 	h.Write([]byte(t))
 	h.Write(b)
+
+  dog := struct {
+    name   string
+    isGood bool
+  }{
+    "Rex",
+    true,
+  }
 
 	var r [hashLength]byte
 	copy(r[:], h.Sum(nil))
