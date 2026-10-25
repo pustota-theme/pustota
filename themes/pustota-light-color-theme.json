@@ -274,6 +274,7 @@
         "punctuation.definition.attribute.rust",
         "storage.type.rust",
         "punctuation.separator.other.ruby",
+        "variable.other.readwrite.instance punctuation.definition.variable",
         "storage.type.type.python",
         "storage.type.function-type.lisp",
         "punctuation.definition.storage.type.objc",
@@ -340,7 +341,6 @@
         "support.class.dart",
         "meta.module entity.name.type.module",
         "meta.declaration storage.type.haskell",
-        "meta.type.declaration entity.name.type.alias",
         "meta.interface entity.name.type.interface",
         "entity.name.type.enum.ts",
         "entity.name.type.lisp",
@@ -380,6 +380,10 @@
         "meta.return.type entity.name.type",
         "meta.type.parameters entity.name.type",
         "keyword.operator.type.annotation.ts",
+        "meta.field.declaration.ts meta.definition.property entity.name.function",
+        "meta.class.ts entity.name.type.module",
+        "meta.definition.variable.tsx variable.other.constant entity.name.function",
+        "meta.class.tsx entity.name.type.module",
         "source.css support.constant",
         "source.css meta.at-rule support.function",
         "support.type.property-name",
@@ -391,7 +395,6 @@
         "keyword.operator.return-value.php",
         "keyword.operator.class.php",
         "keyword.operator.macro.dollar.rust",
-        "keyword.other.special-method.ruby",
         "keyword.constant.lisp",
         "source.objc keyword.other.property",
         "source.editorconfig keyword.other.definition",
@@ -434,6 +437,7 @@
     "function.declaration:python": "#cc7e00",
     "method.declaration:python": "#cc7e00",
     "type.declaration:c": "#007ada",
-    "type.definition:go": "#007ada"
+    "type.definition.struct:go": "#007ada",
+    "type.definition.interface:go": "#007ada"
   }
 }

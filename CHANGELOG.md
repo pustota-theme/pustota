@@ -4,10 +4,20 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## Unreleased
+## 0.34.0
 
 - Added `typedef` name highlight in C via semantic tokens
-- Added type definition name highlight in Go via semantic tokens
+- Added `struct` and `interface` definition name highlight
+  in Go via semantic tokens, other type definitions
+  like `type Set []interface{}` are not highlighted
+- Removed type alias name highlight in TypeScript,
+  `type Matcher = {...}` is not highlighted
+- In TypeScript `type Alias = String` is no longer highlighted as a class
+- In TypeScript fixed highlight `prop: () => number = () => {}` as method
+- In TypeScript fixed `class Test2 extends Module.Class {}` highlight,
+  now `Module` is not highlighted
+- In Ruby fixed `require` highlight, it is now a keyword
+- In Ruby fixed `new` and `private` highlight, they are now keywords
 
 ## 0.33.0
 

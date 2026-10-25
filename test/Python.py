@@ -48,7 +48,7 @@ class FrozenList(object):
     def set(self, other: str | None) -> str:
         class A: ...
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: FrozenList):
         return self.l[key]
 
     def __hash__(self):
@@ -277,6 +277,28 @@ unicode_normalize = ApplyToLeaves(unicode_normalize_entity, (str, unicode))
 class DataclassExample:
     field1: int
     field2: str
+
+def kafka_handler(
+    agent_data: AgentData,
+) -> Callable[
+    [Callable[[Any, KafkaMessage], Awaitable[BaseResponse]]],
+    Callable[[Any, KafkaMessage], Awaitable[BaseResponse]],
+]:
+    """
+    Decorator for creating Kafka endpoint with subscription to input topic and publishing to output topic.
+
+    Args:
+        agent_data: Individual data for the handler
+    """
+    group_id = None if config.BASE_GROUP_ID in {'test', 'dev'} else f'{config.BASE_GROUP_ID}-{agent_data.message_field}'
+    logger.info(
+        'Kafka subscriber configured: topic=%s group_id=%s',
+        agent_data.topic_in,
+        group_id,
+    )
+
+class Example(Protocol):
+    def some(self) -> None: ...
 
 setup(
     name = "django-stubs",

@@ -2,7 +2,7 @@
   "name": "pustota",
   "displayName": "pustota",
   "description": "Minimalistic VSCode theme inspired by old-fashioned hobbies",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "scripts": {
     "build": "node src/build.js",
     "check": "node src/build.js --check",

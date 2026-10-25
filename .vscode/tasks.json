@@ -1,0 +1,18 @@
+// Tasks used by `launch.json`.
+// For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm: build",
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "clear": true
+      }
+    }
+  ]
+}
