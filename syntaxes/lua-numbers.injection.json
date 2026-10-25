@@ -1,0 +1,11 @@
+{
+  "comment": "Lua hexadecimal floats with an unsigned binary exponent, like `0x1p4` or `0xA.8P2`. The builtin Lua grammar requires a sign after `p`, so only `0x1` is scoped as a number and `p4` stays uncolored.",
+  "scopeName": "pustota.injection.lua.numbers",
+  "injectionSelector": "L:source.lua -comment -string",
+  "patterns": [
+    {
+      "match": "(?<![\\w.])0[xX](?:\\h+(?:\\.\\h*)?|\\.\\h+)[pP][-+]?\\d+",
+      "name": "constant.numeric.float.hexadecimal.lua"
+    }
+  ]
+}

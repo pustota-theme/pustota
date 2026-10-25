@@ -1,0 +1,11 @@
+{
+  "comment": "Lua library values, like `math.pi`, `io.stdout`, `package.path` or `_G`. The builtin Lua grammar gives them the same `constant.language.lua` scope as `true`, `false` and `nil`, so they would be highlighted as constants. They are regular table fields and globals, same as `Math.PI` in JavaScript, so this rule scopes them as `support.variable.library.lua`. Same names as in the builtin grammar.",
+  "scopeName": "pustota.injection.lua.constants",
+  "injectionSelector": "L:source.lua -comment -string",
+  "patterns": [
+    {
+      "match": "(?<![^.]\\.|:)\\b(?:_ENV|_G|_VERSION|math\\.(?:pi|huge|maxinteger|mininteger)|utf8\\.charpattern|io\\.(?:stdin|stdout|stderr)|package\\.(?:config|cpath|loaded|loaders|path|preload|searchers))\\b",
+      "name": "support.variable.library.lua"
+    }
+  ]
+}

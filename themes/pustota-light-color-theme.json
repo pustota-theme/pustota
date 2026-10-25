@@ -308,6 +308,7 @@
         "punctuation.definition.storage.type.objc",
         "punctuation.definition.keyword.objc",
         "storage.type.alias.shell",
+        "storage.type.attribute.lua",
         "entity.name.section.markdown",
         "source.php meta.interface storage.type.interface",
         "storage.type.const.php",
@@ -359,6 +360,7 @@
         "source.sass meta.at-rule support.function",
         "meta.function entity.name.function.shell",
         "entity.name.function.lisp",
+        "meta.function.lua entity.name.function.lua",
         "meta.function entity.name.function.objc",
         "meta.function entity.name.function.name-of-parameter.objc",
         "entity.other.attribute-name",
@@ -468,7 +470,8 @@
         "string.unquoted.argument.shell",
         "string.interpolated.dollar.shell",
         "source.shell string.unquoted.argument",
-        "string.interpolated.makefile"
+        "string.interpolated.makefile",
+        "string.tag.lua"
       ],
       "settings": {
         "foreground": "#181b1f"

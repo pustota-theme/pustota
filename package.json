@@ -77,6 +77,26 @@
         "injectTo": ["source.go"]
       },
       {
+        "scopeName": "pustota.injection.lua.numbers",
+        "path": "./syntaxes/lua-numbers.injection.json",
+        "injectTo": ["source.lua"]
+      },
+      {
+        "scopeName": "pustota.injection.lua.operators",
+        "path": "./syntaxes/lua-operators.injection.json",
+        "injectTo": ["source.lua"]
+      },
+      {
+        "scopeName": "pustota.injection.lua.function-names",
+        "path": "./syntaxes/lua-function-names.injection.json",
+        "injectTo": ["source.lua"]
+      },
+      {
+        "scopeName": "pustota.injection.lua.constants",
+        "path": "./syntaxes/lua-constants.injection.json",
+        "injectTo": ["source.lua"]
+      },
+      {
         "scopeName": "pustota.injection.typescript.types",
         "path": "./syntaxes/typescript-types.injection.json",
         "injectTo": ["source.ts", "source.tsx"]

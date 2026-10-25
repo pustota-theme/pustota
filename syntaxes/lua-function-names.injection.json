@@ -1,0 +1,11 @@
+{
+  "comment": "Lua function definitions with a table prefix, like `function Account.new()` or `function a.b.c:method()`. The builtin Lua grammar scopes every name before `.` as `entity.name.function.lua`, same as the function name itself, so `Account` would be highlighted as a definition. Names before `:` are already scoped as `entity.name.class.lua`. This rule scopes the table names as regular variables.",
+  "scopeName": "pustota.injection.lua.function-names",
+  "injectionSelector": "L:meta.function.lua -meta.parameter.lua -comment",
+  "patterns": [
+    {
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b(?=\\s*\\.)",
+      "name": "variable.other.lua"
+    }
+  ]
+}
