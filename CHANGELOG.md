@@ -17,6 +17,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - In Ruby fixed `@@` to be highlighted the same way as `@`
 - In Ruby fixed module name highlight
 - In Go fixed `0b` and `0x` highlight as numbers, not keywords
+- In Makefile fixed `$(TOP_LEVEL)` definitions to be plain text
+- In Makefile fixed `:=` to be an operator
+- In TOML fixed time and date to be constants
 
 ## 0.34.0
 

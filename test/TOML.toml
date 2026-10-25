@@ -110,8 +110,6 @@ trimmed in raw strings.
    is preserved.
 '''
 multiline_literal_regex = '''I [dw]on't need \d{2} apples'''
-multiline_literal_quotes = ''''That,' she said, 'is still pointless.''''
-unicode = "пустота — 空 — ∅"
 
 [numbers]
 int_plain = 99

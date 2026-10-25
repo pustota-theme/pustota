@@ -2,6 +2,8 @@
 
 set -e
 
+top_level=$(top level)
+
 function _check_setup {
   # Checking git and secret-plugin setup:
   local is_tree

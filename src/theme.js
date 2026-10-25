@@ -305,11 +305,10 @@ function tokenColors(c) {
         'string',
         'constant.other.symbol',
         'constant.character.escape',
-
-        // JS:
         'string.quoted invalid.illegal.newline', // in-progress strings
+
         // Markdown:
-        'markup.quote meta.paragraph',
+        'text.html.markdown markup.quote meta.paragraph',
         // Python:
         'source.python string.regexp keyword.operator',
       ],
@@ -325,8 +324,8 @@ function tokenColors(c) {
         'constant.language',
         'support.constant',
 
-        // CSS:
-        'constant.other.color',
+        // CSS / SCSS / Less:
+        'source.css constant.other.color',
         // HTML:
         'string.unquoted.html',
         // TS:
@@ -336,6 +335,8 @@ function tokenColors(c) {
         'source.ts storage.type.numeric',  // `10n`
         // Go:
         'source.go keyword.other.unit',
+        // TOML:
+        'source.toml constant.other.time',
       ],
       settings: {
         foreground: c.syntax.constant,
@@ -356,19 +357,28 @@ function tokenColors(c) {
         'punctuation.decorator',
         'punctuation.separator.continuation.line',
         'punctuation.separator.annotation.result', // `->` operator in annotations
+        // Markup tags, used by HTML, JSX, TSX, Vue, etc:
+        'punctuation.definition.tag.begin',
+        'punctuation.definition.tag.end',
 
         // C:
         'constant.character.escape.line-continuation.c', // `\` operator
         'storage.type.struct.c', // `struct` keyword
         'storage.type.enum.c', // `enum`
         'storage.type.union.c', // `union`
-        // JS:
-        'meta.method.declaration storage.type', // `constructor`
+        // JS / TS:
+        'source.js meta.method.declaration storage.type', // `constructor`
+        'source.ts meta.method.declaration storage.type',
+        'source.tsx meta.method.declaration storage.type',
+        'source.js meta.var.expr storage.type', // `const`, `let`, `var`
+        'source.ts meta.var.expr storage.type',
+        'source.tsx meta.var.expr storage.type',
         // TS:
-        'meta.var.expr storage.type', // `type`
-        'meta.interface storage.type.interface', // `interface`
+        'source.ts meta.interface storage.type.interface', // `interface`
+        'source.tsx meta.interface storage.type.interface',
         'storage.type.enum.ts', // `enum`
-        'meta.type.declaration storage.type.type',
+        'source.ts meta.type.declaration storage.type.type',
+        'source.tsx meta.type.declaration storage.type.type',
         'meta.namespace.declaration.ts storage.type.namespace', // `namespace`
         'meta.class.ts storage.type.property', // `accessor`
         // Rust:
@@ -388,16 +398,16 @@ function tokenColors(c) {
         'storage.type.alias.shell', // `alias` keyword
         // Markdown:
         'entity.name.section.markdown', // headers
-        // HTML / JSX / TSX:
-        'punctuation.definition.tag.begin',
-        'punctuation.definition.tag.end',
+        // PHP:
+        'source.php meta.interface storage.type.interface', // `interface`
         // TOML:
         'source.toml support.type.property-name.table',
         'source.toml support.type.property-name.array',
         // INI:
-        'entity.name.section.group-title',
+        'source.ini entity.name.section.group-title',
         // Makefile:
-        'support.function.target.PHONY',
+        'source.makefile support.function.target.PHONY',
+        'punctuation.separator.key-value.makefile',
         // C#:
         'storage.type.namespace.cs',
         'storage.type.record.cs',
@@ -432,18 +442,20 @@ function tokenColors(c) {
         // Rust:
         'meta.macro.rules entity.name.function.macro.rust',
         // Ruby:
-        'meta.function.method entity.name.function',
+        'source.ruby meta.function.method entity.name.function',
         // PHP:
         'meta.function.php entity.name.function',
         // Go:
         'entity.name.function.go',
         // Haskell:
-        'meta.function.type-declaration entity.name.function',
+        'source.haskell meta.function.type-declaration entity.name.function',
         // CSS:
-        'entity.other.keyframe-offset',
-        // SASS / SCSS:
-        'meta.at-rule entity.name.function',
-        'meta.at-rule support.function',
+        'source.css entity.other.keyframe-offset',
+        // CSS / SCSS / Less / SASS:
+        'source.css meta.at-rule entity.name.function',
+        'source.css meta.at-rule support.function',
+        'source.sass meta.at-rule entity.name.function',
+        'source.sass meta.at-rule support.function',
         // Bash:
         'meta.function entity.name.function.shell',
         // Lisp:
@@ -456,10 +468,10 @@ function tokenColors(c) {
         // Not really functions, but these elements also need a color accent
         // ---
 
-        // Markdown:
-        'markup.inline.raw.string',
-        // HTML / JSX / TSX:
+        // Attributes in HTML, JSX, TSX, Vue, XML, and CSS selectors:
         'entity.other.attribute-name',
+        // Markdown:
+        'text.html.markdown markup.inline.raw.string',
         // Makefile:
         'entity.name.function.target.makefile',
       ],
@@ -483,8 +495,11 @@ function tokenColors(c) {
         // Haskell:
         'meta.declaration storage.type.haskell',
         // TS:
-        'meta.interface entity.name.type.interface',
+        'source.ts meta.interface entity.name.type.interface',
+        'source.tsx meta.interface entity.name.type.interface',
         'entity.name.type.enum.ts',
+        // PHP:
+        'source.php meta.interface entity.name.type.interface',
         // Lisp:
         'entity.name.type.lisp',
         // Objective-C:
@@ -502,9 +517,9 @@ function tokenColors(c) {
 
         // CSS / SCSS / SASS / Stylus:
         'entity.name.tag.css',
-        // Markdown
-        'meta.link.inline string.other.link.title',
-        'meta.image.inline string.other.link.description',
+        // Markdown:
+        'text.html.markdown meta.link.inline string.other.link.title',
+        'text.html.markdown meta.image.inline string.other.link.description',
       ],
       settings: {
         foreground: c.syntax.entity,
@@ -536,13 +551,19 @@ function tokenColors(c) {
         'meta.body meta.function.definition.parameters entity.name.function.c',
         // C#:
         'source.cs keyword.type', // primitive types like `int`
+        // JS / TS:
+        'source.js string.template meta.template', // expressions inside `${}`
+        'source.ts string.template meta.template',
+        'source.tsx string.template meta.template',
         // JS:
-        'string.template meta.template', // expressions inside `${}`
         'meta.class entity.name.type.module.js', // `class A extends M.C`
         // TS:
-        'meta.type.annotation entity.name.type',
-        'meta.return.type entity.name.type',
-        'meta.type.parameters entity.name.type',
+        'source.ts meta.type.annotation entity.name.type',
+        'source.tsx meta.type.annotation entity.name.type',
+        'source.ts meta.return.type entity.name.type',
+        'source.tsx meta.return.type entity.name.type',
+        'source.ts meta.type.parameters entity.name.type',
+        'source.tsx meta.type.parameters entity.name.type',
         'keyword.operator.type.annotation.ts',
         'meta.field.declaration.ts meta.definition.property entity.name.function',
         'meta.class.ts entity.name.type.module',
@@ -553,16 +574,22 @@ function tokenColors(c) {
         'source.css support.constant', // all values and constant likes
         'source.css meta.at-rule support.function', // `var()` func
         // JSON:
-        'support.type.property-name',
+        'source.json support.type.property-name',
+        // CSS / SCSS / Less:
+        'source.css support.type.property-name',
+        // TOML:
+        'source.toml support.type.property-name',
         // YAML:
         'entity.name.tag.yaml',
-        // CSS:
-        'string.quoted.double.attribute-value',
-        // Elixir and Ruby:
-        'constant.language.symbol',
-        'constant.other.symbol.hashkey',
+        // SCSS:
+        'source.css.scss string.quoted.double.attribute-value',
+        // Elixir:
+        'source.elixir constant.language.symbol',
+        // Ruby:
+        'source.ruby constant.language.symbol',
+        'source.ruby constant.other.symbol.hashkey',
         // PHP:
-        'meta.method-call.static keyword.operator',
+        'source.php meta.method-call.static keyword.operator',
         'keyword.operator.return-value.php',
         'keyword.operator.class.php',
         // Rust:
