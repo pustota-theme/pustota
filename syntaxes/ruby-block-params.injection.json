@@ -1,0 +1,11 @@
+{
+  "comment": "Ruby block parameters, like `{ |key, value| }`. The builtin Ruby grammar scopes both `|` and the `,` between parameters as `punctuation.separator.variable.ruby`, so the theme can not highlight `|` as an operator (like Rust closures) without highlighting `,` too. This rule scopes the `,` as `punctuation.separator.object.ruby`, same as all other commas in Ruby.",
+  "scopeName": "pustota.injection.ruby.block-params",
+  "injectionSelector": "L:meta.block.parameters.ruby",
+  "patterns": [
+    {
+      "match": ",",
+      "name": "punctuation.separator.object.ruby"
+    }
+  ]
+}

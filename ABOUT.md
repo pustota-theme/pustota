@@ -18,7 +18,7 @@ Unlike many other themes, this one only highlights a few things:
 3. Constants (`#E6B450`) ![#E6B450](https://placehold.co/15x15/E6B450/E6B450.png)
 4. Keywords and operators (`#FF8F40`) ![#FF8F40](https://placehold.co/15x15/FF8F40/FF8F40.png)
 5. Function definitions (`#FFB454`) ![#FFB454](https://placehold.co/15x15/FFB454/FFB454.png)
-6. Type definitions (`#59C2FF`) ![#59C2FF](https://placehold.co/15x15/59C2FF/59C2FF.png)
+6. Type-like definitions (`#59C2FF`) ![#59C2FF](https://placehold.co/15x15/59C2FF/59C2FF.png)
 
 Everything else is just white (`#B3B1AD`) ![#B3B1AD](https://placehold.co/15x15/B3B1AD/B3B1AD.png)
 
@@ -33,7 +33,7 @@ It highlights exactly the same things:
 3. Constants (`#AB8600`) ![#AB8600](https://placehold.co/15x15/AB8600/AB8600.png)
 4. Keywords and operators (`#D43811`) ![#D43811](https://placehold.co/15x15/D43811/D43811.png)
 5. Function definitions (`#CC7E00`) ![#CC7E00](https://placehold.co/15x15/CC7E00/CC7E00.png)
-6. Type definitions (`#007ADA`) ![#007ADA](https://placehold.co/15x15/007ADA/007ADA.png)
+6. Type-like definitions (`#007ADA`) ![#007ADA](https://placehold.co/15x15/007ADA/007ADA.png)
 
 Everything else is just dark grey (`#181B1F`) ![#181B1F](https://placehold.co/15x15/181B1F/181B1F.png)
 
@@ -48,7 +48,7 @@ It highlights exactly the same things:
 3. Constants (`#F5BD47`) ![#F5BD47](https://placehold.co/15x15/F5BD47/F5BD47.png)
 4. Keywords and operators (`#FF8F40`) ![#FF8F40](https://placehold.co/15x15/FF8F40/FF8F40.png)
 5. Function definitions (`#FFB454`) ![#FFB454](https://placehold.co/15x15/FFB454/FFB454.png)
-6. Type definitions (`#59C2FF`) ![#59C2FF](https://placehold.co/15x15/59C2FF/59C2FF.png)
+6. Type-like definitions (`#59C2FF`) ![#59C2FF](https://placehold.co/15x15/59C2FF/59C2FF.png)
 
 Everything else is just white (`#E0DED8`) ![#E0DED8](https://placehold.co/15x15/E0DED8/E0DED8.png)
 

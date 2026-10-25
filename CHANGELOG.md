@@ -28,8 +28,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   as function definitions, even when the value is an arrow function,
   like `const handleChange = () => {}`, this was already the case in TSX
 - In Ruby fixed `4r`, `3i` and `1.5ri` to be constants
-- In Ruby fixed `@@` to be highlighted the same way as `@`
+- In Ruby `@` and `@@` in variable names are no longer highlighted as keywords,
+  they are plain text, same as `$`
 - In Ruby fixed module name highlight
+- In Ruby fixed method calls in endless methods without parentheses,
+  like `def to_report = self.class.foo`, highlighted as function definitions
+- In Ruby `|` around block parameters, like `{ |key, value| }`,
+  are now highlighted as operators, same as Rust closures
 - In Dart only class and extension type definition names
   are highlighted via semantic tokens, type usages like `String`
   or `int` are no longer highlighted

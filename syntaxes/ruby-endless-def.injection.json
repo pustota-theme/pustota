@@ -1,0 +1,16 @@
+{
+  "comment": "Ruby endless methods without parentheses, like `def to_report = self.class.foo(:@x)`. The builtin Ruby grammar treats everything after `def name ` as an unparenthesized parameter list (`meta.function.method.with-arguments.ruby`) until the end of the line, so method calls in the body are scoped as `meta.function.method ... entity.name.function` and highlighted as definitions, and words like `self` become parameters. This rule matches `def name =` first and scopes it like a method without arguments, so the body is tokenized as regular code. Endless methods with parentheses, like `def foo(a) = a`, are already fine. Remove this when https://github.com/textmate/ruby.tmbundle supports them.",
+  "scopeName": "pustota.injection.ruby.endless-def",
+  "injectionSelector": "L:source.ruby -comment -(string -meta.embedded)",
+  "patterns": [
+    {
+      "comment": "Same method name pattern as the builtin grammar, without setters (`def x=(v)`), which can not be endless. The `=` must follow whitespace and must not start `==`, `=~` or `=>`",
+      "match": "(?x)\n(?<=^|\\s)(def)\\s+\n(\n  (?>[a-zA-Z_]\\w*(?>\\.|::))?      # method prefix\n  (?>                               # method name\n    [a-zA-Z_]\\w*[?!]?\n    |\n    ===?|!=|>[>=]?|<=>|<[<=]?|[%&`/\\|]|\\*\\*?|=?~|[-+]@?|\\[]\n  )\n)\n(?=[ \\t]+=(?![=~>]))",
+      "captures": {
+        "1": { "name": "keyword.control.def.ruby" },
+        "2": { "name": "entity.name.function.ruby" }
+      },
+      "name": "meta.function.method.without-arguments.ruby"
+    }
+  ]
+}
