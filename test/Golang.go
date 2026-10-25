@@ -39,6 +39,12 @@ func hash(t string, b []byte) [hashLength]byte {
 // to use as a set.  Note: not actually safe to use as a set
 type Set []interface{}
 
+type ID = string
+
+type Hasher interface {
+	Hash() [hashLength]byte
+}
+
 type sortableHashes [][hashLength]byte
 
 func (h sortableHashes) Len() int           { return len(h) }

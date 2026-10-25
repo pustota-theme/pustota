@@ -1,8 +1,10 @@
-import { Binder } from './binder'
+import { Binder, func } from './binder'
 import { Dialog } from './dialog'
 import { Channel } from './channel'
 import { UserMessage } from './types'
+import Module from 'npm:module'
 
+type Alias = String
 type Matcher = { match: (message: UserMessage) => boolean }
 
 type DialogHandler<T extends Bot> = Matcher & {
@@ -13,14 +15,32 @@ type PerformerHandler<T> = Matcher & {
   handler: (message: UserMessage, bot: T) => any
 }
 
+type MeetingStatus = "scheduled" | "running-late" | "cancelled" | "eternal"
+
 interface Some {
-  a: string
+  a: Date
+  readonly b?: number
+  method: () => String
+  [propName: string]: any;
+}
+
+interface SearchFunc {
+  (source: string, subString: string): boolean;
 }
 
 enum Colors {
   RED = 'RED',
   BLUE = 'BLUE',
 }
+
+interface ClockConstructor {
+  new (hour: number, minute: number);
+  tick(): void;
+}
+
+class Test implements SearchFunc {}
+
+class Test2 extends Module.Class {}
 
 export abstract class Bot<BotMessage = any> extends OtherClass {
   /** @internal */
@@ -43,8 +63,12 @@ export abstract class Bot<BotMessage = any> extends OtherClass {
     return channel
   }
 
-  dialog(channel: string, users: string[]): Dialog {
+  function dialog(channel: string, users: string[]): Dialog {
     return new Dialog(this, channel, users)
+  }
+
+  prop: () => number = () => {
+    return 1
   }
 
   abortDialog(channel: (string => string), user: string) {
@@ -68,3 +92,9 @@ export abstract class Bot<BotMessage = any> extends OtherClass {
     }
   }
 }
+
+export {
+  Colors,
+  Matcher,
+}
+export default MeetingScheduler

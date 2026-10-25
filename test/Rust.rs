@@ -3,6 +3,7 @@
 
 use itertools::Itertools;
 use std::{env, io::prelude::*, path::PathBuf, process::Command};
+use crate::geoarrow::{self, GEOGRAPHY, GEOMETRY};
 
 mod use_;
 mod variables;
@@ -50,6 +51,31 @@ pub trait MaybeTraverse {
     const IS_TRACE: bool = false;
     // if this type is traceable, then call with tracer_fn, default to do nothing
     fn try_traverse(&self, traverse_fn: &mut TraverseFn);
+}
+
+impl Encoder {
+    /// Maps an Arrow schema onto Postgres columns. All columns nullable.
+    pub(crate) fn new(schema: SchemaRef) -> Result<Self> {
+        let columns = schema
+            .fields()
+            .iter()
+            .map(|field| ColumnEncoder::new(field))
+            .collect::<Result<Vec<_>>>()?;
+
+        let field_count = i16::try_from(columns.len()).map_err(|_err| {
+            TransferredError::in_destination(format!(
+                "a COPY row holds at most {} columns, not {}",
+                i16::MAX,
+                columns.len()
+            ))
+        })?;
+
+        Ok(Self {
+            schema,
+            columns,
+            field_count,
+        })
+    }
 }
 
 

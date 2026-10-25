@@ -5,6 +5,10 @@ import { Channel } from './channel';
 const value = 'as'
 const subst = `a ${'b' + value + 'a'} b`
 
+function test(x, y) {
+  return x + y
+}
+
 export class Bot {
 
   constructor() {

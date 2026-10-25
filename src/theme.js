@@ -359,6 +359,7 @@ function tokenColors(c) {
         'storage.type.rust',
         // Ruby:
         'punctuation.separator.other.ruby', // `:` in ternary
+        'variable.other.readwrite.instance punctuation.definition.variable',  // `@` in `@var`
         // Python:
         'storage.type.type.python',  // `type` keyword
         // Lisp:
@@ -465,7 +466,6 @@ function tokenColors(c) {
         // Haskell:
         'meta.declaration storage.type.haskell',
         // TS:
-        'meta.type.declaration entity.name.type.alias',
         'meta.interface entity.name.type.interface',
         'entity.name.type.enum.ts',
         // Lisp:
@@ -527,6 +527,11 @@ function tokenColors(c) {
         'meta.return.type entity.name.type',
         'meta.type.parameters entity.name.type',
         'keyword.operator.type.annotation.ts',
+        'meta.field.declaration.ts meta.definition.property entity.name.function',
+        'meta.class.ts entity.name.type.module',
+        // TSX:
+        'meta.definition.variable.tsx variable.other.constant entity.name.function',
+        'meta.class.tsx entity.name.type.module',
         // CSS:
         'source.css support.constant', // all values and constant likes
         'source.css meta.at-rule support.function', // `var()` func
@@ -545,8 +550,6 @@ function tokenColors(c) {
         'keyword.operator.class.php',
         // Rust:
         'keyword.operator.macro.dollar.rust', // `$` in macro defs
-        // Ruby:
-        'keyword.other.special-method.ruby', // `.new()`
         // Lisp:
         'keyword.constant.lisp', // :value
         // Objective-C:
@@ -608,11 +611,17 @@ function semanticTokenColors(c) {
     // tokens fall back to the TextMate colors above, which is what we want.
     'type.declaration:c': c.syntax.entity,
 
-    // Go: type names being defined, like `config` in `type config struct`
-    // or `Set` in `type Set []interface{}`. The grammar uses the same
-    // `entity.name.type.go` scope for definitions and usages, so only
-    // gopls can tell them apart. Type usages stay uncolored.
-    'type.definition:go': c.syntax.entity,
+    // Go: struct and interface names being defined, like `config` in
+    // `type config struct` or `Hasher` in `type Hasher interface`.
+    // The grammar uses the same `entity.name.type.go` scope for
+    // definitions and usages, so only gopls can tell them apart.
+    //
+    // gopls marks every type name with a modifier for its underlying
+    // type (`struct`, `interface`, `slice`, `map`, `pointer`, etc),
+    // so other definitions like `type Set []interface{}` or
+    // `type ID = string` stay uncolored, same as type usages.
+    'type.definition.struct:go': c.syntax.entity,
+    'type.definition.interface:go': c.syntax.entity,
   };
 }
 
