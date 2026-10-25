@@ -1,0 +1,12 @@
+{
+  "comment": "TypeScript `this` and `object` used as types, like `clone(): this` or `a: object`. The builtin grammar gives them the same `support.type.builtin` scope as the literal types `true`, `false`, `null` and `undefined`, so they would be highlighted as constants. They are type keywords, same as `string` or `any`, so this rule scopes them as `support.type.primitive`. The scope has no language suffix, since the same rule is injected into TS and TSX.",
+  "scopeName": "pustota.injection.typescript.types",
+  "injectionSelector": "L:meta.type.annotation -comment -string, L:meta.return.type -comment -string, L:meta.type.parameters -comment -string",
+  "patterns": [
+    {
+      "comment": "Not property or parameter names (`object: T`, `this?: T`, `m(): T`), `this is T` predicates, or `this.x`",
+      "match": "(?<![_$[:alnum:]]|\\.)(?:this|object)(?![_$[:alnum:]])(?!\\s*[?!]?\\s*[:(<]|\\s*\\.|\\s+is\\b)",
+      "name": "support.type.primitive"
+    }
+  ]
+}

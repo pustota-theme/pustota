@@ -45,3 +45,130 @@ templ Card(props CardProps) {
     </template>
   </mesh-card>
 }
+
+// statusClass returns a CSS class for a card status; plain Go is allowed in .templ files.
+func statusClass(status string) string {
+  switch status {
+  case "draft":
+    return "card-draft"
+  case "published":
+    return "card-published"
+  default:
+    return "card-" + status
+  }
+}
+
+var buttonAttrs = templ.Attributes{"type": "button", "data-role": "action"}
+
+css cardTheme(accent string, radius int) {
+  background-color: { accent };
+  border-radius: { fmt.Sprintf("%dpx", radius) };
+  border: 1px solid #ccc;
+}
+
+script toggleCard(id string, visible bool) {
+  const el = document.getElementById(id);
+  el.classList.toggle("hide", !visible);
+}
+
+// Layout wraps a page body and renders its children.
+templ Layout(title string, lang string) {
+  <!DOCTYPE html>
+  <html lang={ lang }>
+    <head>
+      <meta charset="utf-8"/>
+      <title>{ title } · mesh</title>
+      @cardTheme("#fafafa", 6)
+    </head>
+    <body class="layout" data-title={ title }>
+      <!-- children are injected here -->
+      { children... }
+    </body>
+  </html>
+}
+
+// Button spreads arbitrary attributes and renders its children.
+templ Button(label string, attrs templ.Attributes) {
+  <button { attrs... } class="btn">
+    { label }
+    { children... }
+  </button>
+}
+
+templ Badge(status string) {
+  switch status {
+    case "draft":
+      <em class="badge">Draft</em>
+    case "published", "archived":
+      <strong class={ "badge", statusClass(status) }>{ status }</strong>
+    default:
+      <span class="badge badge-muted">unknown</span>
+  }
+}
+
+// CardList renders every card and wraps them in a grid.
+templ CardList(cards []*services.Card, selected int, editable bool, filter string) {
+  {{ total := len(cards) }}
+  {{
+    visible := 0
+    for _, c := range cards {
+      if c.Visible {
+        visible++
+      }
+    }
+  }}
+  @Layout(fmt.Sprintf("%d cards", total), "en") {
+    <section
+      class={ "card-grid", templ.KV("card-grid--editable", editable), cardTheme("#fff", 4) }
+      data-count={ fmt.Sprint(total) }
+      data-visible={ strconv.Itoa(visible) }
+      hx-get={ templ.URL("/cards?filter=" + filter) }
+      hx-trigger="load"
+      hx-swap="outerHTML"
+      if editable {
+        contenteditable="true"
+      }
+    >
+      /* Inline Go-style block comment inside the template. */
+      if total == 0 {
+        <p class="empty">No cards yet.</p>
+      } else if total > 100 {
+        <p class="empty">Too many cards ({ fmt.Sprintf("%d", total) }).</p>
+      } else {
+        for i, card := range cards {
+          // Each iteration renders a Card component and an optional badge.
+          @Card(CardProps{Card: card})
+          @Badge(card.Status)
+          <a
+            href={ templ.SafeURL(fmt.Sprintf("/card/%d", card.ID)) }
+            target="_blank"
+            rel="noopener"
+            disabled?={ !card.Visible }
+            aria-selected?={ i == selected }
+            data-index={ strconv.Itoa(i) }
+            onclick={ toggleCard(fmt.Sprintf("card-%d", card.ID), card.Visible) }
+          >
+            { card.Title }
+          </a>
+          if i == selected {
+            <span class="badge">selected</span>
+          } else if editable {
+            @Button("Edit", buttonAttrs) {
+              <i class="icon icon-pencil"></i>
+            }
+          }
+        }
+      }
+      @Button("Reload", templ.Attributes{"hx-get": templ.URL("/cards"), "hx-target": "closest section"})
+      @templ.Raw("<hr/>")
+      <footer>
+        Showing { fmt.Sprintf("%d/%d", visible, total) }
+        &amp; filtered by <code>{ filter }</code>
+      </footer>
+    </section>
+  }
+}
+
+templ Empty() {
+  <p>{ "literal expression" } { `raw string` } { strings.ToUpper("mixed") }</p>
+}

@@ -175,7 +175,7 @@ def obj_hash(o):
     elif o is None:
         return hash_primitive('n', '')
 
-    print type(o)
+    print(type(o))
     assert False
 
 def is_primitive_type(t):
@@ -202,7 +202,7 @@ class ApplyToLeaves(object):
             else:
                 return self.leaf_fn(o)
 
-        print type(o)
+        print(type(o))
         assert False
 
     @property
@@ -298,7 +298,8 @@ def kafka_handler(
     )
 
 class Example(Protocol):
-    def some(self) -> None: ...
+    def some(self) -> None:
+        return None
 
 setup(
     name = "django-stubs",
@@ -312,3 +313,272 @@ setup(
     python_requires = ">=3.6",
     install_requires = dependencies,
 )
+
+# --- Additional syntax coverage -------------------------------------------
+
+import asyncio
+import contextlib as ctx
+import re
+from collections import OrderedDict, defaultdict as ddict
+from dataclasses import dataclass, field
+from enum import Enum, IntFlag, auto
+from functools import lru_cache, partial, reduce
+from typing import (
+    Any,
+    Callable,
+    ClassVar,
+    Final,
+    Generic,
+    Iterator,
+    Literal,
+    NamedTuple,
+    Optional,
+    ParamSpec,
+    Protocol,
+    TypedDict,
+    TypeVar,
+    overload,
+    runtime_checkable,
+)
+
+T = TypeVar('T')
+K = TypeVar('K', bound='Hashable')
+P = ParamSpec('P')
+
+MAX_DEPTH: Final[int] = 1_000_000
+HEX_MASK = 0xFF_FF
+OCT_PERMS = 0o755
+BIN_FLAGS = 0b1010_0101
+RATIO = 6.022e23
+TINY = 1e-9
+SPIN = 3 + 4j
+BIG = 1_000_000_000j
+
+RAW_PATTERN = r'\b(?P<prefix>[a-z]+)_(?P<idx>\d{1,3})\b'
+BYTE_HEADER = b'\x89PNG\r\n\x1a\n'
+RAW_BYTES = rb'\d+\.\d+'
+ESCAPED = 'tab\there\nnewline é \N{GREEK SMALL LETTER ALPHA} \x41 \\ \' "'
+IMPLICIT = ('implicit ' 'concatenation '
+            "across lines")
+BLOCK = """triple "double" quoted
+    with indentation preserved"""
+BLOCK_SINGLE = '''triple 'single' quoted'''
+FORMATTED_TEMPLATE = f"{RATIO:.3e} | {HEX_MASK:#010x} | {'nested ' + 'expr'!r:>20} | {MAX_DEPTH:,} | {SPIN.real=}"
+NESTED_F = f"{', '.join(f'{k}={v:04d}' for k, v in {'a': 1, 'b': 22}.items())} {{literal braces}}"
+RAW_F = rf'^{RAW_PATTERN}\s*$'
+
+
+class Color(Enum):
+    RED = auto()
+    GREEN = 'green'
+    BLUE = 0x0000FF
+
+
+class Perm(IntFlag):
+    READ = 1 << 0
+    WRITE = 1 << 1
+    EXEC = 1 << 2
+
+
+class Point(NamedTuple):
+    x: float
+    y: float = 0.0
+
+
+class Config(TypedDict, total=False):
+    name: str
+    retries: int
+    tags: list[str]
+
+
+class Meta(type):
+    registry: ClassVar[dict[str, type]] = {}
+
+    def __new__(mcs, name, bases, ns, **kwargs):
+        cls = super().__new__(mcs, name, bases, ns)
+        mcs.registry[name] = cls
+        return cls
+
+
+class Serializer(metaclass=Meta):
+    __slots__ = ('_value', '__weakref__')
+
+    def __init__(self, value: Any = None, /, *, strict: bool = False) -> None:
+        self._value = value
+
+    @property
+    def value(self) -> Any:
+        return self._value
+
+    @value.setter
+    def value(self, new: Any) -> None:
+        self._value = new
+
+    @value.deleter
+    def value(self) -> None:
+        del self._value
+
+    @staticmethod
+    def version() -> str:
+        return '0.1'
+
+    def __repr__(self) -> str:
+        return f'{type(self).__name__}({self._value!r})'
+
+
+@runtime_checkable
+class SupportsDigest(Protocol):
+    def digest(self) -> bytes: ...
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Node(Generic[T]):
+    value: T
+    children: list['Node[T]'] = field(default_factory=list)
+    weight: float = 1.0
+
+
+def retry(times: int = 3, *, exceptions: tuple[type[BaseException], ...] = (Exception,)):
+    def decorator(fn: Callable[P, T]) -> Callable[P, T]:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+            attempts = 0
+            while attempts < times:
+                try:
+                    return fn(*args, **kwargs)
+                except exceptions as exc:
+                    attempts += 1
+                    last = exc
+            else:
+                raise RuntimeError('exhausted') from last
+        return wrapper
+    return decorator
+
+
+@overload
+def coerce(value: str) -> int: ...
+@overload
+def coerce(value: bytes) -> bytes: ...
+def coerce(value):
+    return int(value) if isinstance(value, str) else value
+
+
+@retry(times=5, exceptions=(ValueError, KeyError))
+@lru_cache(maxsize=128)
+def parse(text: str, *parts: str, sep: str = ',', **flags: bool) -> list[str]:
+    return [p.strip() for p in text.split(sep) if p] + list(parts)
+
+
+def counter(start=0):
+    total = start
+
+    def bump(step=1):
+        nonlocal total
+        total += step
+        return total
+    return bump
+
+
+def touch_global() -> None:
+    global commonize
+    commonize = None
+
+
+def describe(obj: object) -> str:
+    match obj:
+        case Point(x=0, y=0):
+            return 'origin'
+        case Point(x=x, y=y) if x == y:
+            return f'diagonal {x}'
+        case [first, *rest]:
+            return f'seq {first} +{len(rest)}'
+        case {'name': str(name), **extra}:
+            return f'mapping {name} {extra}'
+        case Color.RED | Color.GREEN as c:
+            return c.name
+        case int() | float() as n if 0 < n <= 100:
+            return 'small number'
+        case None:
+            return 'nothing'
+        case _:
+            return repr(obj)
+
+
+def fib() -> Iterator[int]:
+    a, b = 0, 1
+    while True:
+        received = yield a
+        a, b = b, a + b
+        if received is not None:
+            a, b = received, received + 1
+
+
+def chained() -> Iterator[int]:
+    yield from range(0, 10, 2)
+    yield from (n ** 2 for n in fib() if n % 2)
+
+
+async def fetch(url: str, timeout: float = 1.5) -> Optional[bytes]:
+    async with asyncio.timeout(timeout), ctx.aclosing(stream(url)) as chunks:
+        buffer = bytearray()
+        async for chunk in chunks:
+            buffer.extend(chunk)
+        await asyncio.sleep(0)
+    return bytes(buffer) or None
+
+
+async def stream(url):
+    for i in range(3):
+        yield memoryview(b'chunk')[i:]
+
+
+def exercise_builtins(items: list[int] | None = None) -> dict[str, Any]:
+    items = items or list(range(10))
+    squares = {n: n ** 2 for n in items if n & 1}
+    evens = {n for n in items if not n % 2}
+    pairs = [(i, j) for i in items[::2] for j in items[1::3] if i < j]
+    gen = (abs(x - 5) for x in reversed(items))
+    first, *middle, last = items
+    merged = {**squares, 'extra': [*items, *evens]}
+    sliced = items[1:-1:2], items[::-1], items[...] if False else items[:]
+    cmp = 0 < len(items) <= 100 != MAX_DEPTH
+    cond = 'many' if len(items) > 5 else 'few'
+    if (total := sum(items)) > 10:
+        del merged['extra']
+    assert all(isinstance(n, int) for n in items), 'ints only'
+    with (open(__file__, encoding='utf-8') as fh,
+          ctx.suppress(OSError)):
+        head = fh.readline()
+    try:
+        results = list(map(partial(pow, 2), filter(callable, [len, 3])))
+    except* (TypeError, ValueError) as group:
+        results = [len(group.exceptions)]
+    except* KeyError:
+        results = []
+    else:
+        results.append(max(items, key=lambda n: -n))
+    finally:
+        results = results or [0]
+    for idx, (k, v) in enumerate(zip(sorted(squares), squares.values(), strict=True)):
+        if idx > 3:
+            break
+    else:
+        idx = -1
+    ordered = OrderedDict(sorted(merged.items()))
+    counts = ddict(int)
+    for ch in str(bin(HEX_MASK)) + str(oct(OCT_PERMS)) + str(hex(BIN_FLAGS)):
+        counts[ch] += 1
+    nums = (int('ff', 16), float('inf'), complex(1, -1), divmod(17, 5), round(RATIO, -20))
+    return dict(
+        squares=squares, evens=evens, pairs=pairs, gen=gen, middle=middle,
+        sliced=sliced, cmp=cmp, cond=cond, total=total, head=head, results=results,
+        idx=idx, ordered=ordered, counts=dict(counts), nums=nums,
+        reduced=reduce(lambda acc, n: acc * n, items[1:], 1),
+        chars=[chr(c) for c in map(ord, 'abc')], frozen=frozenset(evens),
+        kinds=(type(None), bool, bytes, object, slice(1, 2), range(3), Ellipsis),
+        matches=re.findall(RAW_PATTERN, head, flags=re.I | re.M),
+        ids=[id(x) for x in (print, input, vars, dir, repr, hash)],
+    )
+
+
+if __name__ == '__main__':
+    print(describe(Point(1, 1)), describe([1, 2, 3]), describe({'name': 'x'}), sep=' | ')

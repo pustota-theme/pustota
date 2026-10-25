@@ -4,6 +4,12 @@
 // they come from palettes in `./palettes/*.json`.
 // Each palette is applied to the very same layout,
 // so all `pustota` variants highlight exactly the same things.
+//
+// Palette groups are split by purpose: `syntax.*` colors are only used
+// by highlight rules in `tokenColors` and `semanticTokenColors`,
+// everything else (`base`, `accent`, `severity`, `vcs`, etc) is only used
+// by UI colors in `colors`. When a UI item needs a syntax color,
+// the value is copied to a UI name instead, so the two can be tuned apart.
 
 // Adds a hex alpha channel to a `#rrggbb` color.
 function alpha(color, value) {
@@ -46,13 +52,13 @@ function colors(c) {
 
     'editorLineNumber.activeForeground': alpha(c.base.fg, 'cc'),
     'editorLineNumber.foreground': alpha(c.base.fg, '80'),
-    'editorInlayHint.foreground': c.syntax.comment,
+    'editorInlayHint.foreground': c.base.hint,
 
     // Stuff that I don't really care about, mostly copied from Ayu:
     // TODO: rework?
     'editorBracketMatch.background': alpha(c.base.ui, '4d'),
     'editorBracketMatch.border': alpha(c.base.ui, '99'),
-    'editorCodeLens.foreground': c.syntax.comment,
+    'editorCodeLens.foreground': c.base.hint,
     'editorCursor.foreground': c.accent.main,
     'editorGroup.border': c.base.line,
     'editorGroupHeader.noTabsBackground': c.base.bg,
@@ -71,7 +77,7 @@ function colors(c) {
     'editorOverviewRuler.addedForeground': alpha(c.vcs.added, '99'),
     'editorOverviewRuler.border': c.base.line,
     'editorOverviewRuler.deletedForeground': alpha(c.vcs.removed, '99'),
-    'editorOverviewRuler.errorForeground': c.syntax.error,
+    'editorOverviewRuler.errorForeground': c.severity.errorRuler,
     'editorOverviewRuler.modifiedForeground': alpha(c.vcs.modified, '99'),
     'editorOverviewRuler.warningForeground': c.accent.main,
     'editorRuler.foreground': alpha(c.base.ui, '66'),
@@ -92,19 +98,19 @@ function colors(c) {
 
     // I am just used to these colors:
     // TODO: rework?
-    'gitDecoration.addedResourceForeground': c.syntax.string,
+    'gitDecoration.addedResourceForeground': c.vcs.addedFile,
     'gitDecoration.conflictingResourceForeground': c.vcs.conflict,
     'gitDecoration.deletedResourceForeground': alpha(c.vcs.removed, 'b3'),
     'gitDecoration.ignoredResourceForeground': c.base.uiMuted,
     'gitDecoration.modifiedResourceForeground': c.vcs.modifiedFile,
-    'gitDecoration.submoduleResourceForeground': alpha(c.syntax.constant, 'b3'),
+    'gitDecoration.submoduleResourceForeground': alpha(c.vcs.submodule, 'b3'),
     'gitDecoration.untrackedResourceForeground': alpha(c.vcs.added, 'b3'),
 
     // General
     // =======
 
     'focusBorder': c.base.bg, // no visual border
-    'errorForeground': c.syntax.keyword,
+    'errorForeground': c.severity.error,
     'foreground': c.base.fg,
 
     'activityBar.activeBorder': c.accent.alt,
@@ -137,22 +143,22 @@ function colors(c) {
     'input.placeholderForeground': alpha(c.base.fg, '80'),
     'inputOption.activeBorder': c.accent.main,
     'inputValidation.errorBackground': c.base.bg,
-    'inputValidation.errorBorder': c.syntax.keyword,
+    'inputValidation.errorBorder': c.severity.error,
     'inputValidation.infoBackground': c.base.bg,
-    'inputValidation.infoBorder': c.syntax.entity,
+    'inputValidation.infoBorder': c.severity.info,
     'inputValidation.warningBackground': c.base.bg,
     'inputValidation.warningBorder': c.accent.main,
 
     // Breakpoints
-    'debugIcon.breakpointDisabledForeground': c.syntax.entity,
+    'debugIcon.breakpointDisabledForeground': c.debug.breakpointDisabled,
     'debugIcon.breakpointForeground': c.accent.main,
 
     'debugExceptionWidget.background': c.base.bg,
     'debugExceptionWidget.border': c.base.bg,
     'debugToolBar.background': c.base.bg,
     'descriptionForeground': c.base.ui,
-    'diffEditor.insertedTextBackground': alpha(c.syntax.string, '26'),
-    'diffEditor.removedTextBackground': alpha(c.syntax.operator, '26'),
+    'diffEditor.insertedTextBackground': alpha(c.diff.inserted, '26'),
+    'diffEditor.removedTextBackground': alpha(c.diff.removed, '26'),
     'dropdown.background': c.base.bg,
     'dropdown.border': c.base.dropdownBorder,
     'dropdown.foreground': c.base.ui,
@@ -171,7 +177,7 @@ function colors(c) {
     'list.activeSelectionForeground': c.accent.main,
     'list.inactiveSelectionBackground': c.base.bg,
     'list.focusAndSelectionOutline': c.base.bg, // no visual border
-    'list.errorForeground': c.syntax.keyword,
+    'list.errorForeground': c.severity.error,
     'list.filterMatchBackground': alpha(c.accent.main, '0d'),
     'list.filterMatchBorder': c.accent.main,
     'list.focusBackground': c.base.bg,
@@ -180,7 +186,7 @@ function colors(c) {
     'list.inactiveSelectionForeground': c.base.ui,
     'list.invalidItemForeground': c.base.uiDim,
     'listFilterWidget.background': c.base.bg,
-    'listFilterWidget.noMatchesOutline': c.syntax.keyword,
+    'listFilterWidget.noMatchesOutline': c.severity.error,
     'listFilterWidget.outline': c.accent.main,
 
     'peekView.border': c.base.bg,
@@ -227,7 +233,7 @@ function colors(c) {
     // Statusbar
     'statusBar.background': c.base.bg,
     'statusBar.border': c.base.bg,
-    'statusBar.debuggingBackground': c.syntax.operator,
+    'statusBar.debuggingBackground': c.debug.statusBar,
     'statusBar.debuggingForeground': c.base.bg,
     'statusBar.foreground': c.base.ui,
     'statusBar.noFolderBackground': c.base.bg,
@@ -286,6 +292,10 @@ function tokenColors(c) {
         'comment.block.documentation storage.type',
         'comment.block.documentation storage',
         'comment.block.documentation keyword.other',
+        // PHP:
+        'comment.block.documentation keyword.other.type.php', // `@var array`
+        // JS / TS:
+        'entity.name.type.instance.jsdoc', // `{Type}` in JSDoc
       ],
       settings: {
         foreground: c.syntax.comment,
@@ -299,11 +309,12 @@ function tokenColors(c) {
         'string',
         'constant.other.symbol',
         'constant.character.escape',
-
-        // JS:
         'string.quoted invalid.illegal.newline', // in-progress strings
+
         // Markdown:
-        'markup.quote meta.paragraph',
+        'text.html.markdown markup.quote meta.paragraph',
+        // Python:
+        'source.python string.regexp keyword.operator',
       ],
       settings: {
         foreground: c.syntax.string,
@@ -317,13 +328,28 @@ function tokenColors(c) {
         'constant.language',
         'support.constant',
 
-        // CSS:
-        'constant.other.color',
+        // CSS / SCSS / Less:
+        'source.css constant.other.color',
         // HTML:
         'string.unquoted.html',
+        // TS:
+        'source.ts meta.type.annotation support.type.builtin',
+        'source.tsx meta.type.annotation support.type.builtin',
+        'source.ts meta.return.type support.type.builtin',
+        'source.tsx meta.return.type support.type.builtin',
+        'source.ts meta.type.parameters support.type.builtin',
+        'source.tsx meta.type.parameters support.type.builtin',
+        // JS / TS:
+        'source.js storage.type.numeric',  // `10n`
+        'source.ts storage.type.numeric',
+        'source.tsx storage.type.numeric',
+        // Go:
+        'source.go keyword.other.unit',
+        // TOML:
+        'source.toml constant.other.time',
       ],
       settings: {
-        foreground: c.accent.main,
+        foreground: c.syntax.constant,
       },
     },
 
@@ -341,29 +367,45 @@ function tokenColors(c) {
         'punctuation.decorator',
         'punctuation.separator.continuation.line',
         'punctuation.separator.annotation.result', // `->` operator in annotations
+        // Markup tags, used by HTML, JSX, TSX, Vue, etc:
+        'punctuation.definition.tag.begin',
+        'punctuation.definition.tag.end',
 
         // C:
         'constant.character.escape.line-continuation.c', // `\` operator
         'storage.type.struct.c', // `struct` keyword
         'storage.type.enum.c', // `enum`
         'storage.type.union.c', // `union`
-        // JS:
-        'meta.method.declaration storage.type', // `constructor`
+        // JS / TS:
+        'source.js meta.method.declaration storage.type.property', // `get` / `set`
+        'source.ts meta.method.declaration storage.type.property',
+        'source.tsx meta.method.declaration storage.type.property',
+        'source.js meta.var.expr storage.type', // `const`, `let`, `var`
+        'source.ts meta.var.expr storage.type',
+        'source.tsx meta.var.expr storage.type',
         // TS:
-        'meta.var.expr storage.type', // `type`
-        'meta.interface storage.type.interface', // `interface`
+        'source.ts meta.interface storage.type.interface', // `interface`
+        'source.tsx meta.interface storage.type.interface',
         'storage.type.enum.ts', // `enum`
-        'meta.type.declaration storage.type.type',
+        'storage.type.enum.tsx',
+        'source.ts meta.type.declaration storage.type.type',
+        'source.tsx meta.type.declaration storage.type.type',
+        'meta.namespace.declaration.ts storage.type.namespace', // `namespace`
+        'meta.namespace.declaration.tsx storage.type.namespace',
+        'meta.class.ts storage.type.property', // `accessor`
+        'meta.class.tsx storage.type.property',
         // Rust:
         'punctuation.definition.attribute.rust', // `#` before `[]`
         'storage.type.rust',
         // Ruby:
         'punctuation.separator.other.ruby', // `:` in ternary
-        'variable.other.readwrite.instance punctuation.definition.variable',  // `@` in `@var`
+        'source.ruby variable.other.readwrite punctuation.definition.variable', // `@`
         // Python:
         'storage.type.type.python',  // `type` keyword
         // Lisp:
         'storage.type.function-type.lisp', // `def*`
+        // Elixir:
+        'punctuation.definition.variable.elixir',  // `@var`
         // Objective-C:
         'punctuation.definition.storage.type.objc', // `@implementation` / etc
         'punctuation.definition.keyword.objc',
@@ -371,16 +413,19 @@ function tokenColors(c) {
         'storage.type.alias.shell', // `alias` keyword
         // Markdown:
         'entity.name.section.markdown', // headers
-        // HTML / JSX / TSX:
-        'punctuation.definition.tag.begin',
-        'punctuation.definition.tag.end',
+        // PHP:
+        'source.php meta.interface storage.type.interface', // `interface`
+        'storage.type.const.php', // `const`
+        'storage.type.enum.php', // `enum`
+        'storage.type.trait.php', // `trait`
         // TOML:
         'source.toml support.type.property-name.table',
         'source.toml support.type.property-name.array',
         // INI:
-        'entity.name.section.group-title',
+        'source.ini entity.name.section.group-title',
         // Makefile:
-        'support.function.target.PHONY',
+        'source.makefile support.function.target.PHONY',
+        'punctuation.separator.key-value.makefile',
         // C#:
         'storage.type.namespace.cs',
         'storage.type.record.cs',
@@ -407,6 +452,10 @@ function tokenColors(c) {
         'meta.definition support.function',
         'meta.function.definition entity.name.function',
 
+        // JS / TS: `constructor`, the grammar scopes it as `storage.type`
+        'meta.method.declaration storage.type.js',
+        'meta.method.declaration storage.type.ts',
+        'meta.method.declaration storage.type.tsx',
         // Python:
         'meta.function.python entity.name.function',
         'meta.function.python support.function',
@@ -415,18 +464,20 @@ function tokenColors(c) {
         // Rust:
         'meta.macro.rules entity.name.function.macro.rust',
         // Ruby:
-        'meta.function.method entity.name.function',
+        'source.ruby meta.function.method entity.name.function',
         // PHP:
         'meta.function.php entity.name.function',
         // Go:
         'entity.name.function.go',
         // Haskell:
-        'meta.function.type-declaration entity.name.function',
+        'source.haskell meta.function.type-declaration entity.name.function',
         // CSS:
-        'entity.other.keyframe-offset',
-        // SASS / SCSS:
-        'meta.at-rule entity.name.function',
-        'meta.at-rule support.function',
+        'source.css entity.other.keyframe-offset',
+        // CSS / SCSS / Less / SASS:
+        'source.css meta.at-rule entity.name.function',
+        'source.css meta.at-rule support.function',
+        'source.sass meta.at-rule entity.name.function',
+        'source.sass meta.at-rule support.function',
         // Bash:
         'meta.function entity.name.function.shell',
         // Lisp:
@@ -439,10 +490,10 @@ function tokenColors(c) {
         // Not really functions, but these elements also need a color accent
         // ---
 
-        // Markdown:
-        'markup.inline.raw.string',
-        // HTML / JSX / TSX:
+        // Attributes in HTML, JSX, TSX, Vue, XML, and CSS selectors:
         'entity.other.attribute-name',
+        // Markdown:
+        'text.html.markdown markup.inline.raw.string',
         // Makefile:
         'entity.name.function.target.makefile',
       ],
@@ -456,18 +507,27 @@ function tokenColors(c) {
       scope: [
         'meta.class entity.name.type',
 
+        // JS / TS: class names, other type names in class bodies are uncolored
+        'source.js meta.class entity.name.type.class',
+        'source.ts meta.class entity.name.type.class',
+        'source.tsx meta.class entity.name.type.class',
         // Rust:
-        'entity.name.type.struct',
-        'entity.name.type.trait',
-        // Dart:
-        'support.class.dart',
+        'source.rust entity.name.type.struct',
+        'source.rust entity.name.type.trait',
+        'source.rust entity.name.type.enum',
         // Elixir:
-        'meta.module entity.name.type.module',
+        'source.elixir meta.module entity.name.type.module',
         // Haskell:
-        'meta.declaration storage.type.haskell',
+        'source.haskell entity.name.type', // from `syntaxes/haskell-types.injection.json`
         // TS:
-        'meta.interface entity.name.type.interface',
+        'source.ts meta.interface entity.name.type.interface',
+        'source.tsx meta.interface entity.name.type.interface',
         'entity.name.type.enum.ts',
+        'entity.name.type.enum.tsx',
+        // PHP:
+        'source.php meta.interface entity.name.type.interface',
+        'entity.name.type.enum.php',
+        'entity.name.type.trait.php',
         // Lisp:
         'entity.name.type.lisp',
         // Objective-C:
@@ -485,9 +545,9 @@ function tokenColors(c) {
 
         // CSS / SCSS / SASS / Stylus:
         'entity.name.tag.css',
-        // Markdown
-        'meta.link.inline string.other.link.title',
-        'meta.image.inline string.other.link.description',
+        // Markdown:
+        'text.html.markdown meta.link.inline string.other.link.title',
+        'text.html.markdown meta.image.inline string.other.link.description',
       ],
       settings: {
         foreground: c.syntax.entity,
@@ -519,39 +579,60 @@ function tokenColors(c) {
         'meta.body meta.function.definition.parameters entity.name.function.c',
         // C#:
         'source.cs keyword.type', // primitive types like `int`
-        // JS:
-        'string.template meta.template', // expressions inside `${}`
-        'meta.class entity.name.type.module.js', // `class A extends M.C`
+        // JS / TS:
+        'source.js string.template meta.template', // expressions inside `${}`
+        'source.ts string.template meta.template',
+        'source.tsx string.template meta.template',
+        // Type usages inside class bodies, like `x as Foo` or `extends M.C`:
+        'source.js meta.class entity.name.type',
+        'source.ts meta.class entity.name.type',
+        'source.tsx meta.class entity.name.type',
         // TS:
-        'meta.type.annotation entity.name.type',
-        'meta.return.type entity.name.type',
-        'meta.type.parameters entity.name.type',
+        'source.ts meta.type.annotation entity.name.type',
+        'source.tsx meta.type.annotation entity.name.type',
+        'source.ts meta.return.type entity.name.type',
+        'source.tsx meta.return.type entity.name.type',
+        'source.ts meta.type.parameters entity.name.type',
+        'source.tsx meta.type.parameters entity.name.type',
         'keyword.operator.type.annotation.ts',
+        'keyword.operator.type.annotation.tsx',
         'meta.field.declaration.ts meta.definition.property entity.name.function',
-        'meta.class.ts entity.name.type.module',
-        // TSX:
-        'meta.definition.variable.tsx variable.other.constant entity.name.function',
-        'meta.class.tsx entity.name.type.module',
+        'meta.field.declaration.tsx meta.definition.property entity.name.function',
+        // JS / TS: `const` names, even when the value is an arrow function
+        'source.js meta.definition.variable variable.other.constant entity.name.function',
+        'source.ts meta.definition.variable variable.other.constant entity.name.function',
+        'source.tsx meta.definition.variable variable.other.constant entity.name.function',
         // CSS:
         'source.css support.constant', // all values and constant likes
         'source.css meta.at-rule support.function', // `var()` func
         // JSON:
-        'support.type.property-name',
+        'source.json support.type.property-name',
+        // CSS / SCSS / Less:
+        'source.css support.type.property-name',
+        // TOML:
+        'source.toml support.type.property-name',
         // YAML:
         'entity.name.tag.yaml',
-        // CSS:
-        'string.quoted.double.attribute-value',
-        // Elixir and Ruby:
-        'constant.language.symbol',
-        'constant.other.symbol.hashkey',
+        // SCSS:
+        'source.css.scss string.quoted.double.attribute-value',
+        // Elixir:
+        'source.elixir constant.language.symbol',
+        'string.quoted meta.embedded.line.elixir', // `#{}` in strings
+        // Ruby:
+        'source.ruby constant.language.symbol',
+        'source.ruby constant.other.symbol.hashkey',
         // PHP:
-        'meta.method-call.static keyword.operator',
+        'source.php meta.method-call.static keyword.operator',
         'keyword.operator.return-value.php',
         'keyword.operator.class.php',
+        'source.php keyword.other.type', // types like `int|string|null`
+        'source.php keyword.control.exit',  // `exit()` call
         // Rust:
         'keyword.operator.macro.dollar.rust', // `$` in macro defs
         // Lisp:
         'keyword.constant.lisp', // :value
+        // Haskell:
+        'keyword.other.preprocessor.extension.haskell', // pragmas
         // Objective-C:
         'source.objc keyword.other.property', // `@property` / `@syntesize`
         // editorconfig:
@@ -563,9 +644,11 @@ function tokenColors(c) {
         'string.unquoted.argument.shell',
         'string.interpolated.dollar.shell',
         'source.shell string.unquoted.argument',
+        // Makefile:
+        'string.interpolated.makefile',
       ],
       settings: {
-        foreground: c.base.fg,
+        foreground: c.syntax.fg,
       },
     },
 
@@ -622,6 +705,26 @@ function semanticTokenColors(c) {
     // `type ID = string` stay uncolored, same as type usages.
     'type.definition.struct:go': c.syntax.entity,
     'type.definition.interface:go': c.syntax.entity,
+
+    // Dart: class names being defined, like `Vector` in `class Vector`
+    // or `Meters` in `extension type Meters(double value)`.
+    // The grammar uses the same `support.class.dart` scope for every
+    // capitalized name, so only the Dart analysis server can tell them apart.
+    //
+    // It only adds the `declaration` modifier to classes and extension types,
+    // `enum` and `mixin` names get the same token for definitions and usages,
+    // so they stay uncolored, same as type usages.
+    'class.declaration:dart': c.syntax.entity,
+
+    // TS / TSX / JS / JSX: properties from the standard library,
+    // like `PI` in `Math.PI`. The grammar scopes them as plain properties,
+    // but VSCode maps this semantic token to `support.constant.property`,
+    // which would color them as constants.
+    // TSX and JSX use the `typescriptreact` and `javascriptreact` language ids.
+    'property.defaultLibrary:typescript': c.syntax.fg,
+    'property.defaultLibrary:typescriptreact': c.syntax.fg,
+    'property.defaultLibrary:javascript': c.syntax.fg,
+    'property.defaultLibrary:javascriptreact': c.syntax.fg,
   };
 }
 

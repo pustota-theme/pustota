@@ -28,5 +28,110 @@
       <div class="wemake-services-logo"></div>
       <h1 autoplay=true>wemake-django-template</h1>
     </div>
+    <header>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="#main" target="_self">Home</a></li>
+          <li><a href="https://wemake.services" target="_blank" rel="noopener noreferrer" data-track="nav">Site</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main">
+      <article>
+        <h2>Django &amp; <abbr title="Representational State Transfer">REST</abbr> &copy; 2026 &#x1F600;</h2>
+        <p>Press <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy <code>manage.py</code>, see <mark>highlighted</mark> text and <time datetime="2026-10-25T10:00:00Z">today</time>.</p>
+        <pre><code class="language-python">def main() -&gt; None:
+    print("hello")</code></pre>
+        <progress value="70" max="100">70%</progress>
+        <meter min="0" max="1" low="0.3" high="0.8" optimum="0.9" value="0.6">60%</meter>
+        <figure>
+          <picture>
+            <source srcset="logo.avif 1x, logo@2x.avif 2x" type="image/avif" />
+            <img src="logo.png" srcset="logo@2x.png 2x" alt="Logo" width="120" height="40" loading="lazy" />
+          </picture>
+          <figcaption>Project logo</figcaption>
+        </figure>
+        <video controls muted playsinline width="320" poster="poster.jpg">
+          <source src="intro.webm" type="video/webm" />
+          <track kind="subtitles" src="intro.en.vtt" srclang="en" label="English" default />
+        </video>
+        <audio src="theme.mp3" loop preload="none"></audio>
+        <details open>
+          <summary>Changelog</summary>
+          <dl>
+            <dt>0.34.0</dt>
+            <dd>Contrast theme</dd>
+          </dl>
+          <ol reversed start="3" type="i"><li>third</li><li>second</li></ol>
+        </details>
+      </article>
+      <section>
+        <form action="/submit" method="post" enctype="multipart/form-data" novalidate>
+          <fieldset disabled>
+            <legend>Account</legend>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" />
+            <input type="password" name="password" minlength="8" />
+            <input type="number" name="age" min="0" max="120" step="1" />
+            <input type="range" name="volume" value="5" />
+            <input type="date" name="birthday" /><input type="time" /><input type="datetime-local" /><input type="month" /><input type="week" />
+            <input type="color" value="#ff0000" /><input type="file" accept="image/*" multiple /><input type="url" /><input type="tel" /><input type="search" />
+            <input type="checkbox" name="agree" checked /><input type="radio" name="plan" value="free" checked /><input type="hidden" name="csrf" value="{{ csrf_token }}" />
+            <input list="cities" name="city" /><datalist id="cities"><option value="Moscow"></option><option value="Berlin"></option></datalist>
+            <select name="theme" multiple size="3">
+              <optgroup label="Dark"><option value="dark" selected>pustota</option><option value="contrast">pustota contrast</option></optgroup>
+              <optgroup label="Light"><option value="light">pustota light</option></optgroup>
+            </select>
+            <textarea name="bio" rows="4" cols="40" maxlength="500" spellcheck="false"></textarea>
+            <output name="result" for="age volume">0</output>
+            <button type="submit" formmethod="post">Save</button>
+            <button type="reset">Reset</button>
+            <button type="button" onclick="document.getElementById('confirm').showModal()">Open dialog</button>
+          </fieldset>
+        </form>
+        <table>
+          <caption>Themes</caption>
+          <colgroup><col span="2" /><col style="background: #333" /></colgroup>
+          <thead><tr><th scope="col">Name</th><th scope="col">Type</th><th>Lines</th></tr></thead>
+          <tbody><tr><td rowspan="2">pustota</td><td>dark</td><td>1,200</td></tr><tr><td colspan="2">light</td></tr></tbody>
+          <tfoot><tr><td colspan="3">2 themes</td></tr></tfoot>
+        </table>
+      </section>
+      <aside aria-labelledby="related-heading" role="complementary">
+        <h3 id="related-heading" hidden>Related</h3>
+        <my-widget theme="dark" data-user-id="42" aria-live="polite"></my-widget>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor">
+          <path d="M12 2 L2 7 l10 5 10-5z" stroke-width="2" stroke-linejoin="round" />
+          <circle cx="12" cy="17" r="3" />
+        </svg>
+        <canvas id="chart" width="300" height="150">Canvas unsupported</canvas>
+        <iframe src="https://example.com/embed" title="Embed" loading="lazy" sandbox="allow-scripts" allowfullscreen></iframe>
+      </aside>
+    </main>
+    <dialog id="confirm" aria-modal="true">
+      <form method="dialog"><p>Are you sure?</p><button value="cancel">Cancel</button><button value="ok" autofocus>OK</button></form>
+    </dialog>
+    <template id="row-template">
+      <tr><td class="name"></td><td class="value"></td></tr>
+    </template>
+    <footer>
+      <p>&lt;wemake.services&gt; &mdash; <small>all rights reserved</small></p>
+    </footer>
+    <style>
+      :root { --accent: #7aa2f7; }
+      main > article h2::before { content: "\201C"; color: var(--accent); }
+      @media (prefers-color-scheme: dark) { body { background: #1a1b26; } }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const rows = document.getElementById('row-template').content.cloneNode(true);
+        document.querySelector('tbody')?.append(rows);
+      });
+    </script>
+    <script type="module">
+      import { init } from './main.js';
+      init(window.__CONFIG__ ?? {});
+    </script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "wemake-django-template"}</script>
   </body>
 </html>

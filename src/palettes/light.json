@@ -7,6 +7,7 @@
       "bg": "#fafafa",
       "line": "#8a91991a",
       "fg": "#181b1f",
+      "hint": "#737b84",
       "ui": "#6e7682",
       "uiDim": "#b2b7bb",
       "uiMuted": "#c9cccf",
@@ -21,14 +22,13 @@
     },
 
     "syntax": {
+      "fg": "#181b1f",
       "comment": "#737b84",
       "string": "#478f00",
       "keyword": "#d43811",
       "func": "#cc7e00",
       "entity": "#007ada",
-      "constant": "#a37acc",
-      "operator": "#ed9366",
-      "error": "#f51818"
+      "constant": "#ab8600"
     },
 
     "selection": {
@@ -38,12 +38,30 @@
       "suggest": "#bcdaf2"
     },
 
+    "severity": {
+      "error": "#d43811",
+      "errorRuler": "#f51818",
+      "info": "#007ada"
+    },
+
+    "debug": {
+      "breakpointDisabled": "#007ada",
+      "statusBar": "#ed9366"
+    },
+
     "vcs": {
       "added": "#99bf4d",
       "modified": "#709ecc",
       "removed": "#f27983",
+      "addedFile": "#478f00",
       "modifiedFile": "#c2a620",
+      "submodule": "#a37acc",
       "conflict": "#ff0000"
+    },
+
+    "diff": {
+      "inserted": "#478f00",
+      "removed": "#ed9366"
     },
 
     "terminal": {

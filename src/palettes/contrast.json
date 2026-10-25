@@ -5,6 +5,7 @@
   "colors": {
     "base": {
       "fg": "#e0ded8",
+      "hint": "#959da6",
       "ui": "#848c9c"
     },
 
@@ -13,7 +14,9 @@
     },
 
     "syntax": {
-      "comment": "#959da6"
+      "fg": "#e0ded8",
+      "comment": "#959da6",
+      "constant": "#e5c547"
     },
 
     "selection": {

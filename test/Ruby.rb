@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Originally designed by Ben Laurie
 # Adapted from https://github.com/benlaurie/objecthash/blob/master/objecthash.py
 
@@ -151,3 +153,231 @@ module ObjectHash
     end
   end
 end
+
+# --- Additional syntax coverage -------------------------------------------
+
+=begin
+Block comment spanning
+several lines.
+=end
+
+require_relative "support/helpers"
+require "json"
+
+BEGIN { $stdout.sync = true }
+END { puts "done" }
+
+module Normalizer
+  refine String do
+    def squish = gsub(/\s+/, " ").strip
+  end
+end
+
+using Normalizer
+
+module Reportable
+  def self.included(base) = base.extend(ClassMethods)
+
+  module ClassMethods
+    def report_fields(arg, *names, **opts)
+      @report_fields ||= []
+      @report_fields.concat(names.map(&:to_sym))
+      opts.each { |key, value| define_method(:"report_#{key}") { value } }
+    end
+  end
+
+  def to_report = self.class.instance_variable_get(:@report_fields).to_h { |f| [f, public_send(f)] }
+end
+
+class Fingerprint
+  include Comparable
+  include Reportable
+  prepend Module.new { def digest = super.freeze }
+
+  MAGIC = 0xDEAD_BEEF
+  OCTAL = 0o755
+  BINARY = 0b1010_0101
+  BIG = 1_000_000
+  SCIENTIFIC = 6.022e23
+  RATIONAL = 3/4r
+  COMPLEX = 2 + 3i
+  IMAGINARY_RATIONAL = 1.5ri
+  CHAR = ?A
+  WORDS = %w[alpha beta gamma].freeze
+  SYMBOLS = %i[sha256 sha512 md5].freeze
+  PATTERN = %r{\A(?<algo>sha\d+)/(?<hex>\h{8,})\z}imx
+  TEMPLATE = %Q(interpolated #{WORDS.first} with "quotes")
+  LITERAL = %q(no #{interpolation} here)
+  QUOTED_SYMBOL = :"with spaces"
+  SHELL = `echo "$HOME"`
+
+  SQL = <<~SQL.strip
+    SELECT id, name
+      FROM fingerprints
+     WHERE algo = '#{SYMBOLS.first}'
+  SQL
+
+  RAW = <<-'RAW'
+    nothing #{interpolated} \n here
+  RAW
+
+  @@registry = {}
+  @count = 0
+
+  attr_accessor :algo, :hex
+  attr_reader :created_at
+  attr_writer :label
+
+  class << self
+    attr_accessor :default_algo
+
+    def count = @count
+
+    def [](hex) = @@registry[hex] || new(default_algo, hex)
+
+    def build(algo = :sha256, *rest, hex:, label: nil, **meta, &blk)
+      new(algo, hex, **meta).tap do |fp|
+        fp.label = label unless label.nil?
+        blk&.call(fp)
+        @count += 1
+      end
+    end
+  end
+
+  self.default_algo = :sha256
+
+  report_fields :algo, :hex, owner: "ci"
+
+  def initialize(algo, hex, **meta)
+    @algo, @hex, @meta = algo, hex, meta
+    @created_at = Time.now
+    @@registry[hex] = self
+  end
+
+  def <=>(other) = [algo, hex] <=> [other.algo, other.hex]
+
+  def digest = "#{algo}/#{hex}"
+
+  def inspect = "#<#{self.class} #{digest} #{__method__} #{__FILE__}:#{__LINE__}>"
+
+  def to_h = { algo:, hex: }
+
+  def method_missing(name, *args, &block)
+    if name.to_s.start_with?("meta_")
+      @meta.fetch(name.to_s.delete_prefix("meta_").to_sym) { super }
+    else
+      super
+    end
+  end
+
+  def respond_to_missing?(name, include_private = false) = name.start_with?("meta_") || super
+
+  def classify
+    case [algo, hex.length]
+    in [:sha256 | :sha512 => strong, Integer => len] if len > 32
+      "strong #{strong} (#{len})"
+    in [:md5, _] then "weak"
+    in [^(self.class.default_algo), *] then "default"
+    in [Symbol => sym, *rest] unless rest.empty?
+      "other #{sym}"
+    else
+      "unknown"
+    end
+  end
+
+  def parse(input)
+    case input
+    in { algo: String => a, hex: String => h, **rest }
+      [a.to_sym, h, rest]
+    in [*, { nested: [Integer => depth, *] }, *]
+      depth
+    in String if input.match?(PATTERN)
+      $~[:algo]
+    in nil | []
+      nil
+    end
+  end
+
+  def verify!(attempts = 3)
+    tries = 0
+    begin
+      tries += 1
+      raise ArgumentError, "bad hex" unless hex.match?(/\A\h+\z/)
+      raise IOError if tries < 2
+    rescue ArgumentError => e
+      warn e.message
+      raise
+    rescue IOError, SystemCallError
+      retry if tries < attempts
+    else
+      :verified
+    ensure
+      @verified_at = Time.now
+    end
+  end
+
+  private
+
+  def normalize(str) = str.squish
+
+  private def hidden; end
+  protected def semi_hidden = nil
+  alias_method :fp, :digest
+  alias to_str digest
+  undef hidden
+end
+
+Row = Struct.new(:id, :value, keyword_init: true) do
+  def doubled = value * 2
+end
+
+Coord = Data.define(:lat, :lng) do
+  def to_a = [lat, lng]
+end
+
+square = ->(x) { x * x }
+add = lambda { |a, b = 1, *rest, key:, **opts, &blk| a + b }
+curried = proc { |a, b| a * b }.curry
+to_s = method(:format).to_proc
+compose = square >> ->(n) { n + 1 } << :to_i.to_proc
+
+result = catch(:halt) do
+  [1, 2, 3].each_with_index do |n, i|
+    throw :halt, n if i == 1
+  end
+end
+
+totals = (1..10).step(2).map { _1 * 2 } + (1...10).select(&:even?) + (..5).to_s.chars + (1..).lazy.first(2)
+squares = [1, 2, 3].map { it ** 2 }
+counts = Hash.new(0).tap { |h| %w[a b a].each { |w| h[w] += 1 } }
+value = ENV["HOME"]&.length || 0
+value ||= 42
+value &&= value.clamp(1, 100)
+flag = defined?(ObjectSpace) ? ObjectSpace.each_object(Class).count : -1
+label = square.(4) > 10 ? "big" : "small"
+puts "skipped" unless flag.positive?
+i = 0
+i += 1 while i < 3
+i -= 1 until i.zero?
+begin
+  i += 2
+end while i < 10
+loop do
+  i -= 1
+  next if i.odd?
+  break if i < 2
+  redo if false
+end
+for idx, word in %w[x y z].each_with_index
+  print idx, word, "\n"
+end
+if i.between?(0, 5) then puts "small" elsif i > 5 then puts "big" else puts "neg" end
+$global_counter = Integer("0x1f", 16) + Float("1e3").floor + Rational(1, 3).to_f.round(2)
+printf("%-10s|%05.2f|%x|%08b\n", "fmt", 3.14159, 255, 5)
+puts format("%<name>s is %{age}", name: "fp", age: 3)
+puts "%s and %p" % ["str", :sym]
+json = JSON.pretty_generate(Fingerprint.build(hex: "ab" * 16).to_h.merge(Coord.new(lat: 1.5, lng: -2.0).to_h))
+Fingerprint.build(:sha512, hex: "ff" * 32, label: "x") { |fp| fp.verify!(2) }.then { |fp| fp.classify }
+
+__END__
+This is DATA, not code: #{not} interpolated

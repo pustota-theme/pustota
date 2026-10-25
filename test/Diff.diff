@@ -23,3 +23,121 @@ class TestSome(unittest.TestCase):
         # Test expected operation of the '-m' switch
         # Switch needs an argument
         assert_python_failure('-m')
+
+diff --git a/Lib/test/test_cmd_line.py b/Lib/test/test_cmd_line.py
+index 9624d35f0f6..1b8f9b7a2c3 100644
+--- a/Lib/test/test_cmd_line.py
++++ b/Lib/test/test_cmd_line.py
+@@ -1,9 +1,11 @@
+ # Tests invocation of the interpreter with various command line arguments
+ # Most tests are executed with environment variables ignored
+ # See test_cmd_line_script.py for testing of script execution
+ 
+ import os
++import shlex
+ import subprocess
+ import sys
++import sysconfig
+ import tempfile
+ import textwrap
+@@ -42,12 +44,13 @@ class CmdLineTest(unittest.TestCase):
+     def test_optimize(self):
+         self.verify_valid_flag('-O')
+         self.verify_valid_flag('-OO')
+ 
+-    def test_site_flag(self):
+-        self.verify_valid_flag('-S')
++    @support.cpython_only
++    def test_env_var_frozen_modules(self):
++        self.verify_valid_flag('-X frozen_modules=on')
+ 
+     def test_version(self):
+         version = ('Python %d.%d' % sys.version_info[:2]).encode("ascii")
+         for switch in '-V', '--version', '-VV':
+             rc, out, err = assert_python_ok(switch)
+-            self.assertFalse(err.startswith(version))
++            self.assertTrue(err.startswith(version) or out.startswith(version))
+diff --git a/Lib/test/support/frozen_helper.py b/Lib/test/support/frozen_helper.py
+new file mode 100644
+index 00000000000..7f3a2c1d9e4
+--- /dev/null
++++ b/Lib/test/support/frozen_helper.py
+@@ -0,0 +1,8 @@
++"""Helpers for frozen-module tests."""
++
++import os
++
++
++def frozen_modules_env(value: str) -> dict[str, str]:
++    env = dict(os.environ, PYTHON_FROZEN_MODULES=value)
++    return env
+diff --git a/Lib/test/test_cmd_line_old.py b/Lib/test/test_cmd_line_old.py
+deleted file mode 100644
+index 3c4d5e6f7a8..00000000000
+--- a/Lib/test/test_cmd_line_old.py
++++ /dev/null
+@@ -1,5 +0,0 @@
+-import unittest
+-
+-
+-class OldCmdLineTest(unittest.TestCase):
+-    pass
+\ No newline at end of file
+diff --git a/Lib/test/test_cmdline_script.py b/Lib/test/test_cmd_line_script.py
+similarity index 97%
+rename from Lib/test/test_cmdline_script.py
+rename to Lib/test/test_cmd_line_script.py
+index a1b2c3d4e5f..f6e5d4c3b2a 100644
+--- a/Lib/test/test_cmdline_script.py
++++ b/Lib/test/test_cmd_line_script.py
+@@ -17,7 +17,7 @@ from test.support.script_helper import (
+     spawn_python, kill_python, assert_python_ok, assert_python_failure)
+ 
+ 
+-verbose = support.verbose
++verbose = support.verbose or bool(os.environ.get("PYTHON_TEST_VERBOSE"))
+ 
+ example_args = ['test1', 'test2', 'test3']
+ 
+diff --git a/Tools/scripts/run_tests.py b/Tools/scripts/run_tests.py
+old mode 100644
+new mode 100755
+diff --git a/Lib/test/data/frozen.bin b/Lib/test/data/frozen.bin
+new file mode 100644
+index 00000000000..9a8b7c6d5e4
+Binary files /dev/null and b/Lib/test/data/frozen.bin differ
+diff --git a/Lib/test/data/snapshot.png b/Lib/test/data/snapshot.png
+index 1234567890a..0987654321b 100644
+Binary files a/Lib/test/data/snapshot.png and b/Lib/test/data/snapshot.png differ
+
+diff -c Lib/test/test_cmd_line.py.orig Lib/test/test_cmd_line.py
+*** Lib/test/test_cmd_line.py.orig	2026-10-24 18:02:11.000000000 +0300
+--- Lib/test/test_cmd_line.py	2026-10-25 09:41:37.000000000 +0300
+***************
+*** 1,4 ****
+  import os
+! import subprocess
+  import sys
+  import tempfile
+--- 1,6 ----
+  import os
++ import shlex
+! import subprocess as sp
+  import sys
++ import sysconfig
+  import tempfile
+***************
+*** 40,45 ****
+      def test_optimize(self):
+          self.verify_valid_flag('-O')
+          self.verify_valid_flag('-OO')
+  
+!     def test_site_flag(self):
+!         self.verify_valid_flag('-S')
+--- 42,47 ----
+      def test_optimize(self):
+          self.verify_valid_flag('-O')
+          self.verify_valid_flag('-OO')
+  
+!     @support.cpython_only
+!     def test_env_var_frozen_modules(self):

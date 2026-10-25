@@ -4,6 +4,52 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.35.0
+
+- In Python fixed that some regex patterns where highlighted as keywords
+- In TypeScript fixed `null` and `undefined` highlight in type annitations
+- In TypeScript `this` and `object` in types, like `clone(): this`,
+  are no longer highlighted as constants, same as `string` or `any`
+- In JavaScript and TypeScript `constructor` is now highlighted
+  as a method definition, not a keyword
+- In TypeScript fixed `accessor` to be a keyword
+- In TypeScript fixed `namespace` to be a keyword
+- In JavaScript and TypeScript fixed `10n` to be a constant
+- In JavaScript and TypeScript fixed `contructror` to be a function definition
+- In JavaScript and TypeScript some properties like `Math.PI`
+  are no longer highlighted as a constant
+- In JavaScript and TypeScript type usages inside class bodies,
+  like `x as Foo` or `satisfies Foo`, are no longer highlighted as types,
+  JSDoc types like `{Foo}` inside classes are now comments
+- TSX is now highlighted exactly like TypeScript: `enum`, `namespace`,
+  `accessor`, `:` in type annotations, `null` and `undefined` in types,
+  `10n`, and function-typed properties like `render: () => void`
+- In JavaScript and TypeScript `const` names are no longer highlighted
+  as function definitions, even when the value is an arrow function,
+  like `const handleChange = () => {}`, this was already the case in TSX
+- In Ruby fixed `4r`, `3i` and `1.5ri` to be constants
+- In Ruby fixed `@@` to be highlighted the same way as `@`
+- In Ruby fixed module name highlight
+- In Dart only class and extension type definition names
+  are highlighted via semantic tokens, type usages like `String`
+  or `int` are no longer highlighted
+- In Haskell only type definition names in `data`, `newtype` and `class`
+  are highlighted, type usages and `instance ToJSON Hash` are no longer
+  highlighted as definitions
+- In Elixir `defimpl` names are no longer highlighted as definitions,
+  like `impl` in Rust, `defmodule` and `defprotocol` names still are
+- In Elixir fixed `#{}` highlight in strings, now they are plain text
+- In Rust `enum` names are now highlighted as type definitions,
+  same as `struct` and `trait` names
+- In PHP fixed `const`, `enum` and `trait` to be keywords
+- In PHP types like `int|string|null` are no longer highlighted as keywords
+- In PHP `enum` and `trait` names are now highlighted as type definitions,
+  same as `class` and `interface` names
+- In Go fixed `0b` and `0x` highlight as numbers, not keywords
+- In Makefile fixed `$(TOP_LEVEL)` definitions to be plain text
+- In Makefile fixed `:=` to be an operator
+- In TOML fixed time and date to be constants
+
 ## 0.34.0
 
 - Added `typedef` name highlight in C via semantic tokens

@@ -3,6 +3,89 @@
 	"$schema": "vscode://schemas/color-theme",
 	"type": "dark",
   "custom": [
-    {"a": 1, "b": true, "c": null},
+    {"a": 1, "b": true, "c": null}
+  ],
+  "colors": {
+    "editor.background": "#1e2027",
+    "editor.foreground": "#d7dae0",
+    "editorCursor.foreground": "#ffcc66",
+    "terminal.ansiBrightBlack": "#5c6370"
+  },
+  "tokenColors": [
+    {
+      "name": "Comments",
+      "scope": ["comment", "punctuation.definition.comment"],
+      "settings": {"foreground": "#5c6370", "fontStyle": "italic"}
+    },
+    {
+      "name": "Keywords",
+      "scope": "keyword.control",
+      "settings": {"foreground": "#c678dd", "fontStyle": ""}
+    },
+    {
+      "name": "Strings",
+      "scope": ["string", "string.quoted.double", "string.template"],
+      "settings": {"foreground": "#98c379", "fontStyle": "bold underline"}
+    }
+  ],
+  "semanticHighlighting": true,
+  "semanticTokenColors": {
+    "variable.readonly": {"foreground": "#56b6c2", "italic": false},
+    "parameter": "#e5c07b",
+    "*.deprecated": {"strikethrough": true}
+  },
+  "scalars": {
+    "integer": 42,
+    "negative": -17,
+    "zero": 0,
+    "float": 3.14159,
+    "negativeFloat": -0.5,
+    "exponent": 1e-5,
+    "bigExponent": 6.022E+23,
+    "negativeExponent": -2.5e-3,
+    "true": true,
+    "false": false,
+    "null": null,
+    "emptyString": "",
+    "unicode": "pustota — пустота — 空",
+    "escapes": "quote \" backslash \\ slash \/ newline \n tab \t carriage \r backspace \b formfeed \f",
+    "unicodeEscapes": "caf\u00e9 \u2014 \ud83d\ude00",
+    "url": "https://github.com/pustota-theme/pustota"
+  },
+  "empty": {
+    "object": {},
+    "array": [],
+    "nestedEmpty": [[], {}, [{}], {"a": []}]
+  },
+  "key with spaces": "value",
+  "ключ": "значение",
+  "emoji 🔑": "🔥",
+  "$ref": "#/definitions/theme",
+  "123": "numeric-looking key",
+  "": "empty key",
+  "matrix": [
+    [1, 2, 3],
+    [4.0, -5.5, 6e2],
+    [true, false, null],
+    ["a", "b", "c"]
+  ],
+  "deep": {
+    "level1": {
+      "level2": {
+        "level3": {
+          "level4": {
+            "level5": {
+              "value": "bottom",
+              "path": ["level1", "level2", "level3", "level4", "level5"],
+              "mixed": [1, "two", 3.0, {"four": 4}, [5], null, true]
+            }
+          }
+        }
+      }
+    }
+  },
+  "contributors": [
+    {"login": "sobolevn", "id": 4660275, "admin": true, "repos": ["pustota", "wemake-python-styleguide"]},
+    {"login": "octocat", "id": 1, "admin": false, "repos": []}
   ]
 }

@@ -388,3 +388,337 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
+
+#pragma mark - Additional syntax coverage
+
+#import <Foundation/Foundation.h>
+@import Darwin;
+@class TNDeliveryQueue;
+@protocol TNQueueDelegate;
+
+#pragma clang assume_nonnull begin
+
+typedef enum TNDeliveryState : NSInteger {
+    TNDeliveryStatePending = 0,
+    TNDeliveryStateDelivered,
+    TNDeliveryStateFailed = -1,
+} TNDeliveryState;
+
+typedef enum TNDeliveryOptions : NSUInteger {
+    TNDeliveryOptionNone      = 0,
+    TNDeliveryOptionSound     = 1 << 0,
+    TNDeliveryOptionBadge     = 1 << 1,
+    TNDeliveryOptionIgnoreDnD = 1 << 2,
+} TNDeliveryOptions;
+
+typedef void (^TNCompletionBlock)(BOOL success, NSError * _Nullable error);
+typedef NSString * _Nonnull (^TNFormatter)(id value);
+typedef struct { CGFloat x, y; } TNPoint;
+
+static NSString * const TNErrorDomain = @"fr.julienxx.oss.terminal-notifier.error";
+static const NSTimeInterval TNDefaultTimeout = 2.5;
+static const NSUInteger TNMaxRetries = 3u;
+static const long long TNLargeNumber = 0x7FFFFFFFLL;
+static const double TNExponent = 6.02e23;
+static const unsigned TNBits = 0b1010 | 017;
+
+/// A protocol describing anything able to deliver a notification.
+@protocol TNDeliverable <NSObject>
+@required
+- (void)deliverWithCompletion:(TNCompletionBlock)completion;
+@property (nonatomic, readonly, copy) NSString *identifier;
+@optional
+- (void)cancel;
++ (instancetype)deliverableWithIdentifier:(NSString *)identifier;
+@end
+
+/**
+ * A FIFO queue of deliverable items.
+ * @discussion Uses lightweight generics and KVO-compliant properties.
+ */
+__attribute__((objc_subclassing_restricted))
+@interface TNDeliveryQueue<__covariant ItemType : id<TNDeliverable>> : NSObject <NSCopying, NSFastEnumeration>
+
+@property (nonatomic, strong, readonly) NSMutableArray<ItemType> *items;
+@property (nonatomic, weak, nullable) id<TNQueueDelegate> delegate;
+@property (nonatomic, copy, nullable) TNFormatter formatter;
+@property (nonatomic, assign, getter=isPaused) BOOL paused;
+@property (atomic, readwrite) TNDeliveryState state;
+@property (class, nonatomic, readonly) TNDeliveryQueue *sharedQueue;
+@property (nonatomic, unsafe_unretained, nullable) id legacyObserver;
+@property (nonatomic, copy) NSDictionary<NSString *, NSNumber *> *metrics;
+@property (nonatomic) TNPoint anchor;
+
+- (instancetype)initWithCapacity:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)queueWithItems:(NSArray<ItemType> *)items;
+- (void)enqueue:(ItemType)item;
+- (nullable ItemType)dequeue;
+- (void)drainWithOptions:(TNDeliveryOptions)options completion:(nullable TNCompletionBlock)completion;
+- (NSArray<NSString *> *)identifiersMatching:(BOOL (^)(ItemType item))predicate;
+- (NSString *)formatValue:(id)value withFormatter:(TNFormatter __nullable)formatter NS_SWIFT_NAME(format(_:using:));
+
+@end
+
+@protocol TNQueueDelegate <NSObject>
+- (void)queue:(TNDeliveryQueue *)queue didFinishItem:(id<TNDeliverable>)item;
+@end
+
+@interface TNDeliveryQueue ()
+@property (nonatomic, strong, readwrite) NSMutableArray *items;
+@property (nonatomic, strong) dispatch_queue_t workQueue;
+@end
+
+@implementation TNDeliveryQueue {
+    NSUInteger _capacity;
+    NSLock *_lock;
+    __weak id _weakRef;
+    __block NSInteger _pendingCount;
+}
+
+@synthesize paused = _paused;
+@dynamic legacyObserver;
+
+static TNDeliveryQueue *_sharedQueue = nil;
+
++ (TNDeliveryQueue *)sharedQueue {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedQueue = [[self alloc] initWithCapacity:16];
+    });
+    return _sharedQueue;
+}
+
++ (instancetype)queueWithItems:(NSArray *)items {
+    TNDeliveryQueue *queue = [[self alloc] initWithCapacity:items.count];
+    for (id<TNDeliverable> item in items) {
+        [queue enqueue:item];
+    }
+    return queue;
+}
+
+- (instancetype)initWithCapacity:(NSUInteger)capacity {
+    if ((self = [super init])) {
+        _capacity = capacity ?: 8;
+        _lock = [[NSLock alloc] init];
+        _items = [NSMutableArray arrayWithCapacity:capacity];
+        _workQueue = dispatch_queue_create("fr.julienxx.queue", DISPATCH_QUEUE_SERIAL);
+        _state = TNDeliveryStatePending;
+        _metrics = @{@"enqueued": @0, @"failed": @0};
+        _anchor = (TNPoint){ .x = 0.0, .y = 1.5 };
+    }
+    return self;
+}
+
+- (void)dealloc {
+    _lock = nil;
+}
+
+- (id)copyWithZone:(nullable NSZone *)zone {
+    TNDeliveryQueue *copy = [[[self class] allocWithZone:zone] initWithCapacity:_capacity];
+    copy->_items = [_items mutableCopy];
+    return copy;
+}
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                  objects:(id __unsafe_unretained [])buffer
+                                    count:(NSUInteger)len {
+    return [_items countByEnumeratingWithState:state objects:buffer count:len];
+}
+
+- (void)enqueue:(id<TNDeliverable>)item {
+    NSParameterAssert(item != nil);
+    @synchronized (self) {
+        if (_items.count >= _capacity) {
+            [_items removeObjectAtIndex:0];
+        }
+        [_items addObject:item];
+        _pendingCount += 1;
+    }
+    [self willChangeValueForKey:@"items"];
+    NSMutableDictionary *metrics = [self.metrics mutableCopy];
+    metrics[@"enqueued"] = @([metrics[@"enqueued"] unsignedIntegerValue] + 1);
+    self.metrics = metrics;
+    [self didChangeValueForKey:@"items"];
+}
+
+- (id<TNDeliverable>)dequeue {
+    [_lock lock];
+    id<TNDeliverable> first = _items.firstObject;
+    if (first) [_items removeObjectAtIndex:0];
+    [_lock unlock];
+    return first;
+}
+
+- (void)drainWithOptions:(TNDeliveryOptions)options completion:(TNCompletionBlock)completion {
+    __weak typeof(self) weakSelf = self;
+    __block NSUInteger failures = 0;
+    BOOL wantsSound = (options & TNDeliveryOptionSound) == TNDeliveryOptionSound;
+    BOOL ignoresDnD = !!(options & TNDeliveryOptionIgnoreDnD);
+
+    dispatch_async(self.workQueue, ^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf) return;
+
+        id<TNDeliverable> item;
+        while ((item = [strongSelf dequeue]) != nil) {
+            @try {
+                [item deliverWithCompletion:^(BOOL success, NSError *error) {
+                    if (!success) failures++;
+                    if ([strongSelf.delegate respondsToSelector:@selector(queue:didFinishItem:)]) {
+                        [strongSelf.delegate queue:strongSelf didFinishItem:item];
+                    }
+                }];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"delivery raised %@ (%@)", exception.name, exception.userInfo);
+                failures++;
+                if ([exception.name isEqualToString:NSInternalInconsistencyException]) @throw;
+            }
+            @finally {
+                strongSelf->_pendingCount--;
+            }
+        }
+
+        NSError *error = failures > 0
+            ? [NSError errorWithDomain:TNErrorDomain
+                                  code:(NSInteger)failures
+                              userInfo:@{NSLocalizedDescriptionKey: @"some deliveries failed",
+                                         @"sound": @(wantsSound),
+                                         @"ignoresDnD": @(ignoresDnD)}]
+            : nil;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(TNDefaultTimeout * NSEC_PER_SEC)),
+                       dispatch_get_main_queue(), ^{
+            if (completion) completion(error == nil, error);
+        });
+    });
+}
+
+- (NSArray<NSString *> *)identifiersMatching:(BOOL (^)(id<TNDeliverable>))predicate {
+    NSMutableArray<NSString *> *result = [NSMutableArray new];
+    [_items enumerateObjectsUsingBlock:^(id<TNDeliverable> obj, NSUInteger idx, BOOL *stop) {
+        if (predicate(obj)) {
+            [result addObject:obj.identifier];
+        }
+        if (idx > TNMaxRetries * 100) *stop = YES;
+    }];
+    NSSortDescriptor *byLength = [NSSortDescriptor sortDescriptorWithKey:@"length" ascending:YES];
+    return [result sortedArrayUsingDescriptors:@[byLength]];
+}
+
+- (NSString *)formatValue:(id)value withFormatter:(TNFormatter)formatter {
+    if (formatter) return formatter(value);
+    if ([value isKindOfClass:NSNumber.class]) {
+        NSNumberFormatter *nf = [[NSNumberFormatter alloc] init];
+        nf.numberStyle = NSNumberFormatterDecimalStyle;
+        return [nf stringFromNumber:(NSNumber *)value] ?: @"";
+    }
+    return [value description];
+}
+
+- (void)setPaused:(BOOL)paused {
+    _paused = paused;
+    self.state = paused ? TNDeliveryStatePending : self.state;
+}
+
+- (BOOL)isPaused {
+    return _paused;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"<%@: %p items=%lu capacity=%lu>",
+            NSStringFromClass([self class]), self, (unsigned long)_items.count, (unsigned long)_capacity];
+}
+
+@end
+
+@interface NSString (TNEscaping)
+- (NSString *)tn_shellEscapedString;
++ (nullable NSString *)tn_stringFromFile:(NSString *)path error:(NSError * _Nullable * _Nullable)error;
+@end
+
+@implementation NSString (TNEscaping)
+
+- (NSString *)tn_shellEscapedString {
+    NSString *escaped = [self stringByReplacingOccurrencesOfString:@"'" withString:@"'\\''"];
+    return [NSString stringWithFormat:@"'%@'", escaped];
+}
+
++ (NSString *)tn_stringFromFile:(NSString *)path error:(NSError **)error {
+    NSData *data = [[NSFileManager defaultManager] contentsAtPath:path];
+    return data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
+}
+
+@end
+
+static void TNDemonstrateLiterals(void) {
+    NSNumber *integer = @42;
+    NSNumber *unsignedLong = @42UL;
+    NSNumber *floating = @3.14f;
+    NSNumber *boolean = @YES;
+    NSNumber *character = @'c';
+    NSNumber *boxedExpr = @(TNMaxRetries * 2 + 1);
+    NSString *boxedCString = @(getenv("HOME") ?: "/");
+    NSArray<NSNumber *> *numbers = @[integer, unsignedLong, floating, boolean, character, boxedExpr];
+    NSDictionary<NSString *, id> *mapping = @{
+        @"numbers": numbers,
+        @"nested": @{@"inner": @[@1, @2, @3]},
+        @"empty": @[],
+        @"string": boxedCString,
+    };
+    NSArray *copy = [numbers arrayByAddingObject:mapping[@"string"]];
+    NSNumber *second = numbers[1];
+    id value = [mapping valueForKeyPath:@"nested.inner.@count"];
+    SEL selector = @selector(tn_shellEscapedString);
+    Protocol *protocol = @protocol(TNDeliverable);
+    const char *encoding = @encode(NSRange);
+    NSString *className = NSStringFromClass(TNDeliveryQueue.class);
+    NSString *multiline = @"first line "
+                          @"second line";
+    NSString *joined = [@[@"a", @"b"] componentsJoinedByString:@", "];
+    NSMutableString *buffer = [NSMutableString stringWithCapacity:64];
+    [buffer appendFormat:@"%@ %@ %ld %lld %g %u", joined, className, (long)TNLargeNumber, TNLargeNumber, TNExponent, TNBits];
+    NSSet<NSString *> *set = [NSSet setWithArray:@[@"x", @"y"]];
+    NSMutableSet *mutableSet = [set mutableCopy];
+    [mutableSet unionSet:set];
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:0];
+    NSData *bytes = [multiline dataUsingEncoding:NSUTF8StringEncoding];
+    NSRange range = [multiline rangeOfString:@"second"];
+    NSURL *url = [NSURL URLWithString:@"https://example.com/path?q=1"];
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZ";
+    NSString *stamp = [formatter stringFromDate:now];
+    CGFloat ratio = (CGFloat)second.doubleValue / 2.0;
+    BOOL responds = [mapping respondsToSelector:selector] && protocol != nil && encoding != NULL;
+    NSUInteger count = [[mapping allKeys] count] ^ range.length;
+    NSInteger parsed = [@"123" integerValue] + (NSInteger)strtol("0x1F", NULL, 16);
+    id<TNDeliverable> __autoreleasing *outItem = NULL;
+    void (^simpleBlock)(void) = ^{ NSLog(@"%@ %@ %lu %d %@ %@", value, className, (unsigned long)count, responds, stamp, url.host); };
+    int (^adder)(int, int) = ^int(int a, int b) { return a + b; };
+    NSComparator cmp = ^NSComparisonResult(id lhs, id rhs) { return [lhs compare:rhs]; };
+    NSArray *sorted = [copy sortedArrayUsingComparator:cmp];
+    __auto_type inferredCount = sorted.count;
+    NSUInteger declaredCount = inferredCount;
+    NSString * _Nullable nullableName = nil;
+    NSString * _Nonnull nonnullName = @"name";
+    id untyped = nullableName ?: nonnullName;
+    (void)declaredCount; (void)untyped;
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF > %@", @1];
+    NSArray *filtered = [sorted filteredArrayUsingPredicate:predicate];
+    if (@available(macOS 10.14, *)) {
+        simpleBlock();
+    } else {
+        NSLog(@"%d %@ %@ %@ %lu", adder(1, 2), filtered, indexes, bytes, (unsigned long)parsed);
+    }
+    for (NSString *key in [mapping keyEnumerator]) {
+        if ([key hasPrefix:@"n"]) continue;
+        break;
+    }
+    [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL *stop) {
+        *stop = [key isEqualToString:@"empty"];
+    }];
+    (void)ratio; (void)outItem; (void)mutableSet;
+}
+
+#pragma clang assume_nonnull end
