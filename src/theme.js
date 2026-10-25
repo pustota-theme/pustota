@@ -458,7 +458,7 @@ function tokenColors(c) {
         'meta.method.declaration > storage.type.ts',
         'meta.method.declaration > storage.type.tsx',
         // Python:
-        'meta.function.python entity.name.function',
+        'meta.function.python entity.name.function', // also from `syntaxes/python-function-names.injection.json`
         'meta.function.python support.function',
         'meta.function.python support.variable', // constants used as functions
         'meta.function.python variable.legacy', // old types used as functions
@@ -520,6 +520,13 @@ function tokenColors(c) {
         'source.elixir meta.module entity.name.type.module',
         // Haskell:
         'source.haskell entity.name.type', // from `syntaxes/haskell-types.injection.json`
+        // C:
+        'entity.name.type.struct.c', // from `syntaxes/c-types.injection.json`
+        'entity.name.type.union.c',
+        'entity.name.type.typedef.c',
+        // Go:
+        'entity.name.type.struct.go', // from `syntaxes/go-types.injection.json`
+        'entity.name.type.interface.go',
         // TS:
         'source.ts meta.interface entity.name.type.interface',
         'source.tsx meta.interface entity.name.type.interface',
@@ -671,42 +678,13 @@ function tokenColors(c) {
 
 // Builds a complete VSCode color theme from a palette.
 // Semantic tokens come from language servers (like Pylance) and are applied
-// on top of TextMate scopes. We only use them where TextMate grammars
-// cannot tell the cases apart.
+// on top of TextMate scopes. We don't use them to add highlight,
+// cases that TextMate grammars cannot tell apart are fixed by grammar
+// injections in `syntaxes/` instead, so they work without a language server.
+// We only use them where grammars cannot tell the cases apart at all,
+// and to undo VSCode's default semantic token colors.
 function semanticTokenColors(c) {
   return {
-    // Python: builtin type names used as function/method names,
-    // like `def set(self): ...`. The grammar scopes the name as
-    // `support.type.python`, exactly like `set(items)` or `-> set`,
-    // so only the language server can tell the definition apart.
-    'function.declaration:python': c.syntax.func,
-    'method.declaration:python': c.syntax.func,
-
-    // C: names introduced by `typedef`, like `PyObject` in
-    // `typedef struct _object PyObject;` or `PySlot` in
-    // `typedef struct { ... } PySlot;`. The grammar has no scope for
-    // the new name, so only the language server can mark it as a type
-    // being declared. Type usages stay uncolored.
-    //
-    // This needs clangd. The Microsoft C/C++ extension (cpptools) emits
-    // the same `type` token for definitions and usages and only knows
-    // the `static`, `global` and `local` modifiers, so there is no
-    // selector that would match the typedef name alone. All cpptools
-    // tokens fall back to the TextMate colors above, which is what we want.
-    'type.declaration:c': c.syntax.entity,
-
-    // Go: struct and interface names being defined, like `config` in
-    // `type config struct` or `Hasher` in `type Hasher interface`.
-    // The grammar uses the same `entity.name.type.go` scope for
-    // definitions and usages, so only gopls can tell them apart.
-    //
-    // gopls marks every type name with a modifier for its underlying
-    // type (`struct`, `interface`, `slice`, `map`, `pointer`, etc),
-    // so other definitions like `type Set []interface{}` or
-    // `type ID = string` stay uncolored, same as type usages.
-    'type.definition.struct:go': c.syntax.entity,
-    'type.definition.interface:go': c.syntax.entity,
-
     // Dart: class names being defined, like `Vector` in `class Vector`
     // or `Meters` in `extension type Meters(double value)`.
     // The grammar uses the same `support.class.dart` scope for every
@@ -716,6 +694,13 @@ function semanticTokenColors(c) {
     // `enum` and `mixin` names get the same token for definitions and usages,
     // so they stay uncolored, same as type usages.
     'class.declaration:dart': c.syntax.entity,
+
+    // Dart: function and method names being defined, like `build` in
+    // `Widget build(BuildContext context)`. The grammar uses the same
+    // `entity.name.function.dart` scope for definitions and calls,
+    // so only the Dart analysis server can tell them apart.
+    'function.declaration:dart': c.syntax.func,
+    'method.declaration:dart': c.syntax.func,
 
     // TS / TSX / JS / JSX: properties from the standard library,
     // like `PI` in `Math.PI`. The grammar scopes them as plain properties,

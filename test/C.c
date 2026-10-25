@@ -43,6 +43,12 @@ PyAPI_FUNC(void) PyObject_ClearWeakRefs(PyObject *);
 typedef Py_hash_t (*hashfunc)(PyObject *);
 typedef PyObject *(*richcmpfunc) (PyObject *, PyObject *, int);
 
+union DataValue {
+    int i;
+    float f;
+    char str[20];
+};
+
 enum Color chosenColor = GREEN;
 struct Point pt = { 10, 20 };
 union DataValue val;

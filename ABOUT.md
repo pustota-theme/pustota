@@ -81,6 +81,18 @@ And ending with languages like Elixir, Lisp, and Haskell.
 If you want to contribute a language support, please feel free!
 It is quite easy to do, since there are only 5 major colors :)
 
+### Semantic tokens
+
+Most languages are highlighted with TextMate grammars only,
+but some definitions can not be told apart from usages without a language server.
+These languages need semantic tokens from an extension:
+
+| Language | What needs semantic tokens | Extension |
+|----------|----------------------------|-----------|
+| Dart | Class, extension type, function, and method definition names | [Dart](https://marketplace.visualstudio.com/items?itemName=Dart-Code.dart-code) |
+
+Without the extension these names are not highlighted, everything else works as usual.
+
 ## Development
 
 Files in `themes/` are generated, do not edit them by hand.

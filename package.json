@@ -2,7 +2,7 @@
   "name": "pustota",
   "displayName": "pustota",
   "description": "Minimalistic VSCode theme inspired by old-fashioned hobbies",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "scripts": {
     "build": "node src/build.js",
     "check": "node src/build.js --check",
@@ -60,6 +60,21 @@
         "scopeName": "pustota.injection.haskell.types",
         "path": "./syntaxes/haskell-types.injection.json",
         "injectTo": ["source.haskell"]
+      },
+      {
+        "scopeName": "pustota.injection.python.function-names",
+        "path": "./syntaxes/python-function-names.injection.json",
+        "injectTo": ["source.python"]
+      },
+      {
+        "scopeName": "pustota.injection.c.types",
+        "path": "./syntaxes/c-types.injection.json",
+        "injectTo": ["source.c"]
+      },
+      {
+        "scopeName": "pustota.injection.go.types",
+        "path": "./syntaxes/go-types.injection.json",
+        "injectTo": ["source.go"]
       },
       {
         "scopeName": "pustota.injection.typescript.types",

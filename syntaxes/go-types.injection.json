@@ -1,0 +1,47 @@
+{
+  "comment": "Go struct and interface names being defined, like `config` in `type config struct` or `Hasher` in `type Hasher interface`, including generic and grouped `type ( ... )` declarations. The builtin grammar uses the same `entity.name.type.go` scope for definitions and usages, so this rule scopes these names as `entity.name.type.struct.go` and `entity.name.type.interface.go`. Other definitions like `type Set []interface{}` or `type ID = string` stay uncolored, same as type usages.",
+  "scopeName": "pustota.injection.go.types",
+  "injectionSelector": "L:source.go -comment -string",
+  "repository": {
+    "name": {
+      "comment": "Struct or interface type name, with optional type parameters: `Pair[K comparable, V any] struct`, but not `Set []interface{}` or `Arr [4]struct{}`",
+      "match": "\\b(\\w+)(?=(\\[(?:[^\\[\\]]|\\g<2>)*\\])?\\s*\\b(struct|interface)\\b)",
+      "captures": { "1": { "name": "entity.name.type.$3.go" } }
+    }
+  },
+  "patterns": [
+    {
+      "comment": "`type Name struct`",
+      "match": "^\\s*(type)\\s+(\\w+)(?=\\s+(struct|interface)\\b)",
+      "captures": { "1": { "name": "keyword.type.go" }, "2": { "name": "entity.name.type.$3.go" } }
+    },
+    {
+      "comment": "`type Name[T any] struct`, same as the builtin generic `single_type` rule",
+      "begin": "^\\s*(type)\\s+(?=\\w+\\[(?:[^\\[\\]]|(\\[(?:[^\\[\\]]|\\g<2>)*\\]))*\\]\\s*\\b(?:struct|interface)\\b)",
+      "beginCaptures": { "1": { "name": "keyword.type.go" } },
+      "end": "(?<=\\])",
+      "patterns": [{ "include": "#name" }, { "include": "source.go#parameter-variable-types" }]
+    },
+    {
+      "comment": "`type ( Name struct; ... )`, same as the builtin `multi_types` rule",
+      "begin": "\\b(type)\\s*(\\()",
+      "beginCaptures": {
+        "1": { "name": "keyword.type.go" },
+        "2": { "name": "punctuation.definition.begin.bracket.round.go" }
+      },
+      "end": "\\)",
+      "endCaptures": { "0": { "name": "punctuation.definition.end.bracket.round.go" } },
+      "patterns": [
+        { "include": "#name" },
+        { "include": "source.go#struct_variables_types" },
+        { "include": "source.go#interface_variables_types" },
+        { "include": "source.go#type-declarations-without-brackets" },
+        { "include": "source.go#parameter-variable-types" },
+        {
+          "match": "\\w+",
+          "name": "entity.name.type.go"
+        }
+      ]
+    }
+  ]
+}

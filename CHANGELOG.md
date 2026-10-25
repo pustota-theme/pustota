@@ -4,7 +4,7 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## 0.35.0
+## 0.35.0 aka The First Public Release
 
 - In Python fixed that some regex patterns where highlighted as keywords
 - In TypeScript fixed `null` and `undefined` highlight in type annitations
@@ -54,6 +54,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - In Makefile fixed `$(TOP_LEVEL)` definitions to be plain text
 - In Makefile fixed `:=` to be an operator
 - In TOML fixed time and date to be constants
+- Python builtin names used as function names (`def set`), C `typedef` names,
+  and Go `struct` and `interface` names are now highlighted
+  via grammar injections instead of semantic tokens,
+  so they work without a language server (and with cpptools in C)
+- In C `struct` and `union` definition names, like `struct student { ... }`,
+  are now highlighted, usages like `struct student s;` are not
+- In Dart function and method definition names are now highlighted
+  via semantic tokens, calls are not highlighted
 
 ## 0.34.0
 

@@ -385,7 +385,7 @@ type Node struct {
 	}
 }
 
-type Point struct{ X, Y int }
+type Point struct { X, Y int }
 
 // Hash implements Hasher with a pointer receiver.
 func (n *Node) Hash() [hashLength]byte {

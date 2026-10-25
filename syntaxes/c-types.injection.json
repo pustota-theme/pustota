@@ -1,0 +1,26 @@
+{
+  "comment": "C type definition names. Struct and union names with a body, like `student` in `struct student { ... };` or `DataValue` in `union DataValue { ... };`, including the brace on the next line. Usages like `struct student s;` or `union DataValue val;` stay uncolored. Names introduced by `typedef`, like `PyObject` in `typedef struct _object PyObject;`, `PySlot` in `typedef struct { ... } PySlot;`. Function and function pointer types, like `hashfunc` in `typedef Py_hash_t (*hashfunc)(PyObject *);`, stay uncolored. The builtin grammar has no scope for these names, so the `typedef` rule wraps the whole `typedef` up to `;` and scopes the names being declared as `entity.name.type.typedef.c`. Struct and enum bodies are tokenized by the builtin grammar, so their fields are not affected.",
+  "scopeName": "pustota.injection.c.types",
+  "injectionSelector": "L:source.c -comment -string",
+  "patterns": [
+    {
+      "comment": "`struct name {` and `union name {`, a line ending with `struct name` is also a definition, because the `{` can only be on the next line",
+      "match": "\\b(struct|union)\\s+([A-Za-z_]\\w*)(?=\\s*(?:\\{|$))",
+      "captures": { "1": { "name": "storage.type.$1.c" }, "2": { "name": "entity.name.type.$1.c" } }
+    },
+    {
+      "begin": "\\btypedef\\b",
+      "beginCaptures": { "0": { "name": "keyword.other.typedef.c" } },
+      "end": ";",
+      "endCaptures": { "0": { "name": "punctuation.terminator.statement.c" } },
+      "patterns": [
+        {
+          "comment": "`typedef unsigned char name;`, `typedef struct { ... } name;` and `typedef int name[4];`, but not function types, like `typedef int name(int);` or `typedef int (*name)(int);`",
+          "match": "\\b[A-Za-z_]\\w*\\b(?=(?:\\s*\\[[^\\]]*\\])*\\s*[;,])",
+          "name": "entity.name.type.typedef.c"
+        },
+        { "include": "source.c" }
+      ]
+    }
+  ]
+}

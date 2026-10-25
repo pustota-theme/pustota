@@ -45,7 +45,7 @@ class FrozenList(object):
         class B:
             print('abc')
 
-    def set(self, other: str | None) -> str:
+    def set(self, other: set[str] | None) -> str:
         class A: ...
 
     def __getitem__(self, key: FrozenList):
