@@ -1,0 +1,11 @@
+{
+  "comment": "Python function and method names that match builtin names, like `set` in `def set(self): ...`. The builtin grammar scopes them as `support.type.python`, exactly like `set(items)` or `-> set`, so they would not be highlighted as definitions. This rule scopes every name after `def` as `entity.name.function.python`.",
+  "scopeName": "pustota.injection.python.function-names",
+  "injectionSelector": "L:meta.function.python -meta.function.parameters -comment -string",
+  "patterns": [
+    {
+      "match": "(?<=\\bdef\\s+)[[:alpha:]_][[:word:]]*",
+      "name": "entity.name.function.python"
+    }
+  ]
+}
