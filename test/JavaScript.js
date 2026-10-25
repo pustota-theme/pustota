@@ -42,7 +42,7 @@ export class Bot extends Dialog {
   }
 
   onMessage(message) {
-    const performer = this._performerHandlers.find(c => c.match(message));
+    let performer = this._performerHandlers.find(c => c.match(message));
     if (performer) return performer.handler(message, this);
     const channel = this._channelFor(message.channel);
     var hasActions = channel.hasFor(message.user);

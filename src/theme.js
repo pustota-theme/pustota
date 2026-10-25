@@ -399,7 +399,7 @@ function tokenColors(c) {
         'storage.type.rust',
         // Ruby:
         'punctuation.separator.other.ruby', // `:` in ternary
-        'source.ruby variable.other.readwrite punctuation.definition.variable', // `@`
+        'meta.block.parameters.ruby punctuation.separator.variable.ruby', // `|` around block params
         // Python:
         'storage.type.type.python',  // `type` keyword
         // Lisp:
@@ -452,10 +452,11 @@ function tokenColors(c) {
         'meta.definition support.function',
         'meta.function.definition entity.name.function',
 
-        // JS / TS: `constructor`, the grammar scopes it as `storage.type`
-        'meta.method.declaration storage.type.js',
-        'meta.method.declaration storage.type.ts',
-        'meta.method.declaration storage.type.tsx',
+        // JS / TS: `constructor`, the grammar scopes it as `storage.type`.
+        // `>` keeps `const` / `let` inside method bodies out of this rule.
+        'meta.method.declaration > storage.type.js',
+        'meta.method.declaration > storage.type.ts',
+        'meta.method.declaration > storage.type.tsx',
         // Python:
         'meta.function.python entity.name.function',
         'meta.function.python support.function',
