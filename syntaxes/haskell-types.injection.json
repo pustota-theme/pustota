@@ -1,0 +1,21 @@
+{
+  "comment": "Haskell type definition names, like `Hash` in `data Hash = ...`, `Salt` in `newtype Salt = ...` or `Hashable` in `class (Eq a) => Hashable a`. The builtin grammar uses the same `storage.type.haskell` scope for defined names and type usages, and the language server sends the same semantic token for both, so only these names get `entity.name.type.haskell`. Type usages, `instance` heads, and `type` synonyms stay uncolored.",
+  "scopeName": "pustota.injection.haskell.types",
+  "injectionSelector": "L:source.haskell -comment -string -meta.deriving -meta.import -meta.class-context",
+  "patterns": [
+    {
+      "comment": "`data Name`, `newtype Name` and `type data Name`",
+      "match": "(?<=\\bdata\\s|\\bnewtype\\s)[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nd}']*",
+      "name": "entity.name.type.haskell"
+    },
+    {
+      "comment": "`class Name`, `class Ctx a => Name` and `class (Ctx a, Ctx b) => Name`",
+      "match": "(?<=\\bclass\\s)(?:((\\((?:[^()]|\\g<2>)*\\))|[\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nd}']*(?:\\s+[\\p{Ll}_][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nd}']*)+)\\s*(=>|⇒)\\s*)?([\\p{Lu}\\p{Lt}][\\p{Ll}_\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nd}']*)",
+      "captures": {
+        "1": { "name": "meta.class-context.haskell", "patterns": [{ "include": "source.haskell#type_signature" }] },
+        "3": { "name": "keyword.operator.big-arrow.haskell" },
+        "4": { "name": "entity.name.type.haskell" }
+      }
+    }
+  ]
+}

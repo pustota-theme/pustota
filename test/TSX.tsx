@@ -34,6 +34,8 @@ import { useState, useEffect, useMemo, useRef, useReducer, type ReactNode, type 
 import type { Dispatch, SetStateAction } from 'react'
 export type { Props as MainProps }
 
+const pi = Math.PI
+
 declare module 'react' {
   interface CSSProperties { '--accent'?: string }
 }

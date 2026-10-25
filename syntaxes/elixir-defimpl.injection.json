@@ -1,0 +1,14 @@
+{
+  "comment": "Elixir `defimpl Proto, for: Type` does not define a new module name, it implements an existing protocol, like `impl` in Rust. The builtin Elixir grammar scopes it exactly like `defmodule` and `defprotocol` (`meta.module.elixir`), so its name would be highlighted as a definition. This rule matches `defimpl` first and scopes the name as a regular module usage.",
+  "scopeName": "pustota.injection.elixir.defimpl",
+  "injectionSelector": "L:source.elixir -comment -string",
+  "patterns": [
+    {
+      "match": "^\\s*(defimpl)\\s+(([A-Z][A-Za-z0-9_]*\\s*(\\.)\\s*)*[A-Z][A-Za-z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.control.module.elixir" },
+        "2": { "name": "entity.name.type.module.elixir" }
+      }
+    }
+  ]
+}

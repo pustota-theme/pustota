@@ -224,7 +224,7 @@ class Circle extends Shape implements Matcher {
   declare radius: number
   accessor label = 'circle'
   #secret = Priority.High
-  static #count = 0
+  static #count = Number.MAX_VALUE
   static readonly PI = Math.PI
   public override describe(): string {
     return super.describe() + ` r=${this.radius}`

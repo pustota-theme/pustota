@@ -292,6 +292,10 @@ function tokenColors(c) {
         'comment.block.documentation storage.type',
         'comment.block.documentation storage',
         'comment.block.documentation keyword.other',
+        // PHP:
+        'comment.block.documentation keyword.other.type.php', // `@var array`
+        // JS / TS:
+        'entity.name.type.instance.jsdoc', // `{Type}` in JSDoc
       ],
       settings: {
         foreground: c.syntax.comment,
@@ -329,10 +333,16 @@ function tokenColors(c) {
         // HTML:
         'string.unquoted.html',
         // TS:
-        'meta.type.annotation.ts support.type.builtin',
-        'meta.return.type.ts support.type.builtin',
-        'meta.type.parameters.ts support.type.builtin',
-        'source.ts storage.type.numeric',  // `10n`
+        'source.ts meta.type.annotation support.type.builtin',
+        'source.tsx meta.type.annotation support.type.builtin',
+        'source.ts meta.return.type support.type.builtin',
+        'source.tsx meta.return.type support.type.builtin',
+        'source.ts meta.type.parameters support.type.builtin',
+        'source.tsx meta.type.parameters support.type.builtin',
+        // JS / TS:
+        'source.js storage.type.numeric',  // `10n`
+        'source.ts storage.type.numeric',
+        'source.tsx storage.type.numeric',
         // Go:
         'source.go keyword.other.unit',
         // TOML:
@@ -367,9 +377,9 @@ function tokenColors(c) {
         'storage.type.enum.c', // `enum`
         'storage.type.union.c', // `union`
         // JS / TS:
-        'source.js meta.method.declaration storage.type', // `constructor`
-        'source.ts meta.method.declaration storage.type',
-        'source.tsx meta.method.declaration storage.type',
+        'source.js meta.method.declaration storage.type.property', // `get` / `set`
+        'source.ts meta.method.declaration storage.type.property',
+        'source.tsx meta.method.declaration storage.type.property',
         'source.js meta.var.expr storage.type', // `const`, `let`, `var`
         'source.ts meta.var.expr storage.type',
         'source.tsx meta.var.expr storage.type',
@@ -377,10 +387,13 @@ function tokenColors(c) {
         'source.ts meta.interface storage.type.interface', // `interface`
         'source.tsx meta.interface storage.type.interface',
         'storage.type.enum.ts', // `enum`
+        'storage.type.enum.tsx',
         'source.ts meta.type.declaration storage.type.type',
         'source.tsx meta.type.declaration storage.type.type',
         'meta.namespace.declaration.ts storage.type.namespace', // `namespace`
+        'meta.namespace.declaration.tsx storage.type.namespace',
         'meta.class.ts storage.type.property', // `accessor`
+        'meta.class.tsx storage.type.property',
         // Rust:
         'punctuation.definition.attribute.rust', // `#` before `[]`
         'storage.type.rust',
@@ -391,6 +404,8 @@ function tokenColors(c) {
         'storage.type.type.python',  // `type` keyword
         // Lisp:
         'storage.type.function-type.lisp', // `def*`
+        // Elixir:
+        'punctuation.definition.variable.elixir',  // `@var`
         // Objective-C:
         'punctuation.definition.storage.type.objc', // `@implementation` / etc
         'punctuation.definition.keyword.objc',
@@ -400,6 +415,9 @@ function tokenColors(c) {
         'entity.name.section.markdown', // headers
         // PHP:
         'source.php meta.interface storage.type.interface', // `interface`
+        'storage.type.const.php', // `const`
+        'storage.type.enum.php', // `enum`
+        'storage.type.trait.php', // `trait`
         // TOML:
         'source.toml support.type.property-name.table',
         'source.toml support.type.property-name.array',
@@ -434,6 +452,10 @@ function tokenColors(c) {
         'meta.definition support.function',
         'meta.function.definition entity.name.function',
 
+        // JS / TS: `constructor`, the grammar scopes it as `storage.type`
+        'meta.method.declaration storage.type.js',
+        'meta.method.declaration storage.type.ts',
+        'meta.method.declaration storage.type.tsx',
         // Python:
         'meta.function.python entity.name.function',
         'meta.function.python support.function',
@@ -485,21 +507,27 @@ function tokenColors(c) {
       scope: [
         'meta.class entity.name.type',
 
+        // JS / TS: class names, other type names in class bodies are uncolored
+        'source.js meta.class entity.name.type.class',
+        'source.ts meta.class entity.name.type.class',
+        'source.tsx meta.class entity.name.type.class',
         // Rust:
         'source.rust entity.name.type.struct',
         'source.rust entity.name.type.trait',
-        // Dart:
-        'support.class.dart',
+        'source.rust entity.name.type.enum',
         // Elixir:
         'source.elixir meta.module entity.name.type.module',
         // Haskell:
-        'meta.declaration storage.type.haskell',
+        'source.haskell entity.name.type', // from `syntaxes/haskell-types.injection.json`
         // TS:
         'source.ts meta.interface entity.name.type.interface',
         'source.tsx meta.interface entity.name.type.interface',
         'entity.name.type.enum.ts',
+        'entity.name.type.enum.tsx',
         // PHP:
         'source.php meta.interface entity.name.type.interface',
+        'entity.name.type.enum.php',
+        'entity.name.type.trait.php',
         // Lisp:
         'entity.name.type.lisp',
         // Objective-C:
@@ -555,8 +583,10 @@ function tokenColors(c) {
         'source.js string.template meta.template', // expressions inside `${}`
         'source.ts string.template meta.template',
         'source.tsx string.template meta.template',
-        // JS:
-        'meta.class entity.name.type.module.js', // `class A extends M.C`
+        // Type usages inside class bodies, like `x as Foo` or `extends M.C`:
+        'source.js meta.class entity.name.type',
+        'source.ts meta.class entity.name.type',
+        'source.tsx meta.class entity.name.type',
         // TS:
         'source.ts meta.type.annotation entity.name.type',
         'source.tsx meta.type.annotation entity.name.type',
@@ -565,11 +595,13 @@ function tokenColors(c) {
         'source.ts meta.type.parameters entity.name.type',
         'source.tsx meta.type.parameters entity.name.type',
         'keyword.operator.type.annotation.ts',
+        'keyword.operator.type.annotation.tsx',
         'meta.field.declaration.ts meta.definition.property entity.name.function',
-        'meta.class.ts entity.name.type.module',
-        // TSX:
-        'meta.definition.variable.tsx variable.other.constant entity.name.function',
-        'meta.class.tsx entity.name.type.module',
+        'meta.field.declaration.tsx meta.definition.property entity.name.function',
+        // JS / TS: `const` names, even when the value is an arrow function
+        'source.js meta.definition.variable variable.other.constant entity.name.function',
+        'source.ts meta.definition.variable variable.other.constant entity.name.function',
+        'source.tsx meta.definition.variable variable.other.constant entity.name.function',
         // CSS:
         'source.css support.constant', // all values and constant likes
         'source.css meta.at-rule support.function', // `var()` func
@@ -585,6 +617,7 @@ function tokenColors(c) {
         'source.css.scss string.quoted.double.attribute-value',
         // Elixir:
         'source.elixir constant.language.symbol',
+        'string.quoted meta.embedded.line.elixir', // `#{}` in strings
         // Ruby:
         'source.ruby constant.language.symbol',
         'source.ruby constant.other.symbol.hashkey',
@@ -592,10 +625,14 @@ function tokenColors(c) {
         'source.php meta.method-call.static keyword.operator',
         'keyword.operator.return-value.php',
         'keyword.operator.class.php',
+        'source.php keyword.other.type', // types like `int|string|null`
+        'source.php keyword.control.exit',  // `exit()` call
         // Rust:
         'keyword.operator.macro.dollar.rust', // `$` in macro defs
         // Lisp:
         'keyword.constant.lisp', // :value
+        // Haskell:
+        'keyword.other.preprocessor.extension.haskell', // pragmas
         // Objective-C:
         'source.objc keyword.other.property', // `@property` / `@syntesize`
         // editorconfig:
@@ -669,12 +706,25 @@ function semanticTokenColors(c) {
     'type.definition.struct:go': c.syntax.entity,
     'type.definition.interface:go': c.syntax.entity,
 
-    // TS / JS: properties from the standard library,
+    // Dart: class names being defined, like `Vector` in `class Vector`
+    // or `Meters` in `extension type Meters(double value)`.
+    // The grammar uses the same `support.class.dart` scope for every
+    // capitalized name, so only the Dart analysis server can tell them apart.
+    //
+    // It only adds the `declaration` modifier to classes and extension types,
+    // `enum` and `mixin` names get the same token for definitions and usages,
+    // so they stay uncolored, same as type usages.
+    'class.declaration:dart': c.syntax.entity,
+
+    // TS / TSX / JS / JSX: properties from the standard library,
     // like `PI` in `Math.PI`. The grammar scopes them as plain properties,
     // but VSCode maps this semantic token to `support.constant.property`,
     // which would color them as constants.
+    // TSX and JSX use the `typescriptreact` and `javascriptreact` language ids.
     'property.defaultLibrary:typescript': c.syntax.fg,
+    'property.defaultLibrary:typescriptreact': c.syntax.fg,
     'property.defaultLibrary:javascript': c.syntax.fg,
+    'property.defaultLibrary:javascriptreact': c.syntax.fg,
   };
 }
 
