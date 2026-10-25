@@ -17,3 +17,246 @@ test:
     - master
   environment:
     name: production  # used to track time with 'cycle analytics'
+
+# Anchors, aliases, merge keys
+# ============================
+
+.docker: &docker
+  image: "docker:24-dind"
+  services:
+    - docker:dind
+  variables: &docker-vars
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+
+.before: &docker-before-script
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+
+build:
+  <<: *docker
+  stage: build
+  variables:
+    <<: *docker-vars
+    IMAGE_FULL_NAME: "${CI_REGISTRY_IMAGE}/app"
+  before_script: *docker-before-script
+  script:
+    - docker build -t "$IMAGE_FULL_NAME:$CI_COMMIT_SHA" .
+    - docker push "$IMAGE_FULL_NAME:$CI_COMMIT_SHA"
+
+deploy:
+  <<: [*docker, *docker-vars]
+  stage: deploy
+  when: manual
+  needs: [build, test]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
+    - when: never
+
+# Scalars
+# =======
+
+scalars:
+  plain: Plain string with spaces and 'single quotes' inside
+  single: 'It''s a single-quoted string with a literal \n backslash-n'
+  double: "Double-quoted with \"escapes\": tab\t newline\n unicode \u00e9 \U0001F600 hex \x41"
+  multi_line_plain: This plain scalar
+    continues on the next line
+    and is folded into one line
+  multi_line_double: "This double-quoted scalar
+    also spans lines \
+    with an escaped line break"
+  empty_plain:
+  empty_double: ""
+  empty_single: ''
+  "key: with colon": value
+  'another: key': value
+  ? complex key spanning
+    two lines
+  : complex value
+  ? [flow, sequence, key]
+  : mapped from a sequence
+  ? {a: 1}
+  : mapped from a mapping
+  url: https://github.com/pustota-theme/pustota
+  colon_in_value: "host:8080"
+  hash_in_value: "value # not a comment"
+  looks_like_bool: "yes"
+  tilde_null: ~
+  explicit_null: null
+  capital_null: Null
+  bool_true: true
+  bool_false: False
+  int_decimal: 1_000_000
+  int_negative: -42
+  int_octal: 0o14
+  int_hex: 0x1A
+  float_plain: 3.14159
+  float_exp: 6.02e+23
+  float_neg_exp: -1.5E-10
+  float_dot: .5
+  float_inf: .inf
+  float_neg_inf: -.inf
+  float_nan: .nan
+  date: 2026-10-25
+  timestamp: 2026-10-25T14:30:00Z
+  timestamp_space: 2026-10-25 14:30:00.123 +03:00
+  timestamp_offset: 2001-12-14t21:59:43.10-05:00
+
+# Explicit tags
+# =============
+
+tagged:
+  str_number: !!str 123
+  int_string: !!int "456"
+  float_string: !!float "7.5"
+  bool_string: !!bool "true"
+  null_tag: !!null ""
+  binary: !!binary |
+    R0lGODlhDAAMAIQAAP//9/X17unp5WZmZgAAAOfn515eXvPz7Y6OjuDg4J+fn5
+    OTk6enp56enmlpaWNjY6Ojo4SEhP/++f/++f/++f/++f/++f/++f/++f/++f/+
+  timestamp: !!timestamp 2026-10-25T00:00:00Z
+  set: !!set
+    ? pustota
+    ? dark
+    ? light
+  omap: !!omap
+    - first: 1
+    - second: 2
+  pairs: !!pairs
+    - key: value
+    - key: another
+  seq: !!seq [a, b, c]
+  map: !!map {x: 1, y: 2}
+  custom_ref: !Ref LoadBalancerSecurityGroup
+  custom_sub: !Sub "arn:aws:s3:::${BucketName}/*"
+  custom_getatt: !GetAtt [MyInstance, PublicIp]
+  custom_join: !Join
+    - ""
+    - - "arn:aws:iam::"
+      - !Ref AWS::AccountId
+      - ":root"
+  custom_map: !Config {retries: 3, backoff: 1.5}
+  local_tag: !local-tag value
+  verbatim_tag: !<tag:yaml.org,2002:str> verbatim
+
+# Block scalars
+# =============
+
+block_scalars:
+  literal: |
+    Line one keeps its newline.
+    Line two keeps indentation:
+        four extra spaces.
+
+  literal_strip: |-
+    No trailing newline at all.
+
+  literal_keep: |+
+    Trailing newlines are kept.
+
+
+  folded: >
+    This folded scalar
+    joins lines with spaces
+
+    but keeps blank lines as newlines.
+
+      Indented lines
+      are preserved as-is.
+  folded_strip: >-
+    Stripped folded
+    content here.
+  folded_keep: >+
+    Kept folded content.
+
+  explicit_indent: |2
+      Leading two spaces are content here.
+     One leading space here.
+  explicit_indent_strip: >1-
+     Indentation indicator one, strip chomping.
+  script: |
+    #!/usr/bin/env bash
+    set -euo pipefail
+    for file in *.py; do
+      python -m py_compile "$file"
+    done
+
+# Nested structures and flow style
+# ================================
+
+matrix:
+  include:
+    - python: "3.11"
+      os: ubuntu-latest
+      extras: [docs, lint]
+    - python: "3.12"
+      os: macos-latest
+      extras: []
+    - {python: "3.13", os: windows-latest, extras: [docs]}
+  exclude:
+    -
+      python: "3.11"
+      os: windows-latest
+    - python: "3.12"
+      os:
+        - windows-latest
+        - macos-latest
+
+flow_mapping: {name: pustota, version: 0.34.0, tags: [theme, vscode], nested: {deep: {deeper: true}}}
+flow_sequence: [1, 2.5, "three", [4, 5], {six: 6}, null, true, ~]
+flow_multiline: [
+  alpha, beta,
+  gamma,
+]
+flow_mapping_multiline: {
+  key: value,
+  "quoted key": 'quoted value',
+  ? explicit: key,
+}
+nested_sequences:
+  - - - deeply
+      - nested
+    - sequence
+  - - of
+    - sequences
+sequence_of_mappings:
+  - name: first
+    value: 1
+  - name: second
+    value: 2
+mapping_of_sequences:
+  odds: [1, 3, 5]
+  evens:
+    - 2
+    - 4
+    - 6
+mapping_in_sequence_inline:
+  - key: value
+    other: thing
+  - !!str tagged item
+  - *docker-before-script
+  - &inline_anchor anchored item
+  - *inline_anchor
+...
+---
+# Second document: a plain sequence at the root
+- &first_entry
+  id: 1
+  title: "pustota"
+- id: 2
+  title: пустота
+  parent: *first_entry
+- !!str 3
+...
+%YAML 1.2
+%TAG !e! tag:example.com,2026:
+---
+root: !e!widget
+  name: third document with directives
+  values: [0x1A, 0o14, .inf, -.inf, .nan, ~, 2026-10-25]
+...
+--- !!str "fourth document is a bare tagged scalar"
+--- |
+  fifth document is a literal block scalar
+  spanning two lines

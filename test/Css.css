@@ -47,3 +47,251 @@ pre.example > #id1 {
 @media screen and (min-width: 30em) and (orientation: landscape) {
   /* … */
 }
+
+/* ---------------------------------------------------------------------- */
+/* Imports, layers, and registered custom properties                      */
+/* ---------------------------------------------------------------------- */
+
+@import url("theme/tokens.css") layer(tokens) supports(display: grid) screen and (min-width: 40em);
+@import "theme/reset.css" layer(reset);
+
+@layer reset, tokens, components, utilities;
+
+@property --accent-hue {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 212;
+}
+
+@property --panel-gap {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0.5rem;
+}
+
+:root {
+  --accent: oklch(62% 0.19 var(--accent-hue));
+  --accent-soft: color-mix(in oklab, var(--accent) 20%, white);
+  --surface: hsl(220deg 14% 96%);
+  --ink: rgb(28 32 38 / 0.92);
+  --radius: clamp(0.25rem, 0.5vw + 0.125rem, 0.75rem);
+  --gutter: max(1rem, min(4vw, 2.5rem));
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", Menlo, monospace;
+  color-scheme: light dark;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-var.woff2") format("woff2"),
+       url(/fonts/inter-var.woff) format("woff");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153;
+}
+
+@layer components {
+  .card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    grid-template-areas:
+      "header header"
+      "sidebar main"
+      "footer footer";
+    gap: var(--panel-gap, 8px) calc(var(--gutter) / 2);
+    padding-block: 1.5rem;
+    padding-inline: var(--gutter);
+    border-radius: var(--radius);
+    background: var(--surface, #fafafa);
+    color: var(--ink);
+    font: 400 1rem/1.5 var(--font-sans);
+    min-height: 100dvh;
+    max-width: 72ch;
+    container: card / inline-size;
+    transition: opacity 250ms ease-in-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    & > header { grid-area: header; }
+    & > aside { grid-area: sidebar; }
+    & > main { grid-area: main; }
+    & > footer { grid-area: footer; }
+
+    &:hover,
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    &.is-featured::before {
+      content: "★ " attr(data-label) " ";
+      counter-increment: cards 2;
+    }
+
+    &::after {
+      content: counter(cards) "/" counters(section, ".");
+    }
+  }
+
+  .card-title {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-background-clip: text;
+    background-clip: text;
+    font-size: clamp(1.25rem, 2vw + 1rem, 2.5rem);
+    letter-spacing: 0.02em;
+    text-wrap: balance;
+    margin: 0 0 0.5em;
+    margin-bottom: 0.5em !important;
+  }
+
+  .card-title:is(h1, h2, h3):where(.large, .xl):not(.muted) {
+    font-weight: 700;
+  }
+}
+
+@layer utilities {
+  .u-reset { all: unset; }
+  .u-inherit { color: inherit; font: inherit; }
+  .u-initial { display: initial; }
+  .u-revert { display: revert; }
+  .u-revert-layer { color: revert-layer; }
+  .u-rotate { transform: rotate(45deg) skew(0.2rad) translate3d(0, -2px, 0); }
+  .u-turn { rotate: 0.25turn; }
+}
+
+/* Every selector kind */
+a[href^="https://"],
+a[href$=".pdf" i],
+a[href*="example" s],
+input[type="checkbox" i]:checked + label,
+ul > li:nth-child(2n+1 of .visible),
+ol li:nth-last-of-type(odd),
+li:first-child ~ li,
+p:has(> img:only-child),
+article:has(h2 + p),
+section:not(:has(.empty)),
+tr:nth-child(even):hover > td:last-child,
+::selection,
+li::marker,
+my-element::part(label),
+::slotted(span),
+.tooltip::before,
+details[open] > summary::after,
+input:placeholder-shown,
+:is(ul, ol) :where(li, dd):empty,
+*:focus-within,
+html:lang(ru),
+#main\:id,
+.wrapper\.escaped,
+.one\.two > .\31 0px {
+  color: var(--ink);
+}
+
+li::marker {
+  content: "→ ";
+  color: var(--accent);
+}
+
+.badge::after {
+  content: "\201C" attr(title) "\201D";
+}
+
+/* Media queries */
+@media only screen and (prefers-color-scheme: dark) {
+  :root {
+    --surface: hsl(220 14% 10%);
+    --ink: rgb(236 238 242 / 0.95);
+  }
+}
+
+@media not print and (prefers-reduced-motion: reduce) {
+  .card { transition: none; animation: none; }
+}
+
+@media (min-width: 48rem) and (max-width: 90rem), (orientation: portrait) {
+  .card { gap: 1.5vw 2vh; }
+}
+
+@media (hover: hover) and (pointer: fine) and (resolution >= 2dppx) {
+  .card:hover { transform: translateY(-2px) scale(1.01); }
+}
+
+/* Container, supports, scope, starting-style */
+@container card (inline-size > 30em) and (min-height: 200px) {
+  .card-title { font-size: 2rem; }
+}
+
+@container style(--accent-hue: 212) {
+  .card { border-color: var(--accent); }
+}
+
+@supports (display: grid) and (not (display: inline-grid)) {
+  .card { display: grid; }
+}
+
+@supports selector(:has(a)) or (container-type: inline-size) {
+  .card { container-type: inline-size; }
+}
+
+@supports not (color: oklch(0% 0 0)) {
+  :root { --accent: #2f6fed; }
+}
+
+@scope (.card) to (.card-body) {
+  :scope { isolation: isolate; }
+  img { max-inline-size: 100%; block-size: auto; }
+}
+
+@starting-style {
+  .card { opacity: 0; translate: 0 1rem; }
+}
+
+dialog[open] {
+  opacity: 1;
+  transition: opacity 0.4s, display 0.4s allow-discrete, overlay 0.4s allow-discrete;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+/* Keyframes with from/to and mixed percentages */
+@keyframes fade-slide {
+  from {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  33.3%,
+  66.6% {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.card.is-entering {
+  animation: fade-slide 600ms ease-out 1 both,
+             bounce 2s infinite alternate;
+  animation-delay: -0.2s;
+  will-change: transform, opacity;
+}
+
+/* Page */
+@page {
+  size: A4 portrait;
+  margin: 2cm 1.5cm;
+
+  @top-center {
+    content: "pustota";
+  }
+}
+
+@page :first {
+  margin-top: 4cm;
+}
+
+@namespace svg url(http://www.w3.org/2000/svg);
+
+svg|a { fill: currentColor; }

@@ -1,0 +1,16 @@
+{
+  "comment": "Ruby numbers with `r` and `i` suffixes, like `3/4r`, `3i` or `1.5ri`. The builtin Ruby grammar does not scope them at all, so they stay uncolored. Remove this when https://github.com/textmate/ruby.tmbundle supports them.",
+  "scopeName": "pustota.injection.ruby.numbers",
+  "injectionSelector": "L:source.ruby -comment -(string -meta.embedded)",
+  "patterns": [
+    {
+      "comment": "Only `i` is allowed after an exponent: `1e3i` is valid, `1e3r` is not",
+      "match": "\\b\\d(?>_?\\d)*(?:\\.\\d(?>_?\\d)*)?[eE][-+]?\\d(?>_?\\d)*i\\b",
+      "name": "constant.numeric.ruby"
+    },
+    {
+      "match": "(?x)\n\\b\n(?:\n  0[xX]\\h(?>_?\\h)*|                    # 0xffr\n  0[bB][01](?>_?[01])*|                 # 0b1i\n  0[dD]\\d(?>_?\\d)*|                     # 0d10r\n  0[oO]?[0-7](?>_?[0-7])*|              # 0o17ri\n  \\d(?>_?\\d)*(?:\\.\\d(?>_?\\d)*)?         # 4r, 1.5ri\n)\n(?:ri|r|i)\\b",
+      "name": "constant.numeric.ruby"
+    }
+  ]
+}

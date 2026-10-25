@@ -319,3 +319,310 @@ public class ObjectHash implements Comparable<ObjectHash> {
         REDACTED,;
     }
 }
+
+// --- Additional syntax coverage ---------------------------------------------
+
+/**
+ * Hashes a value of type {@code T}.
+ *
+ * @param <T> the wrapped Java type
+ * @see ObjectHash
+ * @since 1.1
+ */
+@FunctionalInterface
+interface Hashable<T> {
+    byte[] hashOf(T value) throws NoSuchAlgorithmException;
+
+    default Hashable<T> andThen(java.util.function.UnaryOperator<byte[]> op) {
+        return v -> op.apply(hashOf(v));
+    }
+
+    static <U extends Comparable<? super U>> Hashable<U> identity() {
+        return v -> new byte[0];
+    }
+
+    private void helper() { }
+}
+
+sealed interface JsonValue permits JsonNull, JsonNumber, JsonText, JsonList {
+    String TAG_PREFIX = "json:";
+}
+
+record JsonNull() implements JsonValue { }
+
+record JsonNumber(double value, boolean integral) implements JsonValue {
+    JsonNumber {
+        if (Double.isNaN(value)) {
+            throw new IllegalArgumentException("NaN");
+        }
+    }
+
+    JsonNumber(long value) {
+        this(value, true);
+    }
+
+    static JsonNumber zero() {
+        return new JsonNumber(0L);
+    }
+}
+
+record JsonText(@Deprecated String text) implements JsonValue { }
+
+non-sealed class JsonList implements JsonValue, Iterable<JsonValue> {
+    private final List<JsonValue> items = new ArrayList<>();
+
+    @Override
+    public Iterator<JsonValue> iterator() {
+        return items.iterator();
+    }
+}
+
+enum Tag {
+    BOOL('b') {
+        @Override
+        String describe() {
+            return "boolean";
+        }
+    },
+    INT('i'),
+    FLOAT('f') {
+        @Override
+        String describe() {
+            return "floating point";
+        }
+    },
+    LIST('l'),
+    DICT('d');
+
+    private final char marker;
+
+    Tag(char marker) {
+        this.marker = marker;
+    }
+
+    char marker() {
+        return marker;
+    }
+
+    String describe() {
+        return name().toLowerCase();
+    }
+}
+
+@interface Fixture {
+    String value() default "";
+    int[] weights() default {1, 2};
+    Class<?> target() default Object.class;
+}
+
+@Fixture(value = "literals", weights = {3, 4}, target = ObjectHash.class)
+abstract class Literals {
+    static final int DECIMAL = 1_000_000;
+    static final int HEX = 0xCAFE_BABE;
+    static final int OCTAL = 0755;
+    static final int BINARY = 0b1010_1010;
+    static final long LONG = 9_223_372_036_854_775_807L;
+    static final float FLOAT = 1.5f;
+    static final double DOUBLE = 6.022e23;
+    static final double HEX_FLOAT = 0x1.8p1;
+    static final double SMALL = 1e-9d;
+    static final char CHAR = 'x';
+    static final char ESCAPED = '\n';
+    static final char UNICODE = '\u00e9';
+    static final char OCTAL_CHAR = '\101';
+    static final String STRING = "tab\t quote\" backslash\\ \u2603";
+    static final String TEXT_BLOCK = """
+        {
+          "name": "objecthash",
+          "escaped": "line \
+        continued",
+          "quotes": \"""
+        }
+        """;
+    static final int[] ARRAY = {1, 2, 3};
+    static final int[][] MATRIX = {{1, 2}, {3, 4}};
+    static final Object NOTHING = null;
+    protected static int counter;
+
+    static {
+        counter = ARRAY.length;
+    }
+
+    {
+        counter++;
+    }
+
+    abstract int weight();
+}
+
+final class Walker<K extends Comparable<K>, V> {
+
+    /** Inner (non-static) class. */
+    class Cursor {
+        int position;
+    }
+
+    /** Static nested class. */
+    static class Stats {
+        long visited;
+    }
+
+    private final java.util.Map<K, V> map = new java.util.TreeMap<>();
+    private transient volatile boolean dirty;
+    private static final Object LOCK = new Object();
+
+    @SafeVarargs
+    static <T> List<T> listOf(T... items) {
+        return java.util.Arrays.asList(items);
+    }
+
+    static double sum(List<? extends Number> numbers) {
+        double total = 0;
+        for (Number n : numbers) {
+            total += n.doubleValue();
+        }
+        return total;
+    }
+
+    static void fill(List<? super Integer> sink, int upTo) {
+        for (int i = 0; i < upTo; i++) {
+            sink.add(i);
+        }
+    }
+
+    static @Nullable String firstOrNull(@NonNull List<@NonNull String> items, @Nullable String fallback) {
+        var optional = java.util.Optional.ofNullable(items.isEmpty() ? null : items.get(0));
+        java.util.Optional<String> explicit = optional;
+        final java.util.Map<String, @Nullable Integer> sizes = new java.util.HashMap<>();
+        sizes.put("first", explicit.map(String::length).orElse(null));
+        return explicit.orElse(fallback);
+    }
+
+    String classify(Object value) {
+        return switch (value) {
+            case null -> "null";
+            case Integer i when i > 100 -> "big int " + i;
+            case Integer i -> "int " + i;
+            case String s -> "string of " + s.length();
+            case JsonNumber(double v, boolean integral) when integral -> "integral " + v;
+            case JsonNumber(var v, var integral) -> "number " + v;
+            case int[] arr -> "ints " + arr.length;
+            default -> "other";
+        };
+    }
+
+    int legacySwitch(Tag tag) {
+        int score = 0;
+        switch (tag) {
+            case BOOL:
+            case INT:
+                score += 1;
+                // fall through
+            case FLOAT:
+                score += 2;
+                break;
+            case LIST, DICT:
+                score = -1;
+                break;
+            default:
+                throw new AssertionError(tag);
+        }
+        switch (tag) {
+            case BOOL -> score++;
+            case INT, FLOAT -> {
+                score--;
+            }
+            default -> score = 0;
+        }
+        return score;
+    }
+
+    void loops(int[][] grid, Object value) {
+        var total = 0L;
+        outer:
+        for (int row = 0; row < grid.length; row++) {
+            inner:
+            for (int col = 0; col < grid[row].length; col++) {
+                if (grid[row][col] < 0) continue outer;
+                if (grid[row][col] == 0) break inner;
+                total += grid[row][col];
+            }
+        }
+        int n = 0;
+        while (n < 3) n++;
+        do {
+            n--;
+        } while (n > 0);
+        for (; ; ) {
+            break;
+        }
+        for (var row : grid) {
+            total ^= row.length;
+        }
+        synchronized (LOCK) {
+            dirty = !dirty;
+        }
+        total = total << 2 | total >>> 1 & ~total;
+        total <<= 1;
+        total >>= 1;
+        total >>>= 1;
+        total %= 7;
+        total = total > 0 ? total : -total;
+        boolean check = value instanceof String s && !s.isEmpty();
+        int ternaryCast = (int) (long) (total + (short) 1 + (byte) 2);
+        Object o = (Comparable<String> & java.io.Serializable) "x";
+        System.out.printf("%d %b %d %s%n", total, check, ternaryCast, o);
+    }
+
+    void resources(java.nio.file.Path path) throws java.io.IOException {
+        try (var in = java.nio.file.Files.newBufferedReader(path);
+             java.io.BufferedWriter out = java.nio.file.Files.newBufferedWriter(path)) {
+            out.write(String.valueOf(in.readLine()));
+        } catch (java.io.FileNotFoundException | SecurityException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        } catch (RuntimeException e) {
+            assert e != null : "unreachable";
+        } finally {
+            dirty = false;
+        }
+    }
+
+    void streams(List<String> words) {
+        var lengths = words.stream()
+            .filter(w -> !w.isBlank())
+            .map(String::length)
+            .sorted(Comparator.reverseOrder())
+            .toList();
+        java.util.function.Supplier<Walker<K, V>> factory = Walker::new;
+        java.util.function.Function<String, Integer> parser = Integer::parseInt;
+        java.util.function.BiFunction<Integer, Integer, Integer> max = Math::max;
+        java.util.Optional<String> longest = words.stream().max(Comparator.comparingInt(String::length));
+        String fallback = longest.map(String::toUpperCase).orElse("none");
+        java.util.Map<Boolean, List<String>> partitioned = words.stream()
+            .collect(java.util.stream.Collectors.partitioningBy(w -> w.length() > 3));
+        Runnable r = () -> { };
+        Runnable anonymous = new Runnable() {
+            @Override
+            public void run() {
+                lengths.forEach(System.out::println);
+            }
+        };
+        Thread t = new Thread(anonymous);
+        t.start();
+        int[] copy = lengths.stream().mapToInt(Integer::intValue).toArray();
+        var cursor = this.new Cursor();
+        Walker.Stats stats = new Walker.Stats();
+        stats.visited = copy.length + cursor.position + Math.abs(-1) + Integer.MAX_VALUE % 7;
+        Object[] objs = new Object[]{factory, parser, max, r, fallback, partitioned};
+        List<? extends CharSequence> seq = List.<String>of("a", "b");
+        StringBuilder sb = new StringBuilder(String.join(",", words)).reverse();
+        System.out.println(sb.append(objs.length).append(seq.size()).toString().strip());
+    }
+
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public String toString() {
+        return "Walker" + map;
+    }
+}

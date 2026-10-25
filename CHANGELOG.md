@@ -4,6 +4,20 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.35.0
+
+- In Python fixed that some regex patterns where highlighted as keywords
+- In TypeScript fixed `null` and `undefined` highlight in type annitations
+- In TypeScript fixed `accessor` to be a keyword
+- In TypeScript fixed `namespace` to be a keyword
+- In TypeScript fixed `10n` to be a constant
+- In JavaScript and TypeScript some properties like `Math.PI`
+  are no longer highlighted as a constant
+- In Ruby fixed `4r`, `3i` and `1.5ri` to be constants
+- In Ruby fixed `@@` to be highlighted the same way as `@`
+- In Ruby fixed module name highlight
+- In Go fixed `0b` and `0x` highlight as numbers, not keywords
+
 ## 0.34.0
 
 - Added `typedef` name highlight in C via semantic tokens

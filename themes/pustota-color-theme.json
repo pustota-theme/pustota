@@ -231,7 +231,8 @@
         "constant.other.symbol",
         "constant.character.escape",
         "string.quoted invalid.illegal.newline",
-        "markup.quote meta.paragraph"
+        "markup.quote meta.paragraph",
+        "source.python string.regexp keyword.operator"
       ],
       "settings": {
         "foreground": "#c2d94c"
@@ -243,7 +244,12 @@
         "constant.language",
         "support.constant",
         "constant.other.color",
-        "string.unquoted.html"
+        "string.unquoted.html",
+        "meta.type.annotation.ts support.type.builtin",
+        "meta.return.type.ts support.type.builtin",
+        "meta.type.parameters.ts support.type.builtin",
+        "source.ts storage.type.numeric",
+        "source.go keyword.other.unit"
       ],
       "settings": {
         "foreground": "#e6b450"
@@ -271,10 +277,12 @@
         "meta.interface storage.type.interface",
         "storage.type.enum.ts",
         "meta.type.declaration storage.type.type",
+        "meta.namespace.declaration.ts storage.type.namespace",
+        "meta.class.ts storage.type.property",
         "punctuation.definition.attribute.rust",
         "storage.type.rust",
         "punctuation.separator.other.ruby",
-        "variable.other.readwrite.instance punctuation.definition.variable",
+        "source.ruby variable.other.readwrite punctuation.definition.variable",
         "storage.type.type.python",
         "storage.type.function-type.lisp",
         "punctuation.definition.storage.type.objc",
@@ -336,10 +344,10 @@
     {
       "scope": [
         "meta.class entity.name.type",
-        "entity.name.type.struct",
-        "entity.name.type.trait",
+        "source.rust entity.name.type.struct",
+        "source.rust entity.name.type.trait",
         "support.class.dart",
-        "meta.module entity.name.type.module",
+        "source.elixir meta.module entity.name.type.module",
         "meta.declaration storage.type.haskell",
         "meta.interface entity.name.type.interface",
         "entity.name.type.enum.ts",
@@ -438,6 +446,8 @@
     "method.declaration:python": "#ffb454",
     "type.declaration:c": "#59c2ff",
     "type.definition.struct:go": "#59c2ff",
-    "type.definition.interface:go": "#59c2ff"
+    "type.definition.interface:go": "#59c2ff",
+    "property.defaultLibrary:typescript": "#b3b1ad",
+    "property.defaultLibrary:javascript": "#b3b1ad"
   }
 }

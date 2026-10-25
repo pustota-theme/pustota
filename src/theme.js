@@ -4,6 +4,12 @@
 // they come from palettes in `./palettes/*.json`.
 // Each palette is applied to the very same layout,
 // so all `pustota` variants highlight exactly the same things.
+//
+// Palette groups are split by purpose: `syntax.*` colors are only used
+// by highlight rules in `tokenColors` and `semanticTokenColors`,
+// everything else (`base`, `accent`, `severity`, `vcs`, etc) is only used
+// by UI colors in `colors`. When a UI item needs a syntax color,
+// the value is copied to a UI name instead, so the two can be tuned apart.
 
 // Adds a hex alpha channel to a `#rrggbb` color.
 function alpha(color, value) {
@@ -46,13 +52,13 @@ function colors(c) {
 
     'editorLineNumber.activeForeground': alpha(c.base.fg, 'cc'),
     'editorLineNumber.foreground': alpha(c.base.fg, '80'),
-    'editorInlayHint.foreground': c.syntax.comment,
+    'editorInlayHint.foreground': c.base.hint,
 
     // Stuff that I don't really care about, mostly copied from Ayu:
     // TODO: rework?
     'editorBracketMatch.background': alpha(c.base.ui, '4d'),
     'editorBracketMatch.border': alpha(c.base.ui, '99'),
-    'editorCodeLens.foreground': c.syntax.comment,
+    'editorCodeLens.foreground': c.base.hint,
     'editorCursor.foreground': c.accent.main,
     'editorGroup.border': c.base.line,
     'editorGroupHeader.noTabsBackground': c.base.bg,
@@ -71,7 +77,7 @@ function colors(c) {
     'editorOverviewRuler.addedForeground': alpha(c.vcs.added, '99'),
     'editorOverviewRuler.border': c.base.line,
     'editorOverviewRuler.deletedForeground': alpha(c.vcs.removed, '99'),
-    'editorOverviewRuler.errorForeground': c.syntax.error,
+    'editorOverviewRuler.errorForeground': c.severity.errorRuler,
     'editorOverviewRuler.modifiedForeground': alpha(c.vcs.modified, '99'),
     'editorOverviewRuler.warningForeground': c.accent.main,
     'editorRuler.foreground': alpha(c.base.ui, '66'),
@@ -92,19 +98,19 @@ function colors(c) {
 
     // I am just used to these colors:
     // TODO: rework?
-    'gitDecoration.addedResourceForeground': c.syntax.string,
+    'gitDecoration.addedResourceForeground': c.vcs.addedFile,
     'gitDecoration.conflictingResourceForeground': c.vcs.conflict,
     'gitDecoration.deletedResourceForeground': alpha(c.vcs.removed, 'b3'),
     'gitDecoration.ignoredResourceForeground': c.base.uiMuted,
     'gitDecoration.modifiedResourceForeground': c.vcs.modifiedFile,
-    'gitDecoration.submoduleResourceForeground': alpha(c.syntax.constant, 'b3'),
+    'gitDecoration.submoduleResourceForeground': alpha(c.vcs.submodule, 'b3'),
     'gitDecoration.untrackedResourceForeground': alpha(c.vcs.added, 'b3'),
 
     // General
     // =======
 
     'focusBorder': c.base.bg, // no visual border
-    'errorForeground': c.syntax.keyword,
+    'errorForeground': c.severity.error,
     'foreground': c.base.fg,
 
     'activityBar.activeBorder': c.accent.alt,
@@ -137,22 +143,22 @@ function colors(c) {
     'input.placeholderForeground': alpha(c.base.fg, '80'),
     'inputOption.activeBorder': c.accent.main,
     'inputValidation.errorBackground': c.base.bg,
-    'inputValidation.errorBorder': c.syntax.keyword,
+    'inputValidation.errorBorder': c.severity.error,
     'inputValidation.infoBackground': c.base.bg,
-    'inputValidation.infoBorder': c.syntax.entity,
+    'inputValidation.infoBorder': c.severity.info,
     'inputValidation.warningBackground': c.base.bg,
     'inputValidation.warningBorder': c.accent.main,
 
     // Breakpoints
-    'debugIcon.breakpointDisabledForeground': c.syntax.entity,
+    'debugIcon.breakpointDisabledForeground': c.debug.breakpointDisabled,
     'debugIcon.breakpointForeground': c.accent.main,
 
     'debugExceptionWidget.background': c.base.bg,
     'debugExceptionWidget.border': c.base.bg,
     'debugToolBar.background': c.base.bg,
     'descriptionForeground': c.base.ui,
-    'diffEditor.insertedTextBackground': alpha(c.syntax.string, '26'),
-    'diffEditor.removedTextBackground': alpha(c.syntax.operator, '26'),
+    'diffEditor.insertedTextBackground': alpha(c.diff.inserted, '26'),
+    'diffEditor.removedTextBackground': alpha(c.diff.removed, '26'),
     'dropdown.background': c.base.bg,
     'dropdown.border': c.base.dropdownBorder,
     'dropdown.foreground': c.base.ui,
@@ -171,7 +177,7 @@ function colors(c) {
     'list.activeSelectionForeground': c.accent.main,
     'list.inactiveSelectionBackground': c.base.bg,
     'list.focusAndSelectionOutline': c.base.bg, // no visual border
-    'list.errorForeground': c.syntax.keyword,
+    'list.errorForeground': c.severity.error,
     'list.filterMatchBackground': alpha(c.accent.main, '0d'),
     'list.filterMatchBorder': c.accent.main,
     'list.focusBackground': c.base.bg,
@@ -180,7 +186,7 @@ function colors(c) {
     'list.inactiveSelectionForeground': c.base.ui,
     'list.invalidItemForeground': c.base.uiDim,
     'listFilterWidget.background': c.base.bg,
-    'listFilterWidget.noMatchesOutline': c.syntax.keyword,
+    'listFilterWidget.noMatchesOutline': c.severity.error,
     'listFilterWidget.outline': c.accent.main,
 
     'peekView.border': c.base.bg,
@@ -227,7 +233,7 @@ function colors(c) {
     // Statusbar
     'statusBar.background': c.base.bg,
     'statusBar.border': c.base.bg,
-    'statusBar.debuggingBackground': c.syntax.operator,
+    'statusBar.debuggingBackground': c.debug.statusBar,
     'statusBar.debuggingForeground': c.base.bg,
     'statusBar.foreground': c.base.ui,
     'statusBar.noFolderBackground': c.base.bg,
@@ -304,6 +310,8 @@ function tokenColors(c) {
         'string.quoted invalid.illegal.newline', // in-progress strings
         // Markdown:
         'markup.quote meta.paragraph',
+        // Python:
+        'source.python string.regexp keyword.operator',
       ],
       settings: {
         foreground: c.syntax.string,
@@ -321,9 +329,16 @@ function tokenColors(c) {
         'constant.other.color',
         // HTML:
         'string.unquoted.html',
+        // TS:
+        'meta.type.annotation.ts support.type.builtin',
+        'meta.return.type.ts support.type.builtin',
+        'meta.type.parameters.ts support.type.builtin',
+        'source.ts storage.type.numeric',  // `10n`
+        // Go:
+        'source.go keyword.other.unit',
       ],
       settings: {
-        foreground: c.accent.main,
+        foreground: c.syntax.constant,
       },
     },
 
@@ -354,12 +369,14 @@ function tokenColors(c) {
         'meta.interface storage.type.interface', // `interface`
         'storage.type.enum.ts', // `enum`
         'meta.type.declaration storage.type.type',
+        'meta.namespace.declaration.ts storage.type.namespace', // `namespace`
+        'meta.class.ts storage.type.property', // `accessor`
         // Rust:
         'punctuation.definition.attribute.rust', // `#` before `[]`
         'storage.type.rust',
         // Ruby:
         'punctuation.separator.other.ruby', // `:` in ternary
-        'variable.other.readwrite.instance punctuation.definition.variable',  // `@` in `@var`
+        'source.ruby variable.other.readwrite punctuation.definition.variable', // `@`
         // Python:
         'storage.type.type.python',  // `type` keyword
         // Lisp:
@@ -457,12 +474,12 @@ function tokenColors(c) {
         'meta.class entity.name.type',
 
         // Rust:
-        'entity.name.type.struct',
-        'entity.name.type.trait',
+        'source.rust entity.name.type.struct',
+        'source.rust entity.name.type.trait',
         // Dart:
         'support.class.dart',
         // Elixir:
-        'meta.module entity.name.type.module',
+        'source.elixir meta.module entity.name.type.module',
         // Haskell:
         'meta.declaration storage.type.haskell',
         // TS:
@@ -563,9 +580,11 @@ function tokenColors(c) {
         'string.unquoted.argument.shell',
         'string.interpolated.dollar.shell',
         'source.shell string.unquoted.argument',
+        // Makefile:
+        'string.interpolated.makefile',
       ],
       settings: {
-        foreground: c.base.fg,
+        foreground: c.syntax.fg,
       },
     },
 
@@ -622,6 +641,13 @@ function semanticTokenColors(c) {
     // `type ID = string` stay uncolored, same as type usages.
     'type.definition.struct:go': c.syntax.entity,
     'type.definition.interface:go': c.syntax.entity,
+
+    // TS / JS: properties from the standard library,
+    // like `PI` in `Math.PI`. The grammar scopes them as plain properties,
+    // but VSCode maps this semantic token to `support.constant.property`,
+    // which would color them as constants.
+    'property.defaultLibrary:typescript': c.syntax.fg,
+    'property.defaultLibrary:javascript': c.syntax.fg,
   };
 }
 

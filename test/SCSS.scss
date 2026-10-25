@@ -1,3 +1,24 @@
+// Module system: `@use` with namespaces and configuration, `@forward`
+@use "sass:math";
+@use "sass:map";
+@use "sass:list";
+@use "sass:string";
+@use "sass:color";
+@use "sass:meta";
+@use "sass:selector";
+@use "config" as cfg with ($brand: #0f62fe, $spacing-unit: 0.5rem);
+@use "./typography" as *;
+@forward "./buttons" as btn-* hide btn-reset, $btn-secret;
+@forward "./grid" show grid, $grid-columns;
+
+// Variables used by the legacy block below
+$color1: #3366cc;
+$fontcolor1: #1c2026;
+
+@mixin background-image($images...) {
+  background-image: $images;
+}
+
 body {
   > #container {
     background: url("link") no-repeat;
@@ -10,7 +31,7 @@ body {
 div[role="main"] {
   @include background-image(
     linear-gradient(
-      lighten($color1, 30%),
+      lighten($color1, 30%)
     ),
   );
 
@@ -29,4 +50,345 @@ div[role="main"] {
 @function square($number) {
   $result: $number * square($number);  // inline comment
   @return $result;
+}
+
+
+/// Design tokens.
+/// `!default` lets a consumer override them before this file is loaded.
+/// @group tokens
+$base-size: 16px !default;
+$breakpoints: (
+  "sm": 36em,
+  "md": 48em,
+  "lg": 62em,
+  "xl": 75em,
+) !default;
+$palette: (
+  "primary": $color1,
+  "ink": $fontcolor1,
+  "muted": color.adjust($fontcolor1, $lightness: 40%, $alpha: -0.2),
+  "accent": color.scale($color1, $saturation: 20%, $lightness: -10%),
+  "surface": null,
+);
+$sides: top right bottom left;
+$shadow-levels: 1 2 3, 4 5 6;
+$debug-mode: false !default;
+$total-width: 0;
+
+@debug "palette has #{list.length(map.keys($palette))} entries";
+
+@if $debug-mode {
+  @warn "Debug mode is on; output will be verbose";
+}
+
+/* Functions with control flow, math, strings, and maps */
+
+/// Converts pixels to rem.
+/// @param {Number} $px - A pixel value.
+/// @param {Number} $base [$base-size] - Root font size.
+/// @return {Number} The value in rem.
+@function rem($px, $base: $base-size) {
+  @if math.unit($px) != "px" {
+    @error "Expected px, got `#{math.unit($px)}`";
+  }
+  @return math.div($px, $base) * 1rem;
+}
+
+@function bp($name) {
+  @if not map.has-key($breakpoints, $name) {
+    @error "Unknown breakpoint `#{$name}`";
+  }
+  @return map.get($breakpoints, $name);
+}
+
+@function tone($name, $weight: 50%) {
+  $c: map.get($palette, $name);
+  @if $c == null {
+    @return transparent;
+  } @else if $weight > 50% and $weight <= 100% {
+    @return color.mix(white, $c, $weight);
+  } @else if $weight == 50% or not ($weight < 0%) {
+    @return $c;
+  } @else {
+    @return color.mix(black, $c, math.abs($weight));
+  }
+}
+
+@function escape-attr($value) {
+  @return string.unquote("\"#{string.quote($value)}\"");
+}
+
+@function sum($numbers...) {
+  $acc: 0;
+  @each $n in $numbers {
+    $acc: $acc + $n;
+  }
+  @return $acc;
+}
+
+@function fib($n) {
+  @if $n <= 1 {
+    @return $n;
+  }
+  @return fib($n - 1) + fib($n - 2);
+}
+
+/* Mixins with defaults, rest args, content blocks, and `using` */
+
+@mixin respond($name, $direction: up) {
+  $value: bp($name);
+  @if $direction == down {
+    @media (max-width: $value - 0.02em) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $value) {
+      @content;
+    }
+  }
+}
+
+@mixin theme($name: "light") {
+  $ink: if($name == "dark", white, $fontcolor1);
+  $bg: if($name == "dark", #111, white);
+  @content ($ink, $bg);
+}
+
+@mixin pseudo($content: "") {
+  content: $content;
+  position: absolute;
+  display: block;
+}
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin shadow($levels...) {
+  $shadows: ();
+  @each $level in $levels {
+    $shadows: list.append($shadows, 0 ($level * 1px) ($level * 2px) rgba(0, 0, 0, 0.1 * $level), $separator: comma);
+  }
+  box-shadow: $shadows;
+}
+
+%card-base {
+  border-radius: rem(8px);
+  padding: math.div($base-size, 2) $base-size;
+}
+
+%visually-hidden {
+  position: absolute !important;
+  clip: rect(0 0 0 0);
+}
+
+/* Selectors, nesting, interpolation, and the parent selector */
+
+.card {
+  @extend %card-base;
+  @include shadow(1, 2, 3);
+  @include size(100%, auto);
+
+  font: {
+    family: "Inter", system-ui, sans-serif;
+    size: rem(16px);
+    weight: 400;
+  }
+  margin: {
+    top: $base-size * 2;
+    bottom: math.div($base-size, 4);
+  }
+
+  &-title {
+    font-size: math.round(rem(24px) * 1.25);
+    line-height: math.div(32, 24);
+  }
+
+  &-body {
+    padding: sum(4px, 8px, 12px);
+  }
+
+  &:hover,
+  &:focus-within {
+    @include shadow(4, 8);
+  }
+
+  &::before {
+    @include pseudo(escape-attr("quoted \"content\""));
+  }
+
+  .dark & {
+    background: tone("ink", 10%);
+  }
+
+  .sidebar & + & {
+    margin-top: 0;
+  }
+
+  & + & {
+    margin-top: $base-size;
+  }
+
+  @at-root #{&}__badge {
+    color: tone("primary", 75%);
+  }
+
+  @at-root (without: media) {
+    .card-print { display: none; }
+  }
+
+  @include respond("md") {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond("sm", down) {
+    display: block;
+  }
+
+  @include theme("dark") using ($ink, $bg) {
+    color: $ink;
+    background: $bg;
+  }
+
+  @media print and (orientation: portrait) {
+    box-shadow: none;
+
+    @supports (break-inside: avoid) {
+      break-inside: avoid;
+    }
+  }
+
+  @supports not (display: grid) {
+    float: left;
+  }
+}
+
+.sr-only {
+  @extend %visually-hidden;
+}
+
+/* Loops: @each over lists/maps with destructuring, @for, @while */
+
+@each $name, $value in $breakpoints {
+  .container-#{$name} {
+    max-width: $value;
+  }
+}
+
+@each $side in $sides {
+  .m#{string.slice($side, 1, 1)}-auto {
+    margin-#{$side}: auto;
+  }
+}
+
+@each $a, $b, $c in $shadow-levels {
+  .shadow-#{$a}-#{$b}-#{$c} {
+    @include shadow($a, $b, $c);
+  }
+}
+
+@each $name, $hue in ("danger": 0deg, "success": 120deg, "info": 200deg) {
+  .text-#{$name} {
+    color: hsl($hue, 70%, 45%);
+  }
+}
+
+@for $i from 1 through 4 {
+  .col-#{$i} {
+    width: math.percentage(math.div($i, 4));
+  }
+}
+
+@for $i from 0 to 3 {
+  .z-#{$i * 10} {
+    z-index: $i * 10;
+  }
+}
+
+$i: 6;
+@while $i > 0 {
+  .item-#{$i} {
+    width: 2em * $i;
+  }
+  $i: $i - 2;
+}
+
+@each $name in map.keys($palette) {
+  $total-width: $total-width + 1 !global;
+}
+
+/* Builtin module functions */
+
+.builtins {
+  $merged: map.merge($breakpoints, ("xxl": 90em));
+  $deep: map.deep-merge(("a": ("b": 1)), ("a": ("c": 2)));
+  $list: 1px 2px 3px 4px;
+
+  --count: #{$total-width};
+  --first: #{list.nth($list, 1)};
+  --last: #{list.nth($list, -1)};
+  --joined: #{list.join($list, 5px 6px, $separator: space)};
+  --index: #{list.index($list, 3px)};
+  --xxl: #{map.get($merged, "xxl")};
+  --deep: #{map.get($deep, "a", "c")};
+  --upper: #{string.to-upper-case("pustota")};
+  --len: #{string.length("pustota")};
+  --idx: #{string.index("pustota", "tot")};
+  --inserted: #{string.insert("ab", "-", 2)};
+  --min: #{math.min(1px, 2px, 0.5px)};
+  --max: #{math.max(1rem, 2rem)};
+  --clamp: #{math.clamp(0, 15, 10)};
+  --ceil: #{math.ceil(4.2)};
+  --floor: #{math.floor(4.8)};
+  --sqrt: #{math.sqrt(16)};
+  --pow: #{math.pow(2, 10)};
+  --pi: #{math.$pi};
+  --hypot: #{math.hypot(3px, 4px)};
+  --compat: #{math.compatible(1px, 1em)};
+  --random: #{math.random(100)};
+  --red: #{color.channel($color1, "red", $space: rgb)};
+  --hue: #{color.channel($color1, "hue", $space: hsl)};
+  --complement: #{color.complement($color1)};
+  --invert: #{color.invert($color1, 80%)};
+  --grayscale: #{color.grayscale($color1)};
+  --type: #{meta.type-of($palette)};
+  --inspect: #{meta.inspect($sides)};
+  --fn-exists: #{meta.function-exists("rem")};
+  --mixin-exists: #{meta.mixin-exists("shadow")};
+  --nested: #{selector.nest(".a", ".b", "&-c")};
+  --fib: #{fib(10)};
+  --division: #{math.div(10px, 4)};
+  --multiply: #{2 * 3em};
+  --modulo: #{17 % 5};
+  --unitless: #{math.is-unitless(42)};
+  --quoted: #{meta.inspect(string.quote(hello))};
+  --nullish: #{if(null, "yes", "no")};
+  --calc: calc(#{rem(12px)} + 2vw);
+  --bool: #{true and (not false) or (1 == 2)};
+  --cmp: #{1px < 2px, 3 >= 3, "a" != "b"};
+  width: math.div(100%, 3);
+  height: 10px * 2 + 5px;
+  padding: (20px / 4);
+}
+
+// Interpolation inside media queries, property names, and selectors
+$prop: "padding";
+$dir: "inline";
+$min: 30em;
+
+@media screen and (min-width: #{$min}) and (max-width: #{bp("lg")}) {
+  .fluid-#{$dir} {
+    #{$prop}-#{$dir}: rem(24px);
+    #{$prop}: {
+      block: rem(8px);
+    }
+  }
+}
+
+// Placeholder-based extension with selector functions
+.btn-primary {
+  @extend .card-title;
+  @extend %card-base !optional;
 }

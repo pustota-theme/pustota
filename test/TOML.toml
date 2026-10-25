@@ -81,3 +81,157 @@ disable_error_code = ['no-untyped-def']
 [build-system]
 requires = ["poetry-core>=1.9.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+# ---------------------------------------------------------------------------
+# Syntax showcase: keys, strings, numbers, dates, arrays, inline tables
+# ---------------------------------------------------------------------------
+
+[strings]
+basic = "Backport of \"inspect\" from Python\t3.13\nwith escapes \\ and \u00e9 and \U0001F40D"
+basic_empty = ""
+literal = 'C:\Users\sobolev\Desktop\pustota'
+literal_regex = '<\i\c*\s*>'
+literal_quote = 'Tom "Dubs" Preston-Werner'
+multiline_basic = """
+Roses are red
+Violets are blue"""
+multiline_basic_trimmed = """\
+    The quick brown \
+    fox jumps over \
+    the lazy dog.\
+    """
+multiline_basic_quotes = """Here are two quotation marks: "". Simple enough."""
+multiline_basic_three = """Here are fifteen quotation marks: ""\"""\"""\"""\"""\"."""
+multiline_literal = '''
+The first newline is
+trimmed in raw strings.
+   All other whitespace
+   is preserved.
+'''
+multiline_literal_regex = '''I [dw]on't need \d{2} apples'''
+multiline_literal_quotes = ''''That,' she said, 'is still pointless.''''
+unicode = "пустота — 空 — ∅"
+
+[numbers]
+int_plain = 99
+int_positive = +99
+int_negative = -17
+int_zero = 0
+int_underscores = 1_000_000
+int_hex = 0xDEADBEEF
+int_hex_lower = 0xdead_beef
+int_oct = 0o755
+int_bin = 0b1101_0110
+float_fractional = 3.1415
+float_positive = +1.0
+float_negative = -0.01
+float_exp = 5e+22
+float_exp_lower = 1e06
+float_exp_negative = -2E-2
+float_both = 6.626e-34
+float_underscores = 224_617.445_991_228
+inf = inf
+inf_positive = +inf
+inf_negative = -inf
+nan = nan
+nan_positive = +nan
+nan_negative = -nan
+bool_true = true
+bool_false = false
+
+[dates]
+offset_datetime_z = 1979-05-27T07:32:00Z
+offset_datetime_tz = 1979-05-27T00:32:00-07:00
+offset_datetime_fraction = 1979-05-27T00:32:00.999999-07:00
+offset_datetime_space = 1979-05-27 07:32:00Z
+local_datetime = 1979-05-27T07:32:00
+local_datetime_fraction = 1979-05-27T00:32:00.999999
+local_date = 1979-05-27
+local_time = 07:32:00
+local_time_fraction = 00:32:00.999999
+
+[keys]
+bare_key = "value"
+bare-key = "value"
+1234 = "numeric bare key"
+"quoted key" = "value"
+"quoted.key.with.dots" = "value"
+"key with spaces" = "value"
+"ключ" = "unicode quoted key"
+'literal "quoted" key' = "value"
+"" = "empty quoted key"
+physical.color = "orange"
+physical.shape = "round"
+site."github.com" = true
+fruit . apple . smooth = "whitespace around dots is ignored"
+3.14159 = "pi as a dotted key"
+
+[arrays]
+integers = [1, 2, 3]
+colors = ["red", "yellow", "green"]
+nested_ints = [[1, 2], [3, 4, 5]]
+nested_mixed = [[1, 2], ["a", "b", "c"]]
+string_mixed = ["all", 'strings', """are the same""", '''type''']
+numbers = [0.1, 0.2, 0.5, 1, 2, 5]
+contributors = [
+  "Foo Bar <foo@example.com>",
+  { name = "Baz Qux", email = "bazqux@example.com", url = "https://example.com/bazqux" },
+]
+multiline = [
+  1,
+  2, # comment inside an array
+  3,
+]
+empty = []
+dates = [1979-05-27, 07:32:00, 1979-05-27T07:32:00Z]
+inline_tables = [{ x = 1, y = 2 }, { x = 3, y = 4 }]
+
+[inline]
+point = { x = 1, y = 2, z = -3 }
+animal = { type.name = "pug", legs = 4 }
+nested = { a = { b = { c = "deep" } }, list = [1, 2] }
+empty = {}
+
+[dotted.table.header]
+value = 1
+
+[ "quoted table" ]
+"a.b" = 2
+
+[dog."tater.man"]
+type.name = "pug"
+
+[a . b . c]
+spaced = "table header with whitespace around dots"
+
+[[products]]
+name = "Hammer"
+sku = 738594937
+tags = ["tools", "hardware"]
+
+[[products]]  # empty table within the array
+
+[[products]]
+name = "Nail"
+sku = 284758393
+color = "gray"
+
+[[fruits]]
+name = "apple"
+
+[fruits.physical]
+color = "red"
+shape = "round"
+
+[[fruits.varieties]]
+name = "red delicious"
+
+[[fruits.varieties]]
+name = "granny smith"
+
+[[fruits]]
+name = "banana"
+
+[[fruits.varieties]]
+name = "plantain"
