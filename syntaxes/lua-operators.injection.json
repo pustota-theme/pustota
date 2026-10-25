@@ -1,0 +1,12 @@
+{
+  "comment": "Lua 5.3 bitwise operators: `&`, `|`, binary xor `a ~ b` and unary not `~a`. The builtin Lua grammar does not scope them at all, so they stay uncolored, unlike `<<` and `>>`.",
+  "scopeName": "pustota.injection.lua.operators",
+  "injectionSelector": "L:source.lua -comment -string",
+  "patterns": [
+    {
+      "comment": "Not `~=`",
+      "match": "&|\\||~(?!=)",
+      "name": "keyword.operator.lua"
+    }
+  ]
+}

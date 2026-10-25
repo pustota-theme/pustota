@@ -411,6 +411,8 @@ function tokenColors(c) {
         'punctuation.definition.keyword.objc',
         // Bash:
         'storage.type.alias.shell', // `alias` keyword
+        // Lua:
+        'storage.type.attribute.lua', // `<const>` and `<close>`
         // Markdown:
         'entity.name.section.markdown', // headers
         // PHP:
@@ -483,6 +485,8 @@ function tokenColors(c) {
         'meta.function entity.name.function.shell',
         // Lisp:
         'entity.name.function.lisp',
+        // Lua: not `local f = function() end`, same as `const` in JS
+        'meta.function.lua entity.name.function.lua',
         // Objective-C:
         'meta.function entity.name.function.objc', // function def with params
         'meta.function entity.name.function.name-of-parameter.objc',
@@ -654,6 +658,8 @@ function tokenColors(c) {
         'source.shell string.unquoted.argument',
         // Makefile:
         'string.interpolated.makefile',
+        // Lua:
+        'string.tag.lua', // labels, like `::continue::` and `goto continue`
       ],
       settings: {
         foreground: c.syntax.fg,
