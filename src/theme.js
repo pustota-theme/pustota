@@ -489,7 +489,6 @@ function tokenColors(c) {
         'source.css entity.other.keyframe-offset',
         // CSS / SCSS / Less / SASS:
         'source.css meta.at-rule entity.name.function',
-        'source.css meta.at-rule support.function',
         'source.sass meta.at-rule entity.name.function',
         'source.sass meta.at-rule support.function',
         // Bash:

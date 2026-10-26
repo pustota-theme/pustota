@@ -361,7 +361,6 @@
         "source.haskell meta.function.type-declaration entity.name.function",
         "source.css entity.other.keyframe-offset",
         "source.css meta.at-rule entity.name.function",
-        "source.css meta.at-rule support.function",
         "source.sass meta.at-rule entity.name.function",
         "source.sass meta.at-rule support.function",
         "meta.function entity.name.function.shell",
