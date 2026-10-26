@@ -1,0 +1,11 @@
+{
+  "comment": "PowerShell numbers with size suffixes, like `10MB`, `2.5GB` or `0x10KB`. The builtin PowerShell grammar scopes the suffix as `keyword.other.powershell`, same as other keywords, so `MB` would be highlighted as a keyword. This rule scopes the whole number as a constant.",
+  "scopeName": "pustota.injection.powershell.numbers",
+  "injectionSelector": "L:source.powershell -comment -(string -meta.embedded)",
+  "patterns": [
+    {
+      "match": "(?x)\n(?<!\\w)[-+]?\n(?:\n  0[xX][0-9a-fA-F_]+(?:[uU][lL]?|[lL][uU]?)?|  # 0x10KB\n  0[bB][01_]+(?:[uU][lL]?|[lL][uU]?)?|        # 0b1KB\n  (?:\\d[0-9_]*)?\\.?\\d[0-9_]*(?:[eE]\\d+)?      # 10MB, 2.5GB, 1e3KB\n  (?:[fFdDmM]|[uU][lL]?|[lL][uU]?)?\n)\n(?i:[kmgtp]b)\\b",
+      "name": "constant.numeric.powershell"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comment": "PowerShell class and enum definitions, like `class Animal` or `enum Color`. The builtin PowerShell grammar scopes `class` as `storage.type.powershell`, same as types like `[int]`, and the class name as `entity.name.function`, same as names after `%` and `?`. It does not scope `enum` at all. This rule scopes them as keywords and type definitions.",
+  "scopeName": "pustota.injection.powershell.types",
+  "injectionSelector": "L:source.powershell -comment -string",
+  "patterns": [
+    {
+      "match": "(?<![\\w-])(?i:(class))\\s+([\\p{L}\\d_]+)",
+      "captures": {
+        "1": { "name": "storage.type.class.powershell" },
+        "2": { "name": "entity.name.type.class.powershell" }
+      }
+    },
+    {
+      "match": "(?<![\\w-])(?i:(enum))\\s+([\\p{L}\\d_]+)",
+      "captures": {
+        "1": { "name": "storage.type.enum.powershell" },
+        "2": { "name": "entity.name.type.enum.powershell" }
+      }
+    }
+  ]
+}

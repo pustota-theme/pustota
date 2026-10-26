@@ -9,7 +9,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added Lua support
 - Added SQL support
 - Added XML support
+- Added PowerShell support
 - Fixed RST support
+- Fixed `"$var"` highlight in Bash
 
 ## 0.35.0
 
