@@ -1,0 +1,23 @@
+{
+  "comment": "SQL `true`, `false`, `null` and float numbers, like `3.14`, `.5` or `1.5e3`. The builtin SQL grammar does not scope `true` and `false` at all, scopes `null` as a keyword, and only knows integers, so `3.14` is split into two numbers and `1.5e3` stays uncolored.",
+  "scopeName": "pustota.injection.sql.constants",
+  "injectionSelector": "L:source.sql -comment -string",
+  "patterns": [
+    {
+      "comment": "`is null`, `is not null` and `not null` are matched as one keyword by the builtin grammar",
+      "match": "(?i)\\b(?:((?:is\\s+)?not|is)\\s+)?(null)\\b",
+      "captures": {
+        "1": { "name": "keyword.other.DDL.create.II.sql" },
+        "2": { "name": "constant.language.null.sql" }
+      }
+    },
+    {
+      "match": "(?i)\\b(?:true|false)\\b",
+      "name": "constant.language.boolean.sql"
+    },
+    {
+      "match": "(?<![\\w.])(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][-+]?\\d+)?(?![\\w.])",
+      "name": "constant.numeric.sql"
+    }
+  ]
+}

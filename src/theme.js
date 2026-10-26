@@ -487,6 +487,8 @@ function tokenColors(c) {
         'entity.name.function.lisp',
         // Lua: not `local f = function() end`, same as `const` in JS
         'meta.function.lua entity.name.function.lua',
+        // SQL:
+        'meta.function.sql entity.name.function.sql', // from `syntaxes/sql-definitions.injection.json`
         // Objective-C:
         'meta.function entity.name.function.objc', // function def with params
         'meta.function entity.name.function.name-of-parameter.objc',

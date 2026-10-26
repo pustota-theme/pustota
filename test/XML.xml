@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE catalog [
+  <!ENTITY company "Example Inc.">
+  <!ELEMENT catalog (book+)>
+  <!ATTLIST book id ID #REQUIRED>
+]>
+<?xml-stylesheet type="text/xsl" href="style.xsl"?>
+<!-- Single line comment -->
+<!--
+  Multi line
+  comment
+-->
+<catalog xmlns="http://example.com/catalog"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://example.com/catalog catalog.xsd">
+  <book id="bk101" available='true' price="44.95">
+    <author>Gambardella, Matthew</author>
+    <title lang="en">XML Developer&apos;s Guide</title>
+    <genre>Computer</genre>
+    <publish_date>2000-10-01</publish_date>
+    <description>
+      An in-depth look at creating applications with XML &amp; &company;.
+      Escaped chars: &lt;tag&gt; &#169; &#x00A9;
+    </description>
+    <code><![CDATA[
+      if (a < b && c > d) {
+        return "<not a tag>";
+      }
+    ]]></code>
+    <empty-element />
+    <ns:prefixed ns:attr="value" xmlns:ns="http://example.com/ns"/>
+  </book>
+</catalog>

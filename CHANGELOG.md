@@ -4,11 +4,12 @@ All notable changes to the "pustota" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## 0.36.0
+## 0.36.0 aka The First Public Release
 
 - Added Lua support
+- Added SQL support
 
-## 0.35.0 aka The First Public Release
+## 0.35.0
 
 - In Python fixed that some regex patterns where highlighted as keywords
 - In TypeScript fixed `null` and `undefined` highlight in type annitations

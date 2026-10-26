@@ -361,6 +361,7 @@
         "meta.function entity.name.function.shell",
         "entity.name.function.lisp",
         "meta.function.lua entity.name.function.lua",
+        "meta.function.sql entity.name.function.sql",
         "meta.function entity.name.function.objc",
         "meta.function entity.name.function.name-of-parameter.objc",
         "entity.other.attribute-name",
