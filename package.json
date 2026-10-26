@@ -62,6 +62,26 @@
         "injectTo": ["source.haskell"]
       },
       {
+        "scopeName": "pustota.injection.powershell.numbers",
+        "path": "./syntaxes/powershell-numbers.injection.json",
+        "injectTo": ["source.powershell"]
+      },
+      {
+        "scopeName": "pustota.injection.powershell.array-commas",
+        "path": "./syntaxes/powershell-array-commas.injection.json",
+        "injectTo": ["source.powershell"]
+      },
+      {
+        "scopeName": "pustota.injection.powershell.types",
+        "path": "./syntaxes/powershell-types.injection.json",
+        "injectTo": ["source.powershell"]
+      },
+      {
+        "scopeName": "pustota.injection.powershell.methods",
+        "path": "./syntaxes/powershell-methods.injection.json",
+        "injectTo": ["source.powershell"]
+      },
+      {
         "scopeName": "pustota.injection.python.function-names",
         "path": "./syntaxes/python-function-names.injection.json",
         "injectTo": ["source.python"]

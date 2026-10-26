@@ -1,0 +1,14 @@
+{
+  "comment": "PowerShell class methods and constructors, like `[string] Speak()`, `static [void] Run()` or `Animal([string]$name)`. The builtin PowerShell grammar does not scope them at all, and highlights methods like `Hidden()` as the `hidden` keyword. This rule scopes method names the same as function names in `function Get-Item`.",
+  "scopeName": "pustota.injection.powershell.methods",
+  "injectionSelector": "L:source.powershell -comment -string",
+  "patterns": [
+    {
+      "match": "(?xi)\n^\\s*\n(\n  (?:(?:static|hidden)\\s+)*                    # modifiers\n  (?:\\[(?:[^\\[\\]]|\\[[^\\[\\]]*\\])*\\]\\s*)?     # return type, like `[List[int]]`\n)\n(?!(?:if|elseif|while|for|foreach|switch|param|until|catch|trap|return|throw|exit|break|continue|data|dynamicparam|do|try|finally|begin|process|end|clean|function|filter|workflow|configuration|class|enum|using)\\b)\n([\\p{L}_][\\p{L}\\d_]*)\n(?=\\()",
+      "captures": {
+        "1": { "patterns": [{ "include": "source.powershell" }] },
+        "2": { "name": "entity.name.function.powershell" }
+      }
+    }
+  ]
+}

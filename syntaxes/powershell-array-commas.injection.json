@@ -1,0 +1,11 @@
+{
+  "comment": "PowerShell commas inside array expressions, like `@(1, 2, 3)`. The builtin PowerShell grammar scopes them as `keyword.operator.other.powershell`, same as `|` and `&`, so they would be highlighted as operators. This rule scopes them as separators, so they stay plain.",
+  "scopeName": "pustota.injection.powershell.array-commas",
+  "injectionSelector": "L:meta.group.array-expression.powershell -comment -string",
+  "patterns": [
+    {
+      "match": ",",
+      "name": "punctuation.separator.comma.powershell"
+    }
+  ]
+}

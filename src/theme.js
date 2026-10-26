@@ -296,6 +296,8 @@ function tokenColors(c) {
         'comment.block.documentation keyword.other.type.php', // `@var array`
         // JS / TS:
         'entity.name.type.instance.jsdoc', // `{Type}` in JSDoc
+        // PowerShell:
+        'meta.requires.powershell keyword', // `#Requires -Version 7.0`
       ],
       settings: {
         foreground: c.syntax.comment,
@@ -422,6 +424,9 @@ function tokenColors(c) {
         'source.php meta.interface storage.type.interface', // `interface`
         'storage.type.const.php', // `const`
         'storage.type.enum.php', // `enum`
+        // PowerShell:
+        'storage.type.enum.powershell', // from `syntaxes/powershell-types.injection.json`
+        'meta.function.powershell storage.type.powershell', // `function` and `filter`
         'storage.type.trait.php', // `trait`
         // TOML:
         'source.toml support.type.property-name.table',
@@ -490,6 +495,8 @@ function tokenColors(c) {
         'entity.name.function.lisp',
         // Lua: not `local f = function() end`, same as `const` in JS
         'meta.function.lua entity.name.function.lua',
+        // PowerShell: also methods from `syntaxes/powershell-methods.injection.json`
+        'entity.name.function.powershell',
         // SQL:
         'meta.function.sql entity.name.function.sql', // from `syntaxes/sql-definitions.injection.json`
         // Objective-C:
@@ -549,6 +556,9 @@ function tokenColors(c) {
         'source.php meta.interface entity.name.type.interface',
         'entity.name.type.enum.php',
         'entity.name.type.trait.php',
+        // PowerShell: from `syntaxes/powershell-types.injection.json`
+        'entity.name.type.class.powershell',
+        'entity.name.type.enum.powershell',
         // Lisp:
         'entity.name.type.lisp',
         // Objective-C:
@@ -604,6 +614,9 @@ function tokenColors(c) {
         'source.js string.template meta.template', // expressions inside `${}`
         'source.ts string.template meta.template',
         'source.tsx string.template meta.template',
+        // PowerShell: expressions inside `$()` in strings, same as in Python
+        'source.powershell string meta.embedded.substatement',
+        'source.powershell string meta.embedded.substatement keyword.other.substatement', // `$`
         // Type usages inside class bodies, like `x as Foo` or `extends M.C`:
         'source.js meta.class entity.name.type',
         'source.ts meta.class entity.name.type',
@@ -665,6 +678,10 @@ function tokenColors(c) {
         'string.unquoted.argument.shell',
         'string.interpolated.dollar.shell',
         'source.shell string.unquoted.argument',
+        // Bash: `$var` and `${var}` inside strings, same as in Python
+        'source.shell string variable',
+        'source.shell string meta.parameter-expansion',
+        'source.shell string punctuation.definition.variable', // `$`, `${` and `}`
         // Makefile:
         'string.interpolated.makefile',
         // Lua:

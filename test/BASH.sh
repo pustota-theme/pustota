@@ -105,7 +105,7 @@ trap '_abort "interrupted (pid $$, status $?)"' INT TERM
 
 _log() {
   local level="${1^^}"; shift
-  local color="${colors[green]}"
+  local color="test ${colors[green]} fix"
   [[ "$level" == "ERROR" ]] && color="${colors[red]}"
   printf '%b[%-5s]%b %s\n' "$color" "$level" "${colors[reset]}" "$*" >&2
 }
@@ -234,6 +234,7 @@ _coproc_demo() {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  echo 'sorted $1 ${2}'
   _parse_opts "$@"
   _classify "${mapping[0]:-}"
   _read_records "${SECRETS_DIR}/paths/mapping.cfg"
