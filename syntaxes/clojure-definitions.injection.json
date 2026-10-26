@@ -1,0 +1,73 @@
+{
+  "comment": "Clojure function and type definitions, like `(defn greet ...)` or `(defrecord Circle ...)`. The builtin Clojure grammar scopes every `def*` form the same way: the defined name is `entity.global.clojure`, same as names in `(def x 1)`, and calls inside are `entity.name.function.clojure` under `meta.definition`, so they would be highlighted as function definitions. This rule scopes function and macro names as function definitions, and protocol, record, and type names as types, with their methods as function definitions.",
+  "scopeName": "pustota.injection.clojure.definitions",
+  "injectionSelector": "L:source.clojure -comment -string",
+  "patterns": [
+    {
+      "match": "(?<=\\()(defn-?|defmacro|defmulti|defmethod|definline)\\s+((?:\\^(?:\\{[^{}]*\\}|[^\\s{}()\\[\\]]+)\\s+)*)([\\p{L}._+=><!?*-][\\w._:+=><!?*\\d-]*)",
+      "captures": {
+        "1": {
+          "name": "keyword.control.clojure"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "source.clojure"
+            }
+          ]
+        },
+        "3": {
+          "name": "entity.name.function.definition.clojure"
+        }
+      }
+    },
+    {
+      "begin": "(?<=\\()(defprotocol|defrecord|deftype|definterface)\\s+((?:\\^(?:\\{[^{}]*\\}|[^\\s{}()\\[\\]]+)\\s+)*)([\\p{L}._+=><!?*-][\\w._:+=><!?*\\d-]*)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.clojure"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "source.clojure"
+            }
+          ]
+        },
+        "3": {
+          "name": "entity.name.type.clojure"
+        }
+      },
+      "end": "(?=\\))",
+      "patterns": [
+        {
+          "comment": "Methods, like `(area [this])`",
+          "begin": "(\\()\\s*([\\p{L}._+=><!?*-][\\w._:+=><!?*\\d-]*)(?=[\\s)])",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.section.expression.begin.clojure"
+            },
+            "2": {
+              "name": "entity.name.function.definition.clojure"
+            }
+          },
+          "end": "(\\))",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.section.expression.end.clojure"
+            }
+          },
+          "name": "meta.expression.clojure",
+          "patterns": [
+            {
+              "include": "source.clojure"
+            }
+          ]
+        },
+        {
+          "include": "source.clojure"
+        }
+      ]
+    }
+  ]
+}
