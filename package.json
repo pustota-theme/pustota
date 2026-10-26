@@ -52,6 +52,16 @@
         "injectTo": ["source.ruby"]
       },
       {
+        "scopeName": "pustota.injection.clojure.definitions",
+        "path": "./syntaxes/clojure-definitions.injection.json",
+        "injectTo": ["source.clojure"]
+      },
+      {
+        "scopeName": "pustota.injection.clojure.keywords",
+        "path": "./syntaxes/clojure-keywords.injection.json",
+        "injectTo": ["source.clojure"]
+      },
+      {
         "scopeName": "pustota.injection.elixir.defimpl",
         "path": "./syntaxes/elixir-defimpl.injection.json",
         "injectTo": ["source.elixir"]

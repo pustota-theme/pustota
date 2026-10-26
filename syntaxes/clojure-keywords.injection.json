@@ -1,0 +1,15 @@
+{
+  "comment": "Clojure control flow forms that the builtin grammar does not scope as special forms, like `doseq`, `while`, `condp`, `and` or `or`, and `:else` in `cond`. The builtin grammar scopes the forms as function calls and `:else` as a regular keyword, like `:name`. This rule scopes them as `storage.control.clojure`, same as `if`, `when`, and `for`.",
+  "scopeName": "pustota.injection.clojure.keywords",
+  "injectionSelector": "L:source.clojure -comment -string",
+  "patterns": [
+    {
+      "match": "(?<=\\()(?:doseq|dotimes|while|condp|cond->>?|letfn|and|or|not)(?=[\\s)\\]}]|$)",
+      "name": "storage.control.clojure"
+    },
+    {
+      "match": "(?<=[\\s(\\[{]):else(?=[\\s)\\]}]|$)",
+      "name": "storage.control.clojure"
+    }
+  ]
+}

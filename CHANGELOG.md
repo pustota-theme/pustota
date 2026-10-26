@@ -10,6 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added SQL support
 - Added XML support
 - Added PowerShell support
+- Added Clojure support
 - Fixed RST support
 - Fixed `"$var"` highlight in Bash
 

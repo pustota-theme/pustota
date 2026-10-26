@@ -407,6 +407,9 @@ function tokenColors(c) {
         'storage.type.type.python',  // `type` keyword
         // Lisp:
         'storage.type.function-type.lisp', // `def*`
+        // Clojure: special forms, like `if`, `let`, or `fn`,
+        // also from `syntaxes/clojure-keywords.injection.json`
+        'storage.control.clojure',
         // Elixir:
         'punctuation.definition.variable.elixir',  // `@var`
         // Objective-C:
@@ -493,6 +496,8 @@ function tokenColors(c) {
         'meta.function entity.name.function.shell',
         // Lisp:
         'entity.name.function.lisp',
+        // Clojure: from `syntaxes/clojure-definitions.injection.json`
+        'entity.name.function.definition.clojure',
         // Lua: not `local f = function() end`, same as `const` in JS
         'meta.function.lua entity.name.function.lua',
         // PowerShell: also methods from `syntaxes/powershell-methods.injection.json`
@@ -561,6 +566,8 @@ function tokenColors(c) {
         'entity.name.type.enum.powershell',
         // Lisp:
         'entity.name.type.lisp',
+        // Clojure: from `syntaxes/clojure-definitions.injection.json`
+        'entity.name.type.clojure',
         // Objective-C:
         'meta.interface-or-protocol entity.name.type.objc',
         // C#:
@@ -665,6 +672,8 @@ function tokenColors(c) {
         'keyword.operator.macro.dollar.rust', // `$` in macro defs
         // Lisp:
         'keyword.constant.lisp', // :value
+        // Clojure: function calls, the grammar uses the same scope for all of them
+        'entity.name.function.clojure',
         // Haskell:
         'keyword.other.preprocessor.extension.haskell', // pragmas
         // Objective-C:
