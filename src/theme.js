@@ -416,6 +416,8 @@ function tokenColors(c) {
         'storage.type.attribute.lua', // `<const>` and `<close>`
         // Markdown:
         'entity.name.section.markdown', // headers
+        // reStructuredText: header underlines, like `----` and `====`
+        'source.rst markup.heading',
         // PHP:
         'source.php meta.interface storage.type.interface', // `interface`
         'storage.type.const.php', // `const`
@@ -502,6 +504,8 @@ function tokenColors(c) {
         'entity.other.attribute-name',
         // Markdown:
         'text.html.markdown markup.inline.raw.string',
+        // reStructuredText: ``literal``, same as `code` in Markdown
+        'source.rst string.interpolated',
         // Makefile:
         'entity.name.function.target.makefile',
         // XML: root name in `<!DOCTYPE catalog>`, same as `html` in HTML
@@ -668,6 +672,8 @@ function tokenColors(c) {
         // XML: `DOCTYPE` and `ENTITY`, same as `DOCTYPE` in HTML
         'keyword.other.doctype.xml',
         'keyword.other.entity.xml',
+        // reStructuredText:
+        'source.rst keyword.control.table',
       ],
       settings: {
         foreground: c.syntax.fg,
