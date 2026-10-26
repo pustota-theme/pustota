@@ -370,6 +370,7 @@ function tokenColors(c) {
         // Markup tags, used by HTML, JSX, TSX, Vue, etc:
         'punctuation.definition.tag.begin',
         'punctuation.definition.tag.end',
+        'punctuation.definition.tag.xml', // XML has no `begin` and `end` here
 
         // C:
         'constant.character.escape.line-continuation.c', // `\` operator
@@ -503,6 +504,8 @@ function tokenColors(c) {
         'text.html.markdown markup.inline.raw.string',
         // Makefile:
         'entity.name.function.target.makefile',
+        // XML: root name in `<!DOCTYPE catalog>`, same as `html` in HTML
+        'variable.language.documentroot.xml',
       ],
       settings: {
         foreground: c.syntax.func,
@@ -662,6 +665,9 @@ function tokenColors(c) {
         'string.interpolated.makefile',
         // Lua:
         'string.tag.lua', // labels, like `::continue::` and `goto continue`
+        // XML: `DOCTYPE` and `ENTITY`, same as `DOCTYPE` in HTML
+        'keyword.other.doctype.xml',
+        'keyword.other.entity.xml',
       ],
       settings: {
         foreground: c.syntax.fg,
