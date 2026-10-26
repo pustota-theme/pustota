@@ -8,6 +8,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Added Lua support
 - Added SQL support
+- Added XML support
+- Fixed RST support
 
 ## 0.35.0
 

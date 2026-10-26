@@ -311,6 +311,7 @@
         "storage.type.alias.shell",
         "storage.type.attribute.lua",
         "entity.name.section.markdown",
+        "source.rst markup.heading",
         "source.php meta.interface storage.type.interface",
         "storage.type.const.php",
         "storage.type.enum.php",
@@ -367,6 +368,7 @@
         "meta.function entity.name.function.name-of-parameter.objc",
         "entity.other.attribute-name",
         "text.html.markdown markup.inline.raw.string",
+        "source.rst string.interpolated",
         "entity.name.function.target.makefile",
         "variable.language.documentroot.xml"
       ],
@@ -476,7 +478,8 @@
         "string.interpolated.makefile",
         "string.tag.lua",
         "keyword.other.doctype.xml",
-        "keyword.other.entity.xml"
+        "keyword.other.entity.xml",
+        "source.rst keyword.control.table"
       ],
       "settings": {
         "foreground": "#e0ded8"
