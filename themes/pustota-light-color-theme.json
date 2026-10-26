@@ -278,6 +278,7 @@
         "punctuation.separator.annotation.result",
         "punctuation.definition.tag.begin",
         "punctuation.definition.tag.end",
+        "punctuation.definition.tag.xml",
         "constant.character.escape.line-continuation.c",
         "storage.type.struct.c",
         "storage.type.enum.c",
@@ -366,7 +367,8 @@
         "meta.function entity.name.function.name-of-parameter.objc",
         "entity.other.attribute-name",
         "text.html.markdown markup.inline.raw.string",
-        "entity.name.function.target.makefile"
+        "entity.name.function.target.makefile",
+        "variable.language.documentroot.xml"
       ],
       "settings": {
         "foreground": "#cc7e00"
@@ -472,7 +474,9 @@
         "string.interpolated.dollar.shell",
         "source.shell string.unquoted.argument",
         "string.interpolated.makefile",
-        "string.tag.lua"
+        "string.tag.lua",
+        "keyword.other.doctype.xml",
+        "keyword.other.entity.xml"
       ],
       "settings": {
         "foreground": "#181b1f"
