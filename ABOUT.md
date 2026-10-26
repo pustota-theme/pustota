@@ -104,6 +104,12 @@ To regenerate themes after a change run:
 npm run build
 ```
 
+To check the generated themes and the injection grammars in `syntaxes/` run:
+
+```bash
+npm run lint
+```
+
 ## Ports
 
 - Neovim port is available at [pustota.nvim](https://github.com/pustota-theme/pustota.nvim)

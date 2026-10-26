@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node src/build.js",
     "check": "node src/build.js --check",
+    "lint": "node src/lint.js",
     "vscode:prepublish": "npm run build",
     "package": "vsce package",
     "start": "npm run package",
@@ -155,6 +156,7 @@
     "email": "mail@sobolevn.me"
   },
   "devDependencies": {
-    "@vscode/vsce": "^4.0.0"
+    "@vscode/vsce": "^4.0.0",
+    "vscode-oniguruma": "^2.0.1"
   }
 }
