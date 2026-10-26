@@ -1,0 +1,16 @@
+{
+  "comment": "SQL function and stored procedure definitions, like `create or replace function f` or `create procedure schema.p`. The builtin SQL grammar scopes every created name as `entity.name.function.sql`, including tables and indexes, and does not support `procedure` at all. This rule marks function and procedure definitions with `meta.function.sql`.",
+  "scopeName": "pustota.injection.sql.definitions",
+  "injectionSelector": "L:source.sql -comment -string",
+  "patterns": [
+    {
+      "match": "(?i)^\\s*(create(?:\\s+or\\s+(?:replace|alter))?)\\s+(function|procedure|proc)\\s+(?:[\"`\\[]?\\w+[\"`\\]]?\\.)?([\"`\\[]?)(\\w+)[\"`\\]]?",
+      "name": "meta.function.sql",
+      "captures": {
+        "1": { "name": "keyword.other.create.sql" },
+        "2": { "name": "keyword.other.sql" },
+        "4": { "name": "entity.name.function.sql" }
+      }
+    }
+  ]
+}

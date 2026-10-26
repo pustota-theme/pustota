@@ -97,6 +97,16 @@
         "injectTo": ["source.lua"]
       },
       {
+        "scopeName": "pustota.injection.sql.definitions",
+        "path": "./syntaxes/sql-definitions.injection.json",
+        "injectTo": ["source.sql"]
+      },
+      {
+        "scopeName": "pustota.injection.sql.constants",
+        "path": "./syntaxes/sql-constants.injection.json",
+        "injectTo": ["source.sql"]
+      },
+      {
         "scopeName": "pustota.injection.typescript.types",
         "path": "./syntaxes/typescript-types.injection.json",
         "injectTo": ["source.ts", "source.tsx"]
