@@ -493,7 +493,8 @@
         "string.tag.lua",
         "keyword.other.doctype.xml",
         "keyword.other.entity.xml",
-        "source.rst keyword.control.table"
+        "source.rst keyword.control.table",
+        "keyword.other.sql"
       ],
       "settings": {
         "foreground": "#181b1f"
