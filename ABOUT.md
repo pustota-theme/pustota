@@ -113,8 +113,9 @@ npm run lint
 ## Ports
 
 - Neovim port is available at [pustota.nvim](https://github.com/pustota-theme/pustota.nvim)
-- Zed post is available at [pustota.zed](https://github.com/pustota-theme/pustota.zed)
-- Codex post is available at [pustota.codex](https://github.com/pustota-theme/pustota.codex)
+- Vim port is available at [pustota.vim](https://github.com/pustota-theme/pustota.vim)
+- Zed port is available at [pustota.zed](https://github.com/pustota-theme/pustota.zed)
+- Codex port is available at [pustota.codex](https://github.com/pustota-theme/pustota.codex)
 
 ## Showcase
 
